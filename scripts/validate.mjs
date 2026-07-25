@@ -125,6 +125,18 @@ for (const skillName of actualSkills) {
 // `acceptEdits`/`dontAsk` have no Grok equivalent and would silently never match, so they are
 // rejected here. Plugin agents may not declare `bypassPermissions` at all.
 const grokPermissionModes = new Set(['default', 'auto', 'plan']);
+// Grok registers plugin agents as `oh-my-grok-build:<agent>` but keeps skills on their bare name.
+// Referring to a skill with the qualified form (or an agent without it) resolves to nothing at
+// spawn time, so every qualified reference in a SKILL.md must name a real agent.
+for (const skillName of actualSkills) {
+  const skillFile = path.join(skillsRoot, skillName, 'SKILL.md');
+  if (!fs.existsSync(skillFile)) continue;
+  const body = fs.readFileSync(skillFile, 'utf8');
+  const referenced = [...body.matchAll(/oh-my-grok-build:([a-z0-9-]+)/g)].map((m) => m[1]);
+  const unknown = [...new Set(referenced)].filter((ref) => !expectedAgents.includes(ref));
+  check(unknown.length === 0, `${skillName}: qualified references name real agents${unknown.length ? ` (found: ${unknown.join(', ')})` : ''}`);
+}
+
 const expectedPermissionModes = {
   'ogb-planner': 'plan',
   'ogb-architect': 'plan',

@@ -25,6 +25,16 @@
   - 스킬 6개가 모두 `userInvocable: true`로 등록됨 (슬래시 명령 호출 가능)
   - 에이전트 6개가 모두 `oh-my-grok-build:ogb-*` plugin-qualified 이름으로 등록됨 — 스킬이 참조하는 이름과 일치
 - GitHub Actions `validate` 워크플로 통과
+- 실제 Grok 세션에서 `/ogb-doctor` 실행. 스킬·에이전트 디스커버리, Plan mode, subagents, worktree, `create-workflow`, `check-work` 전부 PASS. 이 실행으로 컴포넌트 이름 규약 결함 2건을 발견해 수정했습니다(아래 참조).
+
+### `/ogb-doctor` 실행으로 발견한 결함
+
+Grok은 플러그인 에이전트를 `oh-my-grok-build:<agent>`로 등록하지만 스킬은 bare name을 유지합니다.
+
+- `ogb-doctor`가 존재하지 않는 bare 에이전트 이름(`ogb-planner` 등)을 확인하도록 지시하고 있었습니다.
+- `ogb-start`가 `ogb-verify` **스킬**을 에이전트 문법(`oh-my-grok-build:ogb-verify`)으로 참조하고 있었습니다.
+
+둘 다 수정했고, `scripts/validate.mjs`가 실제 에이전트가 아닌 qualified 참조를 거부하도록 검사를 추가했습니다.
 
 ## 알려진 검증 한계
 
@@ -34,9 +44,9 @@
 
 ## 현재 환경에서 실행하지 못한 검증
 
-설치와 컴포넌트 등록은 확인했지만, 아래는 실제 Grok 세션에서 스킬을 **실행**해야 확인되므로 여전히 미검증입니다.
+`/ogb-doctor`는 실행했지만, 아래는 아직 미검증입니다.
 
-- `/ogb-plan`, `/ogb-start`, `/ogb-ultrawork`, `/ogb-verify`, `/ogb-workflow`, `/ogb-doctor` 실제 호출과 결과
+- `/ogb-plan`, `/ogb-start`, `/ogb-ultrawork`, `/ogb-verify`, `/ogb-workflow` 실제 호출과 결과
 - plugin-qualified agent 이름으로 서브에이전트 생성
 - worktree apply와 충돌 처리
 - bundled `create-workflow`와 `check-work` 발견

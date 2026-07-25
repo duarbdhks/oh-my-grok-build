@@ -53,7 +53,7 @@ Implement an approved plan without broadening scope, damaging unrelated work, or
    - Stop after the same failure appears three times, a destructive action becomes necessary, a secret or external permission is missing, or the plan's assumptions are contradicted.
 
 7. **Verify**
-   - Load and follow `oh-my-grok-build:ogb-verify` after integration.
+   - Load and follow the `ogb-verify` skill after integration. Skills are registered under their bare name; only agents carry the `oh-my-grok-build:` prefix.
    - Completion requires fresh evidence for every acceptance criterion.
 
 8. **Finish safely**
