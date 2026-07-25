@@ -153,7 +153,9 @@ npm run validate:grok
 
 `/ogb-interview`는 그 릴리스 이후에 추가되어, 임시 Express 저장소에서 headless 2회 실행으로 따로 검증했습니다.
 
-아직 확인하지 못한 것은 worktree 병합 **충돌** 처리와 작성된 워크플로의 라이브 실행입니다. 전체 증거는 `docs/validation.ko.md`에 있습니다.
+`/ogb-interview`부터 `/ogb-verify`까지의 체인도 한 세션 안에서 연속으로 실행했습니다. 스킬 하나씩이 아니라 스킬 사이의 이음새를 확인한 실행입니다.
+
+아직 확인하지 못한 것은 worktree 병합 **충돌** 처리, 작성된 워크플로의 라이브 실행, 그리고 세션 경계를 넘는 체인입니다. 계획은 새 세션으로 넘어가지 않으므로 `/ogb-start` 전에 `grok -c`로 돌아와야 합니다. 전체 증거는 `docs/validation.ko.md`에 있습니다.
 
 ## 출처 및 상표
 

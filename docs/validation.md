@@ -88,9 +88,18 @@ This run also confirmed the following:
 
 Two runs were used: one from a cold start, and one that pasted the confirmed components and the Round 0 answer back in as the argument, which is the documented way to resume without a state file.
 
+## End-to-End Chain in One Session
+
+Every validation above exercised a single skill in isolation, each in its own headless run. This one ran the chain continuously — `/ogb-interview` through `/ogb-verify` — inside one interactive Grok Build session, and every skill behaved as documented.
+
+What this adds over the per-skill runs is the handoffs: the interview's brief feeding `/ogb-plan`, the approved plan reaching `/ogb-start` without being restated, and `/ogb-verify` closing on the same acceptance criteria. Those seams are not covered by running each skill alone.
+
+It also stays inside one session, which is the supported path. A plan does not survive into a fresh session; see the note in Still Unverified below.
+
 ## Still Unverified
 
 - The worktree merge **conflict** handling path. The runs above had no overlapping file ownership, so no conflict occurred.
+- The chain across a **session boundary**. Grok writes the plan to `plan.md` inside the session directory, so a new session cannot see it — confirmed by running `/view-plan` in a fresh session in a directory that already held two plans, which reported no saved plan. Returning with `grok -c` or `grok -r <session-id>` restores it, also confirmed. The skills do not yet tell the user this.
 - Live execution of an authored workflow. `validate_only` only proves one path — metadata/compile/representative-args — while the branches for missing arguments, budget exhaustion, or parallel slot failure remain unverified.
 
 ## Run Commands

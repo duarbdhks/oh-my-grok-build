@@ -153,7 +153,9 @@ The current version is `0.1.0`. Alongside static validation, the six skills that
 
 `/ogb-interview` shipped after that release and was validated on its own, in two headless runs against a throwaway Express repository.
 
-What's still unverified is worktree merge **conflict** handling and a live run of an authored workflow. Full evidence is in `docs/validation.md`.
+The chain from `/ogb-interview` through `/ogb-verify` has also been run continuously inside one session, which covers the handoffs between skills rather than each skill alone.
+
+Still unverified: worktree merge **conflict** handling, a live run of an authored workflow, and the chain across a session boundary — a plan does not carry into a fresh session, so return with `grok -c` before `/ogb-start`. Full evidence is in `docs/validation.md`.
 
 ## Attribution and trademarks
 
