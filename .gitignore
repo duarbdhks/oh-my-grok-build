@@ -1,6 +1,5 @@
 .DS_Store
 node_modules/
 *.log
-.grok/ogb/
 .omc/
 coverage/
