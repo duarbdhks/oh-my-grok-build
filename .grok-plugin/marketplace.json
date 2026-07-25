@@ -1,0 +1,36 @@
+{
+  "name": "oh-my-grok-build",
+  "description": "Grok Build-native consensus planning, bounded parallel execution, and evidence-based verification",
+  "owner": {
+    "name": "duarbdhks",
+    "email": "14940560+duarbdhks@users.noreply.github.com"
+  },
+  "plugins": [
+    {
+      "name": "oh-my-grok-build",
+      "description": "Grok Build-native planning, execution, workflow, and verification skills",
+      "category": "workflows",
+      "source": {
+        "type": "local",
+        "path": "./plugins/oh-my-grok-build"
+      },
+      "version": "0.1.0",
+      "author": {
+        "name": "duarbdhks"
+      },
+      "homepage": "https://github.com/duarbdhks/oh-my-grok-build",
+      "tags": [
+        "developer-tools",
+        "multi-agent",
+        "grok-build"
+      ],
+      "keywords": [
+        "oh-my-grok-build",
+        "ogb",
+        "ogb-plan",
+        "ogb-start",
+        "ogb-verify"
+      ]
+    }
+  ]
+}

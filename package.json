@@ -1,0 +1,16 @@
+{
+  "name": "oh-my-grok-build-repository",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Validation tooling for the oh-my-grok-build Grok Build plugin marketplace",
+  "scripts": {
+    "test": "node scripts/validate.mjs",
+    "validate": "node scripts/validate.mjs",
+    "validate:grok": "bash scripts/validate-grok.sh"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "plugins": {
+    "oh-my-grok-build": {
+      "version": "0.1.0",
+      "description": "Grok Build-native planning, execution, workflow, and verification skills",
+      "components": {
+        "skills": [
+          {
+            "name": "ogb-plan",
+            "description": "Create a consensus implementation plan without source edits"
+          },
+          {
+            "name": "ogb-start",
+            "description": "Execute an approved plan with worktree-isolated agents"
+          },
+          {
+            "name": "ogb-ultrawork",
+            "description": "Run bounded parallel work for independent tasks"
+          },
+          {
+            "name": "ogb-verify",
+            "description": "Collect fresh evidence and independently verify completion"
+          },
+          {
+            "name": "ogb-workflow",
+            "description": "Author and smoke-validate native Grok workflows"
+          },
+          {
+            "name": "ogb-doctor",
+            "description": "Diagnose plugin discovery and native capability readiness"
+          }
+        ],
+        "agents": [
+          {
+            "name": "ogb-planner",
+            "description": "Implementation planning specialist"
+          },
+          {
+            "name": "ogb-architect",
+            "description": "Architecture and trade-off reviewer"
+          },
+          {
+            "name": "ogb-critic",
+            "description": "Plan quality and acceptance-criteria critic"
+          },
+          {
+            "name": "ogb-explorer",
+            "description": "Read-only codebase investigator"
+          },
+          {
+            "name": "ogb-executor",
+            "description": "Bounded implementation worker"
+          },
+          {
+            "name": "ogb-verifier",
+            "description": "Independent evidence-based verifier"
+          }
+        ]
+      }
+    }
+  }
+}

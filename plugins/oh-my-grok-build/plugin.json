@@ -1,0 +1,23 @@
+{
+  "name": "oh-my-grok-build",
+  "version": "0.1.0",
+  "description": "Grok Build-native consensus planning, bounded parallel execution, and evidence-based verification",
+  "author": {
+    "name": "duarbdhks",
+    "email": "14940560+duarbdhks@users.noreply.github.com",
+    "url": "https://github.com/duarbdhks"
+  },
+  "homepage": "https://github.com/duarbdhks/oh-my-grok-build",
+  "repository": "https://github.com/duarbdhks/oh-my-grok-build",
+  "license": "MIT",
+  "keywords": [
+    "grok-build",
+    "multi-agent",
+    "planning",
+    "orchestration",
+    "worktree",
+    "verification"
+  ],
+  "skills": "skills",
+  "agents": "agents"
+}
