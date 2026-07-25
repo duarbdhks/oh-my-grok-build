@@ -48,4 +48,6 @@ git push origin v0.1.0
 
 xAI operates [`xai-org/plugin-marketplace`](https://github.com/xai-org/plugin-marketplace) as the official marketplace, and `grok` registers it by default as the `xai-official` source. Listed plugins are pinned to a commit SHA in `.grok-plugin/marketplace.json`, so requesting a listing first requires this repository to have a tagged stable version.
 
-Currently `oh-my-grok-build` is a third-party marketplace and has not applied for an official listing. This will be reconsidered after passing the real-session validation gates in the roadmap above.
+After passing the v0.1 validation gates in `docs/roadmap.md` and cutting the `v0.1.0` tag, a listing was requested in [PR #146](https://github.com/xai-org/plugin-marketplace/pull/146). It is awaiting review; until it merges, `oh-my-grok-build` remains a third-party marketplace.
+
+Once listed, pushing a new commit is not enough to update the plugin. The marketplace entry is pinned to a SHA, so a separate PR has to bump that SHA before users see the change.

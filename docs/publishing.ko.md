@@ -48,4 +48,6 @@ git push origin v0.1.0
 
 xAI는 [`xai-org/plugin-marketplace`](https://github.com/xai-org/plugin-marketplace)를 공식 마켓플레이스로 운영하며, `grok`은 이를 `xai-official` 소스로 기본 등록합니다. 등재된 플러그인은 `.grok-plugin/marketplace.json`에 커밋 SHA로 고정되므로, 등재를 요청하려면 먼저 이 저장소가 태그된 안정 버전을 가져야 합니다.
 
-현재 `oh-my-grok-build`는 서드파티 마켓플레이스이며 공식 등재를 신청하지 않았습니다. 위 로드맵의 실제 세션 검증 게이트를 통과한 뒤에 검토합니다.
+`docs/roadmap.ko.md`의 v0.1 검증 게이트를 통과하고 `v0.1.0` 태그를 만든 뒤 [PR #146](https://github.com/xai-org/plugin-marketplace/pull/146)으로 등재를 신청했습니다. 리뷰 대기 중이며, 머지 전까지 `oh-my-grok-build`는 서드파티 마켓플레이스로 남습니다.
+
+등재 후 플러그인을 갱신하려면 새 커밋을 푸시하는 것만으로는 부족합니다. 마켓플레이스 엔트리가 SHA로 고정되어 있으므로 별도 PR로 SHA를 올려야 사용자에게 반영됩니다.
