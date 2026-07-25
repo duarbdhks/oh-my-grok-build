@@ -24,6 +24,12 @@ This project is inspired by the workflow discipline of `oh-my-claudecode`, but i
 | `/ogb-workflow` | Author and smoke-validate reusable native workflows |
 | `/ogb-doctor` | Diagnose plugin discovery and required Grok capabilities |
 
+## Agents
+
+The plugin ships six role agents: `ogb-planner`, `ogb-architect`, `ogb-critic`, `ogb-explorer`, `ogb-executor`, and `ogb-verifier`.
+
+Those are file names and frontmatter names. Grok registers plugin agents under a plugin-qualified name, so spawn them as `oh-my-grok-build:ogb-planner`. Skills are the opposite — they keep their bare name, so the commands above are `ogb-plan`, not `oh-my-grok-build:ogb-plan`.
+
 ## Install
 
 ```bash

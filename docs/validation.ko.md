@@ -42,6 +42,13 @@ Grok은 플러그인 에이전트를 `oh-my-grok-build:<agent>`로 등록하지�
 
 따라서 frontmatter 정합성은 `npm test`(`scripts/validate.mjs`)가 담당합니다. 이 스크립트는 허용된 `permissionMode` 값 집합과 미지원 필드 부재를 검사합니다.
 
+`scripts/validate.mjs`에도 한계가 있습니다. 컴포넌트 이름 검사는 **단방향**입니다.
+
+- 잡습니다: SKILL.md의 `oh-my-grok-build:<이름>` 참조가 실제 에이전트가 아닌 경우
+- 못 잡습니다: 에이전트를 prefix 없이 bare 이름으로 spawn하도록 지시하는 경우
+
+후자는 산문 속 bare `ogb-executor`가 파일 언급과 구분되지 않아 오탐이 발생하므로 정적으로 검출하지 않습니다. 대신 `ogb-start`와 `ogb-ultrawork`의 spawn shape 블록으로 올바른 형식을 고정하고, 실제 세션의 `/ogb-doctor`로 확인합니다.
+
 ## 현재 환경에서 실행하지 못한 검증
 
 `/ogb-doctor`는 실행했지만, 아래는 아직 미검증입니다.

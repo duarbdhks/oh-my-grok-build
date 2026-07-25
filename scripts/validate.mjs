@@ -126,8 +126,14 @@ for (const skillName of actualSkills) {
 // rejected here. Plugin agents may not declare `bypassPermissions` at all.
 const grokPermissionModes = new Set(['default', 'auto', 'plan']);
 // Grok registers plugin agents as `oh-my-grok-build:<agent>` but keeps skills on their bare name.
-// Referring to a skill with the qualified form (or an agent without it) resolves to nothing at
-// spawn time, so every qualified reference in a SKILL.md must name a real agent.
+// Referring to a skill with the qualified form resolves to nothing at spawn time, so every
+// qualified reference in a SKILL.md must name a real agent.
+//
+// This check is deliberately one-way. The opposite mistake -- naming an agent without the prefix --
+// is not detectable here: a bare `ogb-executor` in prose is indistinguishable from a legitimate
+// mention of the file, and scanning for it produces false positives. That case is covered by the
+// spawn-shape blocks in `ogb-start` and `ogb-ultrawork`, and by running `/ogb-doctor` in a live
+// session. See docs/validation.ko.md.
 for (const skillName of actualSkills) {
   const skillFile = path.join(skillsRoot, skillName, 'SKILL.md');
   if (!fs.existsSync(skillFile)) continue;

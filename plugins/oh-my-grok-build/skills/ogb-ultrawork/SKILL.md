@@ -25,7 +25,7 @@ Use this skill when two or more tasks can proceed without depending on each othe
    - Group work into waves. Tasks in one wave must be independent.
 
 2. **Choose the native mechanism**
-   - For two to four distinct tasks, use parallel `spawn_subagent` calls.
+   - For two to four distinct tasks, use parallel `spawn_subagent` calls with the agent types in the spawn shape below.
    - For more than four repeated or schema-shaped tasks, prefer the native `workflow` tool.
    - Before writing or editing a Rhai workflow, load Grok Build's bundled `create-workflow` skill and follow it.
 
@@ -50,7 +50,31 @@ Use this skill when two or more tasks can proceed without depending on each othe
 
 7. **Verify**
    - Run narrow checks per task and one integrated check for the final workspace.
-   - For code changes, finish with `ogb-verify`.
+   - For code changes, finish with the `ogb-verify` skill.
+
+## Recommended spawn shape
+
+Grok registers plugin agents under a plugin-qualified name. A bare `ogb-executor` does not resolve, so always spawn with the full name.
+
+For a write task, use the equivalent of:
+
+```text
+subagent_type: oh-my-grok-build:ogb-executor
+capability_mode: all
+isolation: worktree
+background: true
+```
+
+For exploration, use the equivalent of:
+
+```text
+subagent_type: oh-my-grok-build:ogb-explorer
+capability_mode: read-only
+isolation: none
+background: true
+```
+
+Skills are the opposite: they are registered under their bare name. The closing verification step is the `ogb-verify` skill, with no plugin prefix.
 
 ## Stop conditions
 
