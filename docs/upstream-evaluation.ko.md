@@ -1,5 +1,7 @@
 # `oh-my-claudecode` 기반 구성 평가
 
+[English](upstream-evaluation.md)
+
 ## 최종 판단
 
 좋은 아이디어이지만, **전체 포크가 아니라 Grok Build 네이티브 플러그인으로 재설계할 때만** 권장합니다.

@@ -1,5 +1,7 @@
 # 아키텍처
 
+[English](architecture.md)
+
 ## 목표
 
 `oh-my-grok-build`는 실행 엔진이 아니라 **운영 규율 계층**입니다. Grok Build가 세션과 도구를 소유하고, 이 플러그인은 어떤 순서와 증거 기준으로 사용할지를 정의합니다.

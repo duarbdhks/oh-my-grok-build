@@ -1,5 +1,7 @@
 # 검증 상태
 
+[English](validation.md)
+
 ## 완료된 검증
 
 - JSON 파싱: marketplace, plugin index, plugin manifest

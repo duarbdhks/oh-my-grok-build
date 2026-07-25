@@ -12,6 +12,10 @@ All notable changes to this project are documented here.
 - Dependency-free static validator and GitHub Actions workflow. It rejects `permissionMode` values Grok Build does not emit and frontmatter fields Grok Build does not document.
 - Architecture, evaluation, validation, security, and roadmap documentation.
 
+### Documentation language
+
+English is now the default documentation language and Korean is the additional translation. Every document ships as a pair — `README.md` / `README.ko.md`, and `docs/<name>.md` / `docs/<name>.ko.md`. The old `README.en.md` is superseded by `README.md`. `npm test` now fails if one half of a pair is missing or if an English document links into the Korean set.
+
 ### Verified in a live Grok Build session
 
 All six skills were executed against `grok` 0.2.112. Write-capable skills ran in throwaway git repositories.

@@ -133,7 +133,7 @@ const grokPermissionModes = new Set(['default', 'auto', 'plan']);
 // is not detectable here: a bare `ogb-executor` in prose is indistinguishable from a legitimate
 // mention of the file, and scanning for it produces false positives. That case is covered by the
 // spawn-shape blocks in `ogb-start` and `ogb-ultrawork`, and by running `/ogb-doctor` in a live
-// session. See docs/validation.ko.md.
+// session. See docs/validation.md.
 for (const skillName of actualSkills) {
   const skillFile = path.join(skillsRoot, skillName, 'SKILL.md');
   if (!fs.existsSync(skillFile)) continue;
@@ -180,8 +180,37 @@ check(!fs.existsSync(path.join(pluginRoot, 'hooks')), 'content-only plugin has n
 check(!fs.existsSync(path.join(pluginRoot, '.mcp.json')), 'content-only plugin has no .mcp.json');
 check(!fs.existsSync(path.join(pluginRoot, '.lsp.json')), 'content-only plugin has no .lsp.json');
 
-for (const required of ['README.md', 'README.en.md', 'LICENSE', 'NOTICE.md', 'SECURITY.md', 'CHANGELOG.md']) {
+for (const required of ['README.md', 'README.ko.md', 'LICENSE', 'NOTICE.md', 'SECURITY.md', 'CHANGELOG.md']) {
   check(fs.existsSync(path.join(root, required)), `${required} exists`);
+}
+
+// English is the default language and Korean is the additional translation, so every document
+// ships as a pair: `<name>.md` (English) alongside `<name>.ko.md` (Korean). A missing half means
+// one language silently fell behind.
+const docsRoot = path.join(root, 'docs');
+const koreanDocs = fs.readdirSync(docsRoot).filter((name) => name.endsWith('.ko.md')).sort();
+const englishDocs = fs.readdirSync(docsRoot)
+  .filter((name) => name.endsWith('.md') && !name.endsWith('.ko.md'))
+  .sort();
+check(koreanDocs.length > 0, 'docs directory contains Korean translations');
+check(sameMembers(englishDocs, koreanDocs.map((name) => name.replace(/\.ko\.md$/, '.md'))),
+  `every doc ships an English and a Korean version (en: ${englishDocs.length}, ko: ${koreanDocs.length})`);
+
+// An English document that points at a Korean file sends the reader into the other language set.
+// Cross-document references are written as backtick paths more often than as markdown links, so
+// match any mention of a `.ko.md` file rather than link syntax only. Each document is allowed
+// exactly one: its own language switcher.
+const englishEntryPoints = [
+  ...englishDocs.map((name) => ({ label: `docs/${name}`, file: path.join(docsRoot, name), own: name.replace(/\.md$/, '.ko.md') })),
+  { label: 'README.md', file: path.join(root, 'README.md'), own: 'README.ko.md' },
+];
+for (const { label, file, own } of englishEntryPoints) {
+  const body = fs.readFileSync(file, 'utf8');
+  const strayRefs = [...body.matchAll(/([A-Za-z0-9-]+\.ko\.md)/g)]
+    .map((match) => match[1])
+    .filter((target) => target !== own);
+  check(strayRefs.length === 0,
+    `${label}: references stay in English${strayRefs.length ? ` (found: ${[...new Set(strayRefs)].join(', ')})` : ''}`);
 }
 
 if (failures.length > 0) {

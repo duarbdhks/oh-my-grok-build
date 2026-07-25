@@ -9,4 +9,5 @@ This repository is a content-only Grok Build plugin marketplace.
 - Do not add hooks, `.mcp.json`, `.lsp.json`, executable binaries, or network installers without an accepted architecture decision.
 - Run `npm test` after every manifest, skill, agent, or index change.
 - Run `npm run validate:grok` when a Grok Build CLI is available.
+- English is the default documentation language; Korean is the additional translation. Every document ships as a pair: `<name>.md` in English and `<name>.ko.md` in Korean. Update both halves in the same change — `npm test` fails when one is missing.
 - Update `CHANGELOG.md`, both READMEs, and `.grok-plugin/plugin-index.json` when public components change.
