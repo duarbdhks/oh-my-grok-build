@@ -41,6 +41,18 @@ Grok Build 네이티브 계획·병렬 실행·검증 도구 모음입니다. `o
 
 위 이름은 파일명이자 frontmatter의 `name`입니다. Grok은 플러그인 에이전트를 `oh-my-grok-build:ogb-planner`처럼 플러그인 이름으로 한정해 등록하므로, 서브에이전트를 생성할 때는 한정된 이름을 써야 합니다. 스킬은 반대로 `ogb-plan`처럼 bare 이름 그대로 등록됩니다.
 
+### 더 넓은 에이전트 모음과 함께 쓰기
+
+이 여섯 개가 스킬 여섯 개에 필요한 전부입니다. `/ogb-plan`부터 `/ogb-doctor`까지 동작하는 데 다른 설치는 필요하지 않습니다. 이 플러그인은 범용 에이전트 라이브러리가 되는 대신 여기서 의도적으로 멈춥니다.
+
+그 범위 밖의 작업 — 코드 리뷰, 보안 감사, 데이터베이스 튜닝, 장애 대응 — 에 특화된 에이전트가 필요하면 [`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents)(MIT) 같은 서드파티 모음이 있습니다. Grok 전용 설치 경로는 없지만, Grok이 Claude 호환 레이어를 통해 `~/.claude/agents/`의 에이전트 정의를 인식하므로 Claude Code 대상 설치가 그대로 동작합니다.
+
+```bash
+./scripts/install.sh --tool claude-code
+```
+
+제안일 뿐 의존성이 아닙니다. 이 플러그인은 해당 프로젝트에서 무엇도 번들하지 않으며 제휴 관계도 없습니다.
+
 ## 설치
 
 ### 마켓플레이스 방식

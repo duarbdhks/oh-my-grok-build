@@ -41,6 +41,18 @@ The plugin also ships the following agents:
 
 Those names are both the file names and the frontmatter `name`. Grok registers plugin agents under a plugin-qualified name, like `oh-my-grok-build:ogb-planner`, so you must use the qualified name when spawning a subagent. Skills, by contrast, register under the bare name, like `ogb-plan`.
 
+### Pairing with a wider agent roster
+
+These six agents are all the six skills need — nothing else has to be installed for `/ogb-plan` through `/ogb-doctor` to work. The plugin deliberately stops there rather than shipping a general agent library.
+
+If you want specialists for work outside that scope — code review, security audit, database tuning, incident response — a third-party roster such as [`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) (MIT) covers it. It has no Grok-specific installer, but Grok discovers agent definitions in `~/.claude/agents/` through its Claude compatibility layer, so its Claude Code target works:
+
+```bash
+./scripts/install.sh --tool claude-code
+```
+
+This is a suggestion, not a dependency. Nothing in this plugin is bundled from or affiliated with that project.
+
 ## Install
 
 ### Marketplace method
