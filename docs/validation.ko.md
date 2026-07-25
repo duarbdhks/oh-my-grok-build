@@ -49,14 +49,29 @@ Grok은 플러그인 에이전트를 `oh-my-grok-build:<agent>`로 등록하지�
 
 후자는 산문 속 bare `ogb-executor`가 파일 언급과 구분되지 않아 오탐이 발생하므로 정적으로 검출하지 않습니다. 대신 `ogb-start`와 `ogb-ultrawork`의 spawn shape 블록으로 올바른 형식을 고정하고, 실제 세션의 `/ogb-doctor`로 확인합니다.
 
-## 현재 환경에서 실행하지 못한 검증
+## 스킬 6개 라이브 실행 검증
 
-`/ogb-doctor`는 실행했지만, 아래는 아직 미검증입니다.
+`grok` 0.2.112 headless(`grok -p`)로 스킬 6개를 전부 실행했습니다. 쓰기 스킬 3개는 임시 git 저장소에서 격리 실행했습니다.
 
-- `/ogb-plan`, `/ogb-start`, `/ogb-ultrawork`, `/ogb-verify`, `/ogb-workflow` 실제 호출과 결과
-- plugin-qualified agent 이름으로 서브에이전트 생성
-- worktree apply와 충돌 처리
-- bundled `create-workflow`와 `check-work` 발견
+| 스킬 | 판정 | 증거 |
+|---|---|---|
+| `/ogb-doctor` | PASS | 스킬 6개·에이전트 6개 등록 확인, Plan mode·subagents·worktree·`create-workflow`·`check-work` 전부 사용 가능 |
+| `/ogb-plan` | PASS | Planner → Architect(REVISE) → Critic(APPROVE) 합의 루프 완주, 소스 미수정 |
+| `/ogb-ultrawork` | PASS | `oh-my-grok-build:ogb-executor` 2개가 worktree 격리로 병렬 실행 후 통합, 대상 2파일만 변경 |
+| `/ogb-start` | PASS | worktree executor 2개, 런타임 수용 기준 충족(`subtract(5,2)`→`3`, `trim`→`"x"`), 기존 export 회귀 없음, commit·push 안 함 |
+| `/ogb-verify` | PASS | `ogb-verifier`와 bundled `check-work` 독립 실행, 검증 세션 중 파일 수정 0건 |
+| `/ogb-workflow` | PASS | Rhai 워크플로 작성 후 `validate_only: true`로 메타데이터·컴파일·대표 args 통과 |
+
+이 실행으로 다음이 함께 확인되었습니다.
+
+- plugin-qualified 이름(`oh-my-grok-build:ogb-*`)으로 서브에이전트가 실제로 생성됨
+- worktree apply가 충돌 없이 통합됨
+- bundled `create-workflow`와 `check-work`가 발견·사용됨
+
+## 남은 미검증
+
+- worktree 병합 **충돌** 처리 경로. 위 실행은 파일 소유권이 겹치지 않아 충돌이 발생하지 않았습니다.
+- 작성된 워크플로의 라이브 실행. `validate_only`는 메타데이터·컴파일·대표 args 경로 하나만 증명하며, 인자 누락·예산 소진·병렬 슬롯 실패 분기는 미검증입니다.
 
 ## 실행 명령
 

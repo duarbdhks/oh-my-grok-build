@@ -12,6 +12,21 @@ All notable changes to this project are documented here.
 - Dependency-free static validator and GitHub Actions workflow. It rejects `permissionMode` values Grok Build does not emit and frontmatter fields Grok Build does not document.
 - Architecture, evaluation, validation, security, and roadmap documentation.
 
+### Verified in a live Grok Build session
+
+All six skills were executed against `grok` 0.2.112. Write-capable skills ran in throwaway git repositories.
+
+| Skill | Result |
+|---|---|
+| `/ogb-doctor` | Six skills and six agents resolved; native prerequisites available |
+| `/ogb-plan` | Planner → Architect (REVISE) → Critic (APPROVE) loop completed without touching source |
+| `/ogb-ultrawork` | Two `oh-my-grok-build:ogb-executor` children ran in isolated worktrees and were integrated |
+| `/ogb-start` | Two worktree executors; runtime acceptance evidence; no commit or push |
+| `/ogb-verify` | Independent verifier plus bundled `check-work`; zero files modified |
+| `/ogb-workflow` | Rhai workflow authored and passed `validate_only` |
+
+Still unproven: worktree merge conflict handling, and a live run of an authored workflow.
+
 ### Verified against the Grok Build CLI
 
 - `grok plugin validate plugins/oh-my-grok-build` passes on `grok` 0.2.112.

@@ -60,7 +60,7 @@ For long-running work, keep the stages explicit: run `/ogb-plan`, review the sav
 
 This repository intentionally ships no daemon, database, hooks, MCP server, native binary, provider router, or tmux worker. It relies on Grok Build for session lifecycle, `/goal`, workflows, worktrees, subagents, and MCP inheritance.
 
-Version `0.1.0` is an experimental preview. Static validation is included; real-session installation and orchestration smoke tests remain required before a stable release.
+Version `0.1.0` ships with static validation plus a live smoke pass: all six skills were executed against Grok Build 0.2.112, covering installation, plugin-qualified subagent spawning, worktree integration, and independent verification. Worktree merge *conflict* handling and a live workflow run are the two paths still unproven — see `docs/validation.ko.md` for the full evidence table.
 
 See the Korean documentation for the full evaluation and architecture.
 
