@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const pluginRoot = path.join(root, 'plugins', 'oh-my-grok-build');
 const expectedSkills = [
+  'ogb-interview',
   'ogb-plan',
   'ogb-start',
   'ogb-ultrawork',

@@ -9,6 +9,7 @@
 ```text
 User
   └─ OGB skills
+      ├─ Clarify: one question per turn → direction brief
       ├─ Plan: planner → architect → critic
       ├─ Execute: explorer / executor + native worktree
       ├─ Parallel: native subagents or native workflow

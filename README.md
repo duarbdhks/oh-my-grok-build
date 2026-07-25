@@ -23,6 +23,7 @@ So this repository focuses on exactly one thing:
 
 | Command | Role | Default safeguard |
 |---|---|---|
+| `/ogb-interview` | One question at a time until a vague idea becomes a direction brief | No source edits; questioning only, never plans or implements |
 | `/ogb-plan` | Planner → Architect → Critic consensus plan | No source edits; up to 3 review loops |
 | `/ogb-start` | Execute an approved plan | Separates task ownership; writes are isolated in worktrees |
 | `/ogb-ultrawork` | Parallel execution of independent tasks | 4 concurrent tasks by default; workflow agent budget of 8 |
@@ -43,7 +44,7 @@ Those names are both the file names and the frontmatter `name`. Grok registers p
 
 ### Pairing with a wider agent roster
 
-These six agents are all the six skills need — nothing else has to be installed for `/ogb-plan` through `/ogb-doctor` to work. The plugin deliberately stops there rather than shipping a general agent library.
+These six agents are all the seven skills need — nothing else has to be installed for `/ogb-interview` through `/ogb-doctor` to work. The plugin deliberately stops there rather than shipping a general agent library.
 
 If you want specialists for work outside that scope — code review, security audit, database tuning, incident response — a third-party roster such as [`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) (MIT) covers it. It has no Grok-specific installer, but Grok discovers agent definitions in `~/.claude/agents/` through its Claude compatibility layer, so its Claude Code target works:
 
@@ -148,9 +149,9 @@ npm run validate:grok
 
 ## Status
 
-The current version is `0.1.0`. Alongside static validation, all six skills were run against a real Grok Build 0.2.112 session, confirming installation, invocation, subagent spawning, worktree integration, and independent verification.
+The current version is `0.1.0`. Alongside static validation, the six skills that shipped in `0.1.0` were run against a real Grok Build 0.2.112 session, confirming installation, invocation, subagent spawning, worktree integration, and independent verification.
 
-What's still unverified is worktree merge **conflict** handling and a live run of an authored workflow. Full evidence is in `docs/validation.md`.
+What's still unverified is worktree merge **conflict** handling, a live run of an authored workflow, and a live session of the newer `/ogb-interview`. Full evidence is in `docs/validation.md`.
 
 ## Attribution and trademarks
 

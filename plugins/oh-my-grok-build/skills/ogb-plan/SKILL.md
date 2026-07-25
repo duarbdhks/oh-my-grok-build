@@ -27,7 +27,7 @@ Create a decision-ready implementation plan through a sequential Planner → Arc
 1. **Ground the request**
    - Classify the request as implementation, bug fix, migration, refactor, incident response, or research-backed design.
    - Capture explicit constraints and make reversible assumptions for missing low-risk details.
-   - Ask only questions that block a safe, testable plan. Do not turn planning into an interview by default.
+   - Ask only questions that block a safe, testable plan. Do not turn planning into an interview by default. When the request is too vague for even one viable option, stop and recommend `/ogb-interview` instead.
 
 2. **Collect evidence**
    - Use direct reads for narrow context.

@@ -2,6 +2,19 @@
 
 All notable changes to this project are documented here.
 
+## Unreleased
+
+### Added
+
+- `/ogb-interview`: a questioning-only skill that turns a vague idea or an unproven design into a direction brief for `/ogb-plan`. One question per turn, weakest-dimension targeting, repository evidence gathered through `ogb-explorer` before the user is asked anything the code can answer, contrarian/simplifier/essence challenge passes, and coarse `CLEAR`/`PARTIAL`/`UNKNOWN` readiness ratings instead of a computed score.
+- `ogb-interview/references/direction-brief-template.md` for the brief structure.
+
+### Notes
+
+- The skill adds no state file, settings key, or agent. Readiness is judged and reported in the response, matching the v0.1 state strategy in `docs/architecture.md`.
+- `/ogb-plan` now recommends `/ogb-interview` when a request is too vague to produce even one viable option.
+- Static validation passes. `/ogb-interview` has not yet been exercised in a live Grok Build session.
+
 ## 0.1.0 - 2026-07-25
 
 ### Added

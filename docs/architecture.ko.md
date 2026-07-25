@@ -9,6 +9,7 @@
 ```text
 사용자
   └─ OGB 스킬
+      ├─ 정리: 한 번에 한 질문 → 방향 브리프
       ├─ 계획: planner → architect → critic
       ├─ 실행: explorer / executor + native worktree
       ├─ 병렬: native subagents 또는 native workflow

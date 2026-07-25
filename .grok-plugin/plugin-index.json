@@ -7,6 +7,10 @@
       "components": {
         "skills": [
           {
+            "name": "ogb-interview",
+            "description": "Interview a vague idea into a decision-ready direction brief"
+          },
+          {
             "name": "ogb-plan",
             "description": "Create a consensus implementation plan without source edits"
           },

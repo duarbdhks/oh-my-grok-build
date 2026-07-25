@@ -2,6 +2,8 @@
 
 [English](validation.md)
 
+> 이 문서의 개수는 스킬 6개를 제공하던 `0.1.0` 라이브 실행 기준입니다. `/ogb-interview`는 그 이후에 추가되어 정적 검증과 `grok plugin validate`는 통과했지만 아직 라이브 세션에서 실행해 보지 않았습니다.
+
 ## 완료된 검증
 
 - JSON 파싱: marketplace, plugin index, plugin manifest

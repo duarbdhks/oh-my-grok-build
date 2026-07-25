@@ -2,6 +2,8 @@
 
 [한국어](validation.ko.md)
 
+> The counts on this page describe the `0.1.0` live run, when the plugin shipped six skills. `/ogb-interview` was added afterwards and has passed static validation and `grok plugin validate`, but has not yet been exercised in a live session.
+
 ## Completed Validation
 
 - JSON parsing: marketplace, plugin index, plugin manifest

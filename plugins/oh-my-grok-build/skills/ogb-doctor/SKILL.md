@@ -23,7 +23,7 @@ Diagnose the plugin without changing the user's environment by default. This com
    - Confirm the plugin is installed, enabled, and trusted as expected.
 
 2. **Component inventory**
-   - Confirm six skills: `ogb-plan`, `ogb-start`, `ogb-ultrawork`, `ogb-verify`, `ogb-workflow`, `ogb-doctor`.
+   - Confirm seven skills: `ogb-interview`, `ogb-plan`, `ogb-start`, `ogb-ultrawork`, `ogb-verify`, `ogb-workflow`, `ogb-doctor`.
    - Confirm six agents. Grok registers plugin agents under a plugin-qualified name, so look for `oh-my-grok-build:ogb-planner`, `oh-my-grok-build:ogb-architect`, `oh-my-grok-build:ogb-critic`, `oh-my-grok-build:ogb-explorer`, `oh-my-grok-build:ogb-executor`, and `oh-my-grok-build:ogb-verifier`. A bare `ogb-planner` is expected to be absent and is not a failure.
    - Check for higher-priority local or user definitions shadowing these names.
 
