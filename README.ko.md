@@ -151,7 +151,9 @@ npm run validate:grok
 
 현재 버전은 `0.1.0`입니다. 정적 검증과 함께, `0.1.0`에 포함된 스킬 6개를 모두 실제 Grok Build 0.2.112 세션에서 실행해 설치·호출·서브에이전트 생성·worktree 통합·독립 검증까지 확인했습니다.
 
-아직 확인하지 못한 것은 worktree 병합 **충돌** 처리, 작성된 워크플로의 라이브 실행, 그리고 이후 추가된 `/ogb-interview`의 라이브 세션입니다. 전체 증거는 `docs/validation.ko.md`에 있습니다.
+`/ogb-interview`는 그 릴리스 이후에 추가되어, 임시 Express 저장소에서 headless 2회 실행으로 따로 검증했습니다.
+
+아직 확인하지 못한 것은 worktree 병합 **충돌** 처리와 작성된 워크플로의 라이브 실행입니다. 전체 증거는 `docs/validation.ko.md`에 있습니다.
 
 ## 출처 및 상표
 

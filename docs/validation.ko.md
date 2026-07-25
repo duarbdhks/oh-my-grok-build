@@ -2,7 +2,7 @@
 
 [English](validation.md)
 
-> 이 문서의 개수는 스킬 6개를 제공하던 `0.1.0` 라이브 실행 기준입니다. `/ogb-interview`는 그 이후에 추가되어 정적 검증과 `grok plugin validate`는 통과했지만 아직 라이브 세션에서 실행해 보지 않았습니다.
+> 아래 `0.1.0` 섹션의 개수는 스킬 6개를 제공하던 그 릴리스의 라이브 실행 기준입니다. `/ogb-interview`는 그 이후에 추가되었고 [별도 섹션](#ogb-interview-라이브-실행-검증)에서 따로 검증합니다.
 
 ## 완료된 검증
 
@@ -71,6 +71,22 @@ Grok은 플러그인 에이전트를 `oh-my-grok-build:<agent>`로 등록하지�
 - plugin-qualified 이름(`oh-my-grok-build:ogb-*`)으로 서브에이전트가 실제로 생성됨
 - worktree apply가 충돌 없이 통합됨
 - bundled `create-workflow`와 `check-work`가 발견·사용됨
+
+## `/ogb-interview` 라이브 실행 검증
+
+`/ogb-interview`는 위 `0.1.0` 실행 이후에 추가되어 별도로 검증했습니다. `grok` 0.2.112 headless(`grok -p`)로, 라우트 2개짜리 Express 앱(`src/server.js`, `package.json`, 인증·기존 rate limit 없음)만 있는 임시 git 저장소에서 실행했습니다.
+
+| 검사 | 판정 | 증거 |
+|---|---|---|
+| 등록 | PASS | `grok inspect --json`에 `ogb-interview`가 플러그인 소스로 `userInvocable: true` 등록 |
+| 매니페스트 | PASS | `grok plugin validate plugins/oh-my-grok-build`가 추가된 스킬 디렉터리를 포함해 유효 판정 |
+| 스코프 형태 게이트 | PASS | Round 0에서 저장소를 먼저 읽고 `src/server.js`·`package.json`을 인용, 상위 컴포넌트 4개 제시 후 확인 질문 1개만 제시 |
+| 질문보다 증거 우선 | PASS | 미들웨어·인증·rate limit 부재를 먼저 확인한 뒤 질문, 코드가 답하는 내용을 사용자에게 되묻지 않음 |
+| 인터뷰 루프 | PASS | 컴포넌트별 `CLEAR`/`PARTIAL`/`UNKNOWN` 준비도 표 보고, 병목 쌍(`rate limit policy` × `Goal`)과 한 문장 근거 지목, 질문 1개 유지 |
+| 추천 답 제시 | PASS | 모든 질문에 근거 붙은 추천 답, 번호 대안, 자유 입력 옵션 동반 |
+| 읽기 전용 경계 | PASS | 두 실행 후 `git status --short --branch` 깨끗, plan 생성·커밋·의존성 설치 없음 |
+
+실행은 두 번입니다. 하나는 콜드 스타트, 하나는 확정된 컴포넌트와 Round 0 답변을 인자로 다시 붙여 넣은 실행으로, 상태 파일 없이 재개하는 문서화된 방식입니다.
 
 ## 남은 미검증
 

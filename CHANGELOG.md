@@ -13,7 +13,7 @@ All notable changes to this project are documented here.
 
 - The skill adds no state file, settings key, or agent. Readiness is judged and reported in the response, matching the v0.1 state strategy in `docs/architecture.md`.
 - `/ogb-plan` now recommends `/ogb-interview` when a request is too vague to produce even one viable option.
-- Static validation passes. `/ogb-interview` has not yet been exercised in a live Grok Build session.
+- Verified with static validation, `grok plugin validate`, and two headless `grok` 0.2.112 runs in a throwaway Express repository. The skill explored before asking, kept one question per turn with a recommended answer, reported the readiness table with a named bottleneck, and left the working tree untouched. Evidence is in `docs/validation.md`.
 
 ## 0.1.0 - 2026-07-25
 

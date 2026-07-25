@@ -2,7 +2,7 @@
 
 [한국어](validation.ko.md)
 
-> The counts on this page describe the `0.1.0` live run, when the plugin shipped six skills. `/ogb-interview` was added afterwards and has passed static validation and `grok plugin validate`, but has not yet been exercised in a live session.
+> The counts in the `0.1.0` sections below describe that release's live run, when the plugin shipped six skills. `/ogb-interview` was added afterwards and is validated separately in [its own section](#live-execution-validation-of-ogb-interview).
 
 ## Completed Validation
 
@@ -71,6 +71,22 @@ This run also confirmed the following:
 - Subagents are actually created under plugin-qualified names (`oh-my-grok-build:ogb-*`)
 - worktree apply merges without conflict
 - The bundled `create-workflow` and `check-work` are discovered and used
+
+## Live Execution Validation of `/ogb-interview`
+
+`/ogb-interview` shipped after the `0.1.0` run above, so it was validated on its own. Ran with `grok` 0.2.112 headless (`grok -p`) in a throwaway git repository holding a two-route Express app (`src/server.js`, `package.json`, no auth and no existing rate limiting).
+
+| Check | Verdict | Evidence |
+|---|---|---|
+| Registration | PASS | `grok inspect --json` lists `ogb-interview` with `userInvocable: true` under the plugin source |
+| Manifest | PASS | `grok plugin validate plugins/oh-my-grok-build` reports a valid manifest with the added skill directory |
+| Scope-shape gate | PASS | Round 0 read the repository first, cited `src/server.js` and `package.json`, proposed four top-level components, and asked exactly one confirmation question |
+| Evidence before questions | PASS | Stated that no middleware, auth, or rate limiting exists before asking anything, rather than asking the user what the code answers |
+| Interview loop | PASS | Reported the `CLEAR`/`PARTIAL`/`UNKNOWN` readiness table per component, named the bottleneck pair (`rate limit policy` × `Goal`) with a one-sentence rationale, and asked one question |
+| Recommended answer | PASS | Every question carried a recommended answer with reasoning, numbered alternatives, and a free-text option |
+| Read-only boundary | PASS | `git status --short --branch` clean after both runs; no plan created, no commit, no dependency installed |
+
+Two runs were used: one from a cold start, and one that pasted the confirmed components and the Round 0 answer back in as the argument, which is the documented way to resume without a state file.
 
 ## Still Unverified
 
