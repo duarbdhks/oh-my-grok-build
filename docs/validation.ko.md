@@ -32,6 +32,7 @@
   - 에이전트 6개가 모두 `oh-my-grok-build:ogb-*` plugin-qualified 이름으로 등록됨 — 스킬이 참조하는 이름과 일치
 - GitHub Actions `validate` 워크플로 통과
 - 에이전트 이름 변경 후 라이브 등록 확인. `grok plugin update oh-my-grok-build` 실행 후 `grok inspect --json`이 6개를 모두 `oh-my-grok-build:planner`, `:architect`, `:critic`, `:explorer`, `:executor`, `:verifier`로 나열합니다. 같은 실행에서 `~/.claude/agents/`의 동명 사용자 에이전트 5개(`planner`, `architect`, `critic`, `executor`, `verifier`)도 나란히 등록되어 있으며, 양쪽 어느 쪽도 상대를 밀어내지 않습니다. 한정된 이름이 레지스트리 키이므로 짧은 에이전트 이름은 안전합니다. 한정되지 않은 참조는 사용자 쪽 에이전트로 가며, 이를 잡으려고 validator 규칙과 `/ogb-doctor` 경고가 존재합니다.
+- 그 설치본에 대해 `/ogb-doctor`를 headless로 재실행: 종합 PASS, FAIL 0건. 스킬 7개와 qualified 에이전트 6개를 모두 해석했고, 새 shadowing 체크가 설계대로 작동했습니다. bare 에이전트 이름을 "없는 것이 정상"으로 취급하는 대신, `~/.claude/agents/`의 동명 정의 5개를 파일명까지 짚어 `WARN`으로 보고했습니다. 같은 실행에서 나온 무관한 관찰 하나: `inspect`의 `provides.agents`가 실제 등록 6개인데 1로 나옵니다. 이 필드가 에이전트가 아니라 에이전트 디렉터리를 세기 때문이며, 이름 변경 이전부터 그랬고 `grok plugin validate`의 `1 agent dir(s)` 출력과 일치합니다.
 - 실제 Grok 세션에서 `/ogb-doctor` 실행. 스킬·에이전트 디스커버리, Plan mode, subagents, worktree, `create-workflow`, `check-work` 전부 PASS. 이 실행으로 컴포넌트 이름 규약 결함 2건을 발견해 수정했습니다(아래 참조).
 
 ### `/ogb-doctor` 실행으로 발견한 결함
