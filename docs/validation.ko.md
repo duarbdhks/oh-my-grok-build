@@ -4,7 +4,7 @@
 
 > 아래 `0.1.0` 섹션의 개수는 스킬 6개를 제공하던 그 릴리스의 라이브 실행 기준입니다. `/ogb-interview`는 그 이후에 추가되었고 [별도 섹션](#ogb-interview-라이브-실행-검증)에서 따로 검증합니다.
 >
-> 이 실행들 이후 에이전트 이름이 바뀌었습니다. `oh-my-grok-build:` 한정자가 이미 네임스페이스 역할을 하므로 `ogb-planner`는 `planner`가 되었고, 나머지 다섯 개도 같습니다. 아래에 기록된 `ogb-*` 에이전트 이름은 당시 실제로 실행된 내용을 서술하므로 그대로 둡니다. 새 이름으로의 등록 재확인은 [남은 미검증](#남은-미검증)에 있습니다.
+> 이 실행들 이후 에이전트 이름이 바뀌었습니다. `oh-my-grok-build:` 한정자가 이미 네임스페이스 역할을 하므로 `ogb-planner`는 `planner`가 되었고, 나머지 다섯 개도 같습니다. 아래에 기록된 `ogb-*` 에이전트 이름은 당시 실제로 실행된 내용을 서술하므로 그대로 둡니다. 새 이름으로의 등록은 별도로 재확인했으며, 아래 CLI 섹션에 있습니다.
 
 ## 완료된 검증
 
@@ -31,6 +31,7 @@
   - 스킬 6개가 모두 `userInvocable: true`로 등록됨 (슬래시 명령 호출 가능)
   - 에이전트 6개가 모두 `oh-my-grok-build:ogb-*` plugin-qualified 이름으로 등록됨 — 스킬이 참조하는 이름과 일치
 - GitHub Actions `validate` 워크플로 통과
+- 에이전트 이름 변경 후 라이브 등록 확인. `grok plugin update oh-my-grok-build` 실행 후 `grok inspect --json`이 6개를 모두 `oh-my-grok-build:planner`, `:architect`, `:critic`, `:explorer`, `:executor`, `:verifier`로 나열합니다. 같은 실행에서 `~/.claude/agents/`의 동명 사용자 에이전트 5개(`planner`, `architect`, `critic`, `executor`, `verifier`)도 나란히 등록되어 있으며, 양쪽 어느 쪽도 상대를 밀어내지 않습니다. 한정된 이름이 레지스트리 키이므로 짧은 에이전트 이름은 안전합니다. 한정되지 않은 참조는 사용자 쪽 에이전트로 가며, 이를 잡으려고 validator 규칙과 `/ogb-doctor` 경고가 존재합니다.
 - 실제 Grok 세션에서 `/ogb-doctor` 실행. 스킬·에이전트 디스커버리, Plan mode, subagents, worktree, `create-workflow`, `check-work` 전부 PASS. 이 실행으로 컴포넌트 이름 규약 결함 2건을 발견해 수정했습니다(아래 참조).
 
 ### `/ogb-doctor` 실행으로 발견한 결함
@@ -103,7 +104,6 @@ Grok은 플러그인 에이전트를 `oh-my-grok-build:<agent>`로 등록하지�
 
 ## 남은 미검증
 
-- 이름 변경 후의 라이브 재등록. 설계 자체는 변경 전에 `grok inspect --json`으로 확인했습니다. `oh-my-claudecode` 플러그인이 이미 짧은 이름의 에이전트를 제공하는데, 그 `oh-my-claudecode:planner`와 `~/.claude/agents/planner.md`에서 온 사용자 레벨 `planner`가 서로를 밀어내지 않고 같은 레지스트리에 공존합니다. 한정된 이름이 레지스트리 키라는 증거입니다. 아직 하지 않은 것은 이 플러그인 자체의 재설치입니다. 재설치 또는 재로드 후 에이전트 6개가 `oh-my-grok-build:planner` 형태로 나타나는지 확인하고 `/ogb-doctor`를 실행해야 합니다.
 - worktree 병합 **충돌** 처리 경로. 위 실행은 파일 소유권이 겹치지 않아 충돌이 발생하지 않았습니다.
 - **세션 경계를 넘는** 체인. Grok은 계획을 세션 디렉터리의 `plan.md`에 쓰므로 새 세션은 이를 볼 수 없습니다. 계획 파일이 이미 두 개 있는 디렉터리에서 새 세션으로 `/view-plan`을 실행해 "저장된 계획 없음"을 확인했습니다. `grok -c` 또는 `grok -r <session-id>`로 돌아가면 복원되는 것도 확인했습니다. 스킬은 아직 이 사실을 사용자에게 알려주지 않습니다.
 - 작성된 워크플로의 라이브 실행. `validate_only`는 메타데이터·컴파일·대표 args 경로 하나만 증명하며, 인자 누락·예산 소진·병렬 슬롯 실패 분기는 미검증입니다.
