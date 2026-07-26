@@ -105,7 +105,7 @@ It also stays inside one session, which is the supported path. A plan does not s
 
 ## Scheduling Scenario Mapping for `/ogb-ultrawork`
 
-Each row is checked against the rule that governs it in the `ogb-ultrawork` `SKILL.md`, the same way the naming rules above cite their exact mechanism. Scenarios A and C also have live headless evidence in the next section; B–F remain design mapping only.
+Each row is checked against the rule that governs it in the `ogb-ultrawork` `SKILL.md`, the same way the naming rules above cite their exact mechanism. Scenarios A, C, D, E, and F also have live headless evidence in the next section. B and B2 remain design mapping only.
 
 | Scenario | Expected behavior | Governing rule | Live |
 |---|---|---|---|
@@ -113,11 +113,11 @@ Each row is checked against the rule that governs it in the `ogb-ultrawork` `SKI
 | B — tasks that both write the same schema/config file | Not in the same wave (same-file ownership ban) | Protocol step 4 (never same file) | static only |
 | B2 — tasks that share a schema/resource but write disjoint files | Same wave allowed only with lowered concurrency (down to 2) | Protocol step 3 | static only |
 | C — independent file searches and configuration reads | One parallel read-only batch | Protocol step 1 (batched investigation) | PASS (below) |
-| D — integration tests sharing one database and port | Never unconditionally parallel; serialized, with the order stated | Protocol step 4 (overlap ban list) | static only |
-| E — 6 subsystem tasks with proven independence | Up to 6 concurrent implementation agents | Protocol step 3 (raise toward 8 only on proven isolation) | static only |
-| F — 8+ repetitive, same-shaped tasks | Native `workflow` tool considered first | Protocol steps 2 and 3 | static only |
+| D — integration tests sharing one database and port | Never unconditionally parallel; serialized, with the order stated | Protocol step 4 (overlap ban list) | PASS (below) |
+| E — 6 subsystem tasks with proven independence | Up to 6 concurrent implementation agents | Protocol step 3 (raise toward 8 only on proven isolation) | PASS (below) |
+| F — 8+ repetitive, same-shaped tasks | Native `workflow` tool considered first | Protocol steps 2 and 3 | PASS (below) |
 
-## Live Scheduling Smokes for Scenarios A and C
+## Live Scheduling Smokes
 
 Ran with `grok` 0.2.112 headless (`grok -p` / `--single`) after the scheduling follow-ups landed on `main` (`abed75c`). The plugin under test was the local install at `oh-my-grok-build-5cffb366` sourced from `plugins/oh-my-grok-build` in this repository.
 
@@ -148,6 +148,58 @@ Ran with `grok` 0.2.112 headless (`grok -p` / `--single`) after the scheduling f
 | Ownership disjoint | alpha / beta / gamma each owned a single package file; no conflicts |
 | Integration | All three files integrated into the main workspace; returns verified as full names |
 | No commit/push | Working tree dirty only for the three package files; no commit created |
+
+The following D, E, and F runs used the same CLI version against the current local install `oh-my-grok-build-ec452e1b`. The repository was clean before the runs. All fixtures, smoke files, and worktrees created by these runs were removed afterwards; no commit, push, PR, dependency, saved workflow, or tracked runtime component was created.
+
+### Scenario D — integration tests sharing one database and port
+
+- Cwd: this repository, using an ignored throwaway fixture.
+- Prompt: run test A and then test B. Both bound TCP port `43127` and acquired the same file-backed test-database lock before updating `shared-database.json`.
+- Verdict: PASS.
+
+| Check | Evidence |
+|---|---|
+| Explicit serialization | Parent report selected no parallel wave and concurrency 1 for the commands: wave 1 was A, wave 2 was B, dependent on A completion |
+| Real shared resources | Both commands used port `43127`, the same exclusive database lock, and the same database file |
+| Both tests passed | A and B exited 0: `A: PASS 1785078374289-1785078375091`; `B: PASS 1785078387494-1785078388296` |
+| No overlap | `B.start >= A.end` was `1785078387494 >= 1785078375091`; the gap was `12403 ms` |
+| Cleanup | The fixture, database, lock, and evidence log were removed; no listener remained on port `43127` |
+
+This proves the scheduling decision with actual contended resources. The test database was a local file-backed fixture, not an external database service.
+
+### Scenario E — six isolated subsystem tasks
+
+- Cwd: this repository, with six temporary paths under `.ogb-smoke/subsystems/`.
+- Prompt: launch one wave of six qualified `oh-my-grok-build:executor` agents at concurrency 6. Each child owned one of `alpha`, `beta`, `gamma`, `delta`, `epsilon`, or `zeta`, used a worktree, wrote only its own file, and verified its content.
+- Verdict: PASS with a headless permission-mode caveat.
+
+| Check | Evidence |
+|---|---|
+| One wave, batch launch | Parent report selected concurrency 6 and launched all six with `background: true` |
+| Qualified spawn + isolation | Six `oh-my-grok-build:executor` agents used `capability_mode: all`, `isolation: worktree`, and six unique `~/.grok/worktrees/develop-oh-my-grok-build/...` paths |
+| Ownership and resources disjoint | One file per named subsystem; no shared file, database, port, cache, configuration, build output, generated artifact, or external environment |
+| Integration | Six successful diffs were inspected and applied one at a time; no result was rejected |
+| Integrated verification | Per-file checks, six post-apply checks, `ALL_SIX_PASS`, and `FILE_COUNT_OK=6` all exited 0 |
+| Cleanup | The six smoke files and all 18 worktrees created by the two blocked attempts plus the successful run were removed |
+
+With headless `--permission-mode auto`, two bounded attempts launched the six children but every child was cancelled before its first write with `Subagent turn was cancelled: user cancelled a permission prompt`. The final explicitly approved local-fixture retry used `--permission-mode bypassPermissions`; it completed without a prompt or cancellation. Scenario E is therefore live-proven in this environment, but unattended write-capable headless execution was not executable under `auto`.
+
+### Scenario F — workflow threshold for eight repetitive tasks
+
+- Cwd: this repository (read-only).
+- Prompt: eight same-shaped tasks, one per selected repository file, each returning the project-relative path and first non-empty line. The parent had to review the mechanism first, prefer a native workflow, and refuse direct eight-subagent fallback.
+- Verdict: PASS.
+
+| Check | Evidence |
+|---|---|
+| Threshold decision | The parent classified the finite list as eight repeated schema-shaped tasks and selected native `workflow` plus one `parallel()` panel, not eight direct `spawn_subagent` calls |
+| Required authoring gate | The bundled `create-workflow` skill was loaded before the inline Rhai workflow was validated |
+| Validation | `validate_only` passed before the live launch |
+| Budget and terminal state | Explicit `agent_budget=8`; terminal status `complete`; logical agents `8 / 8`; spent 8, remaining 0; `agent_usage_incomplete=false` |
+| Result verification | All eight path/first-line results matched local `awk 'NF{print; exit}'` checks; the workflow elapsed-time floor was about `10497 ms` |
+| Content-only boundary | Inline script only; no workflow file, tracked edit, dependency, nested workflow, commit, push, PR, network, or external system |
+
+All three requested remaining scheduling scenarios were executable and live-proven locally. The only local execution limitation found inside this set was scenario E's write-capable headless `auto` permission path; the explicitly authorized bounded retry succeeded. No D, E, or F behavior remains inferred from static text alone.
 
 ## Live Execution Validation of an Authored Workflow
 
@@ -182,7 +234,7 @@ The success journal recorded one `spawn_agent` result with `success: true`, `con
 - The chain across a **session boundary**. Grok writes the plan to `plan.md` inside the session directory, so a new session cannot see it — confirmed by running `/view-plan` in a fresh session in a directory that already held two plans, which reported no saved plan. Returning with `grok -c` or `grok -r <session-id>` restores it, also confirmed. The skills do not yet tell the user this.
 - Loading a saved project workflow through `script_path` in the throwaway repository. The tool required explicit folder trust even though the same authored body validated and ran through `script`; the run deliberately did not mutate user-global trust state.
 - Workflow budget exhaustion and parallel-slot failure. Live success and missing-argument handling are now exercised, but those two failure branches remain unverified.
-- Live scheduling scenarios B, B2, D, E, and F. A and C are exercised above; the rest of the mapping is still static design only.
+- Live scheduling scenarios B and B2. A, C, D, E, and F are exercised above; only the same-file ban and shared-resource lowered-concurrency mappings remain static design evidence.
 - A non-blocking shell-command primitive in Grok Build. The long-command overlap guidance in `ogb-ultrawork` step 4 is written capability-neutral — a backgrounded child can own the command — because this repository has only confirmed `background: true` as a subagent spawn field, not a command-level background mechanism.
 
 ## Run Commands

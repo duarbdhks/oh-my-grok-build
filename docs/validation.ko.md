@@ -105,7 +105,7 @@ Grok은 플러그인 에이전트를 `oh-my-grok-build:<agent>`로 등록하지�
 
 ## `/ogb-ultrawork` 스케줄링 시나리오 매핑
 
-각 행을 `ogb-ultrawork` `SKILL.md`에서 그것을 지배하는 규칙과 대조합니다. 위의 이름 규칙이 정확한 메커니즘을 인용하는 것과 같은 방식입니다. 시나리오 A와 C는 다음 절에 라이브 headless 증거가 있고, B–F는 설계 매핑만 있습니다.
+각 행을 `ogb-ultrawork` `SKILL.md`에서 그것을 지배하는 규칙과 대조합니다. 위의 이름 규칙이 정확한 메커니즘을 인용하는 것과 같은 방식입니다. 시나리오 A, C, D, E, F는 다음 절에 라이브 headless 증거가 있습니다. B와 B2만 설계 매핑으로 남습니다.
 
 | 시나리오 | 기대 동작 | 지배 규칙 | 라이브 |
 |---|---|---|---|
@@ -113,11 +113,11 @@ Grok은 플러그인 에이전트를 `oh-my-grok-build:<agent>`로 등록하지�
 | B — 동일 schema/config 파일을 둘 다 쓰는 작업 | 같은 Wave에 두지 않음 (동일 파일 소유 금지) | Protocol step 4 (never same file) | 정적만 |
 | B2 — schema/자원을 공유하되 쓰는 파일은 서로 다른 작업 | 동시성을 2까지 낮춘 경우에만 같은 Wave 허용 | Protocol step 3 | 정적만 |
 | C — 독립적인 파일 검색과 설정 읽기 | 하나의 병렬 read-only 배치 | Protocol step 1 (조사 일괄 실행) | PASS (아래) |
-| D — 동일 database와 port를 공유하는 integration test | 무조건 병렬 실행하지 않음; 순서를 명시해 직렬화 | Protocol step 4 (겹침 금지 목록) | 정적만 |
-| E — 독립성이 증명된 6개 subsystem 작업 | 최대 6개 동시 구현 에이전트 | Protocol step 3 (격리 증명 시에만 8까지 상향) | 정적만 |
-| F — 8개 이상의 반복적·동형 작업 | 네이티브 `workflow` 도구를 우선 검토 | Protocol step 2와 3 | 정적만 |
+| D — 동일 database와 port를 공유하는 integration test | 무조건 병렬 실행하지 않음; 순서를 명시해 직렬화 | Protocol step 4 (겹침 금지 목록) | PASS (아래) |
+| E — 독립성이 증명된 6개 subsystem 작업 | 최대 6개 동시 구현 에이전트 | Protocol step 3 (격리 증명 시에만 8까지 상향) | PASS (아래) |
+| F — 8개 이상의 반복적·동형 작업 | 네이티브 `workflow` 도구를 우선 검토 | Protocol step 2와 3 | PASS (아래) |
 
-## 시나리오 A·C 라이브 스케줄링 스모크
+## 라이브 스케줄링 스모크
 
 스케줄링 후속 커밋이 `main` (`abed75c`)에 반영된 뒤 `grok` 0.2.112 headless (`grok -p` / `--single`)로 실행했습니다. 테스트 대상 플러그인은 이 저장소의 `plugins/oh-my-grok-build`를 소스로 한 로컬 설치 `oh-my-grok-build-5cffb366`입니다.
 
@@ -148,6 +148,58 @@ Grok은 플러그인 에이전트를 `oh-my-grok-build:<agent>`로 등록하지�
 | 소유권 비겹침 | alpha / beta / gamma가 각각 패키지 파일 1개만 소유, 충돌 없음 |
 | 통합 | 세 파일 모두 main workspace에 통합, 전체 이름 반환 확인 |
 | 커밋/푸시 없음 | 변경은 패키지 파일 3개뿐, 커밋 생성 없음 |
+
+아래 D, E, F 실행은 같은 CLI 버전과 현재 로컬 설치 `oh-my-grok-build-ec452e1b`를 사용했습니다. 실행 전 저장소는 clean이었습니다. 실행이 만든 fixture, smoke 파일, worktree를 모두 제거했으며 커밋·푸시·PR·의존성·저장된 workflow·tracked runtime component는 생성하지 않았습니다.
+
+### 시나리오 D — 동일 database·port integration test
+
+- cwd: 이 저장소, 무시되는 throwaway fixture 사용.
+- 프롬프트: 테스트 A를 실행한 다음 B 실행. 둘 다 TCP port `43127`을 bind하고 같은 file-backed test database lock을 획득한 뒤 `shared-database.json`을 갱신.
+- 판정: PASS.
+
+| 확인 | 증거 |
+|---|---|
+| 명시적 직렬화 | 부모 리포트가 병렬 wave 없이 명령 동시성 1 선택: wave 1은 A, wave 2는 A 완료에 의존하는 B |
+| 실제 공유 자원 | 두 명령 모두 port `43127`, 같은 exclusive database lock, 같은 database 파일 사용 |
+| 두 테스트 성공 | A와 B exit 0: `A: PASS 1785078374289-1785078375091`; `B: PASS 1785078387494-1785078388296` |
+| 겹침 없음 | `B.start >= A.end`는 `1785078387494 >= 1785078375091`; 간격 `12403 ms` |
+| 정리 | fixture, database, lock, evidence log 제거; port `43127` listener 없음 |
+
+실제로 경합하는 자원으로 스케줄링 판단을 증명했습니다. 테스트 database는 외부 database service가 아니라 로컬 file-backed fixture입니다.
+
+### 시나리오 E — 격리된 subsystem 작업 6개
+
+- cwd: 이 저장소, `.ogb-smoke/subsystems/` 아래 임시 경로 6개 사용.
+- 프롬프트: concurrency 6으로 qualified `oh-my-grok-build:executor` 6명을 한 wave에서 시작. 각 child는 `alpha`, `beta`, `gamma`, `delta`, `epsilon`, `zeta` 중 하나만 소유하고 worktree에서 자기 파일만 쓰고 내용을 검증.
+- 판정: headless permission-mode 주의사항을 포함한 PASS.
+
+| 확인 | 증거 |
+|---|---|
+| 한 wave, 일괄 런치 | 부모 리포트가 concurrency 6 선택, 6명 모두 `background: true`로 시작 |
+| qualified spawn + isolation | `oh-my-grok-build:executor` 6명이 `capability_mode: all`, `isolation: worktree`, 서로 다른 `~/.grok/worktrees/develop-oh-my-grok-build/...` 경로 6개 사용 |
+| 소유권·자원 비겹침 | 명명된 subsystem당 파일 1개; 공유 파일·database·port·cache·configuration·build output·generated artifact·external environment 없음 |
+| 통합 | 성공 diff 6개를 검토해 한 번에 하나씩 적용; 거부 결과 없음 |
+| 통합 검증 | 파일별 검사, 적용 후 검사 6회, `ALL_SIX_PASS`, `FILE_COUNT_OK=6` 모두 exit 0 |
+| 정리 | smoke 파일 6개와 차단된 두 시도 및 성공 실행이 만든 worktree 18개 제거 |
+
+Headless `--permission-mode auto`에서는 제한된 두 번의 시도가 child 6명을 시작했지만 모두 첫 write 전에 `Subagent turn was cancelled: user cancelled a permission prompt`로 취소됐습니다. 최종적으로 명시 승인한 로컬 fixture 재시도는 `--permission-mode bypassPermissions`를 사용했고 prompt·취소 없이 완료됐습니다. 따라서 이 환경에서 시나리오 E는 라이브 증명됐지만, unattended write-capable headless 실행은 `auto`에서 실행할 수 없었습니다.
+
+### 시나리오 F — 반복 작업 8개의 workflow 임계값
+
+- cwd: 이 저장소 (read-only).
+- 프롬프트: 선택한 저장소 파일마다 project-relative path와 첫 non-empty 줄을 반환하는 동형 작업 8개. 부모는 먼저 메커니즘을 검토하고 native workflow를 우선하며 direct 8-subagent fallback을 거부.
+- 판정: PASS.
+
+| 확인 | 증거 |
+|---|---|
+| 임계값 판단 | 부모가 유한 목록을 반복적 schema-shaped 작업 8개로 분류하고 direct `spawn_subagent` 8회 대신 native `workflow`와 `parallel()` panel 1개 선택 |
+| 필수 작성 gate | inline Rhai workflow를 검증하기 전에 bundled `create-workflow` 스킬 로드 |
+| 검증 | 라이브 시작 전 `validate_only` 통과 |
+| 예산·터미널 상태 | 명시적 `agent_budget=8`; terminal status `complete`; logical agents `8 / 8`; spent 8, remaining 0; `agent_usage_incomplete=false` |
+| 결과 검증 | path/첫 줄 결과 8개가 모두 로컬 `awk 'NF{print; exit}'` 검사와 일치; workflow elapsed-time floor 약 `10497 ms` |
+| 콘텐츠형 경계 | inline script만 사용; workflow 파일·tracked edit·의존성·nested workflow·커밋·푸시·PR·네트워크·외부 시스템 없음 |
+
+요청된 남은 스케줄링 시나리오 3개는 모두 로컬에서 실행해 라이브 증명했습니다. 이 집합에서 발견한 유일한 로컬 실행 제한은 시나리오 E의 write-capable headless `auto` permission 경로이며, 명시 승인된 제한적 재시도는 성공했습니다. D, E, F 중 정적 텍스트에서만 추론한 동작은 남지 않았습니다.
 
 ## 작성 워크플로 라이브 검증
 
@@ -182,7 +234,7 @@ Smoke check passed for workflow 'inspect-fixture' (1 declared phases; canned-hos
 - **세션 경계를 넘는** 체인. Grok은 계획을 세션 디렉터리의 `plan.md`에 쓰므로 새 세션은 이를 볼 수 없습니다. 계획 파일이 이미 두 개 있는 디렉터리에서 새 세션으로 `/view-plan`을 실행해 "저장된 계획 없음"을 확인했습니다. `grok -c` 또는 `grok -r <session-id>`로 돌아가면 복원되는 것도 확인했습니다. 스킬은 아직 이 사실을 사용자에게 알려주지 않습니다.
 - 임시 저장소에서 저장된 프로젝트 워크플로를 `script_path`로 로드하는 경로. 같은 작성 본문은 `script`로 검증·실행됐지만 도구가 명시적 folder trust를 요구했고, 이번 실행은 사용자 전역 trust 상태를 의도적으로 바꾸지 않았습니다.
 - 워크플로 예산 소진과 병렬 슬롯 실패. 라이브 성공과 인자 누락 처리는 실행했지만 이 두 실패 분기는 여전히 미검증입니다.
-- 라이브 스케줄링 시나리오 B, B2, D, E, F. A와 C는 위에서 실행했고, 나머지 매핑은 여전히 정적 설계뿐입니다.
+- 라이브 스케줄링 시나리오 B와 B2. A, C, D, E, F는 위에서 실행했으며 동일 파일 금지와 공유 자원 동시성 하향 매핑만 정적 설계 증거로 남습니다.
 - Grok Build의 non-blocking 셸 명령 프리미티브. `ogb-ultrawork` step 4의 장시간 명령 겹침 지침은 capability-neutral로 작성되어 있습니다 — 백그라운드 child가 명령을 소유할 수 있습니다 — 이 저장소가 확인한 것은 subagent spawn 필드로서의 `background: true`뿐이고, 명령 수준의 백그라운드 메커니즘은 확인하지 못했기 때문입니다.
 
 ## 실행 명령
