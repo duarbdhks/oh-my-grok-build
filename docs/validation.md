@@ -149,11 +149,39 @@ Ran with `grok` 0.2.112 headless (`grok -p` / `--single`) after the scheduling f
 | Integration | All three files integrated into the main workspace; returns verified as full names |
 | No commit/push | Working tree dirty only for the three package files; no commit created |
 
+## Live Execution Validation of an Authored Workflow
+
+Ran with `grok` 0.2.112 in the throwaway nested git repository `/Users/yeumgw/develop/oh-my-grok-build/.omx/throwaway/inspect-fixture-live`. The project definition was `.grok/workflows/inspect-fixture.rhai`: metadata name `inspect-fixture`, one `Inspect` phase, one schema-constrained read-only agent, required `args.target`, and an explicit `agent_budget` of 1. The only fixture was `fixture.txt`, containing `OGB_LIVE_OK`; the repository had no dependency manifest, commit, push, or external side effect.
+
+The saved project path exposed a separate trust boundary. Calling the workflow tool with `script_path` returned:
+
+```text
+Tool `workflow` failed: workflow path is not trusted: /Users/yeumgw/develop/oh-my-grok-build/.omx/throwaway/inspect-fixture-live/.grok/workflows/inspect-fixture.rhai (project workflows require folder trust)
+```
+
+To avoid changing user-global folder trust for a throwaway repository, the exact saved file contents were then passed through the tool's inline `script` field. This validates the authored workflow body and its live runtime branches, but not saved-definition discovery or `script_path` loading.
+
+The representative `validate_only: true` call used `args.target = "fixture.txt"` and `agent_budget = 1`. Its exact result was:
+
+```text
+Smoke check passed for workflow 'inspect-fixture' (1 declared phases; canned-host path paused (Infra): The inspector failed. Check the run details, then start a new run.). This did not launch the workflow and did not exercise every branch or live dependency. Offer a real run next.
+```
+
+The smoke passed metadata and compilation. Its canned agent output did not satisfy the required `content` field, so that synthetic path reached the workflow's fail-closed `infra` pause. Two explicitly authorized live launches then produced terminal state:
+
+| Path | Display name | Terminal status | Logical agents | Exact evidence |
+|---|---|---|---|---|
+| Representative success | `inspect-fixture` | `complete` | `1 / 1` | `result_summary = {"content":"OGB_LIVE_OK","target":"fixture.txt"}` |
+| Missing `args` | `inspect-fixture-2` | `blocked` (`verification`) | `0 / 1` | `pause_message = "Pass args.target with the project-relative file to inspect."` |
+
+The success journal recorded one `spawn_agent` result with `success: true`, `content: "OGB_LIVE_OK"`, `tokens_used: 41344`, and `duration_ms: 4419`; the run's `elapsed_ms_floor` was 4446. The missing-argument run went directly from `workflow_started` to `workflow_paused`, had no journal file because it launched no agent, and recorded `elapsed_ms_floor: 4`. This confirms that the failure message is actionable and the guard consumes no child-agent budget.
+
 ## Still Unverified
 
 - The worktree merge **conflict** handling path. The runs above had no overlapping file ownership, so no conflict occurred.
 - The chain across a **session boundary**. Grok writes the plan to `plan.md` inside the session directory, so a new session cannot see it — confirmed by running `/view-plan` in a fresh session in a directory that already held two plans, which reported no saved plan. Returning with `grok -c` or `grok -r <session-id>` restores it, also confirmed. The skills do not yet tell the user this.
-- Live execution of an authored workflow. `validate_only` only proves one path — metadata/compile/representative-args — while the branches for missing arguments, budget exhaustion, or parallel slot failure remain unverified.
+- Loading a saved project workflow through `script_path` in the throwaway repository. The tool required explicit folder trust even though the same authored body validated and ran through `script`; the run deliberately did not mutate user-global trust state.
+- Workflow budget exhaustion and parallel-slot failure. Live success and missing-argument handling are now exercised, but those two failure branches remain unverified.
 - Live scheduling scenarios B, B2, D, E, and F. A and C are exercised above; the rest of the mapping is still static design only.
 - A non-blocking shell-command primitive in Grok Build. The long-command overlap guidance in `ogb-ultrawork` step 4 is written capability-neutral — a backgrounded child can own the command — because this repository has only confirmed `background: true` as a subagent spawn field, not a command-level background mechanism.
 

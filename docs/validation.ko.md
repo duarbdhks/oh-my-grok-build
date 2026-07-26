@@ -149,11 +149,39 @@ Grok은 플러그인 에이전트를 `oh-my-grok-build:<agent>`로 등록하지�
 | 통합 | 세 파일 모두 main workspace에 통합, 전체 이름 반환 확인 |
 | 커밋/푸시 없음 | 변경은 패키지 파일 3개뿐, 커밋 생성 없음 |
 
+## 작성 워크플로 라이브 검증
+
+`grok` 0.2.112로 임시 nested git 저장소 `/Users/yeumgw/develop/oh-my-grok-build/.omx/throwaway/inspect-fixture-live`에서 실행했습니다. 프로젝트 정의는 `.grok/workflows/inspect-fixture.rhai`이며 메타데이터 이름 `inspect-fixture`, `Inspect` 단계 1개, 스키마로 제한한 읽기 전용 에이전트 1개, 필수 `args.target`, 명시적 `agent_budget` 1개로 구성했습니다. 유일한 fixture는 `OGB_LIVE_OK`를 담은 `fixture.txt`였고, 저장소에는 의존성 매니페스트·커밋·푸시·외부 부작용이 없었습니다.
+
+저장된 프로젝트 경로에서는 별도 trust 경계가 드러났습니다. `script_path`로 workflow 도구를 호출한 정확한 결과는 다음과 같습니다.
+
+```text
+Tool `workflow` failed: workflow path is not trusted: /Users/yeumgw/develop/oh-my-grok-build/.omx/throwaway/inspect-fixture-live/.grok/workflows/inspect-fixture.rhai (project workflows require folder trust)
+```
+
+임시 저장소를 위해 사용자 전역 folder trust를 바꾸지 않도록, 저장 파일의 정확히 같은 본문을 도구의 인라인 `script` 필드로 전달했습니다. 따라서 작성된 워크플로 본문과 라이브 런타임 분기는 검증했지만 saved definition 발견과 `script_path` 로드는 검증하지 못했습니다.
+
+대표 `validate_only: true` 호출은 `args.target = "fixture.txt"`와 `agent_budget = 1`을 사용했습니다. 정확한 결과는 다음과 같습니다.
+
+```text
+Smoke check passed for workflow 'inspect-fixture' (1 declared phases; canned-host path paused (Infra): The inspector failed. Check the run details, then start a new run.). This did not launch the workflow and did not exercise every branch or live dependency. Offer a real run next.
+```
+
+스모크는 메타데이터와 컴파일을 통과했습니다. canned agent 출력이 필수 `content` 필드를 충족하지 않아 합성 경로는 fail-closed `infra` pause에 도달했습니다. 이어서 명시적으로 승인된 라이브 실행 2개가 다음 터미널 상태를 만들었습니다.
+
+| 경로 | 표시 이름 | 터미널 상태 | 논리 에이전트 | 정확한 증거 |
+|---|---|---|---|---|
+| 대표 성공 | `inspect-fixture` | `complete` | `1 / 1` | `result_summary = {"content":"OGB_LIVE_OK","target":"fixture.txt"}` |
+| `args` 누락 | `inspect-fixture-2` | `blocked` (`verification`) | `0 / 1` | `pause_message = "Pass args.target with the project-relative file to inspect."` |
+
+성공 journal은 `success: true`, `content: "OGB_LIVE_OK"`, `tokens_used: 41344`, `duration_ms: 4419`인 `spawn_agent` 결과 1개를 기록했고, 실행의 `elapsed_ms_floor`는 4446이었습니다. 인자 누락 실행은 `workflow_started`에서 `workflow_paused`로 바로 이동했습니다. 에이전트를 시작하지 않아 journal 파일이 없었고 `elapsed_ms_floor: 4`를 기록했습니다. 실패 메시지가 실행 가능하며 guard가 자식 에이전트 예산을 쓰지 않는 것을 확인했습니다.
+
 ## 남은 미검증
 
 - worktree 병합 **충돌** 처리 경로. 위 실행은 파일 소유권이 겹치지 않아 충돌이 발생하지 않았습니다.
 - **세션 경계를 넘는** 체인. Grok은 계획을 세션 디렉터리의 `plan.md`에 쓰므로 새 세션은 이를 볼 수 없습니다. 계획 파일이 이미 두 개 있는 디렉터리에서 새 세션으로 `/view-plan`을 실행해 "저장된 계획 없음"을 확인했습니다. `grok -c` 또는 `grok -r <session-id>`로 돌아가면 복원되는 것도 확인했습니다. 스킬은 아직 이 사실을 사용자에게 알려주지 않습니다.
-- 작성된 워크플로의 라이브 실행. `validate_only`는 메타데이터·컴파일·대표 args 경로 하나만 증명하며, 인자 누락·예산 소진·병렬 슬롯 실패 분기는 미검증입니다.
+- 임시 저장소에서 저장된 프로젝트 워크플로를 `script_path`로 로드하는 경로. 같은 작성 본문은 `script`로 검증·실행됐지만 도구가 명시적 folder trust를 요구했고, 이번 실행은 사용자 전역 trust 상태를 의도적으로 바꾸지 않았습니다.
+- 워크플로 예산 소진과 병렬 슬롯 실패. 라이브 성공과 인자 누락 처리는 실행했지만 이 두 실패 분기는 여전히 미검증입니다.
 - 라이브 스케줄링 시나리오 B, B2, D, E, F. A와 C는 위에서 실행했고, 나머지 매핑은 여전히 정적 설계뿐입니다.
 - Grok Build의 non-blocking 셸 명령 프리미티브. `ogb-ultrawork` step 4의 장시간 명령 겹침 지침은 capability-neutral로 작성되어 있습니다 — 백그라운드 child가 명령을 소유할 수 있습니다 — 이 저장소가 확인한 것은 subagent spawn 필드로서의 `background: true`뿐이고, 명령 수준의 백그라운드 메커니즘은 확인하지 못했기 때문입니다.
 

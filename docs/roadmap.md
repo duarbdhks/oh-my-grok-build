@@ -21,9 +21,9 @@ Before a stable release, the following real-session scenarios must pass.
 5. ⬜ Blocking conflicting file ownership before execution — a scenario with overlapping ownership hasn't been created yet
 6. ✅ Does not misjudge a failed test as a success
 7. ✅ `oh-my-grok-build:verifier` and `check-work` run independently
-8. ✅ `/ogb-workflow` only proposes scripts that passed `validate_only`
+8. ✅ `/ogb-workflow` script body passed `validate_only`, completed one live run, and blocked missing arguments before spawning an agent
 
-Evidence is in `docs/validation.md`. Only item 5 is unverified, and it can only be reproduced by deliberately creating a conflicting work split.
+Evidence is in `docs/validation.md`. Among the numbered scenarios, only item 5 is unverified, and it can only be reproduced by deliberately creating a conflicting work split. Saved project-workflow loading through `script_path` still has a separate folder-trust limitation documented there.
 
 ## v0.2 — Validated Workflow Recipes
 

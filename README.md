@@ -159,7 +159,7 @@ The current version is `0.1.0`. Alongside static validation, the six skills that
 
 The chain from `/ogb-interview` through `/ogb-verify` has also been run continuously inside one session, which covers the handoffs between skills rather than each skill alone.
 
-Still unverified: worktree merge **conflict** handling, a live run of an authored workflow, and the chain across a session boundary — a plan does not carry into a fresh session, so return with `grok -c` before `/ogb-start`. Full evidence is in `docs/validation.md`.
+An authored minimal workflow body has now completed a live run, and its missing-argument path blocked before spawning an agent. Still unverified: worktree merge **conflict** handling, saved project-workflow loading through `script_path` under folder trust, and the chain across a session boundary — a plan does not carry into a fresh session, so return with `grok -c` before `/ogb-start`. Full evidence is in `docs/validation.md`.
 
 ## Attribution and trademarks
 

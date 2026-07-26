@@ -20,6 +20,7 @@ All notable changes to this project are documented here.
 - `docs/architecture.md` and its Korean pair now describe dynamic concurrency (4 default, at most 8 with proven isolation, lowered on shared resources) instead of a flat default of 4, and distinguish baseline/`/ogb-start` between-wave review from `/ogb-ultrawork` progressive mid-wave review, slot backfill, and one-at-a-time integration.
 - `docs/validation.md` and its pair gained a scheduling-scenario mapping for `/ogb-ultrawork` (including B same-file ban vs B2 shared-resource lowered concurrency). Scenarios A and C were live-smoked with headless `grok` 0.2.112; B/B2/D/E/F and the shell-command background primitive remain unverified.
 - `ogb-ultrawork/references/parallel-report-template.md` now records each agent's qualified `subagent_type`, isolation mode, worktree path, whether `ogb-verify` ran, and the integrated check command.
+- `.gitignore` now excludes `.omx/` so local Ralph state and throwaway validation fixtures do not enter release diffs.
 
 ### Notes
 
@@ -29,6 +30,7 @@ All notable changes to this project are documented here.
 - The chain from `/ogb-interview` through `/ogb-verify` has since been run continuously inside one interactive session, with every skill behaving as documented. That covers the handoffs between skills, which the earlier per-skill runs did not.
 - A plan does not survive into a fresh session — Grok stores it in the session directory. `grok -c` or `grok -r <session-id>` restores it. Both directions were confirmed. The skills do not yet say this, so it is recorded under Still Unverified in `docs/validation.md` rather than treated as covered.
 - Scheduling smokes: Scenario C used three concurrent `oh-my-grok-build:explorer` agents on this repo (read-only, tree stayed clean). Scenario A used three concurrent worktree `oh-my-grok-build:executor` agents on a throwaway three-package fixture and integrated full-name fixes without commit or push.
+- Live workflow smoke: the exact `inspect-fixture` script body passed `validate_only` on `grok` 0.2.112, then completed a live run with `{"content":"OGB_LIVE_OK","target":"fixture.txt"}` using one logical agent. A second run without args stopped as `blocked` with `Pass args.target with the project-relative file to inspect.` and used zero agents. The throwaway repository's saved `script_path` was rejected by folder trust, so the same file contents were launched through inline `script`; no dependency or runtime component was added.
 
 ## 0.1.0 - 2026-07-25
 
