@@ -105,24 +105,56 @@ It also stays inside one session, which is the supported path. A plan does not s
 
 ## Scheduling Scenario Mapping for `/ogb-ultrawork`
 
-This table is a static design mapping, not a live run: each scenario is checked against the specific rule that governs it in the `ogb-ultrawork` `SKILL.md`, the same way the naming rules above cite their exact mechanism. Live scheduling runs remain in Still Unverified below.
+Each row is checked against the rule that governs it in the `ogb-ultrawork` `SKILL.md`, the same way the naming rules above cite their exact mechanism. Scenarios A and C also have live headless evidence in the next section; B–F remain design mapping only.
 
-| Scenario | Expected behavior | Governing rule |
-|---|---|---|
-| A — fixes in 3 independent packages | Same wave, launched as one batch | Protocol step 5 (launch together) |
-| B — tasks that both write the same schema/config file | Not in the same wave (same-file ownership ban) | Protocol step 4 (never same file) |
-| B2 — tasks that share a schema/resource but write disjoint files | Same wave allowed only with lowered concurrency (down to 2) | Protocol step 3 |
-| C — independent file searches and configuration reads | One parallel read-only batch | Protocol step 1 (batched investigation) |
-| D — integration tests sharing one database and port | Never unconditionally parallel; serialized, with the order stated | Protocol step 4 (overlap ban list) |
-| E — 6 subsystem tasks with proven independence | Up to 6 concurrent implementation agents | Protocol step 3 (raise toward 8 only on proven isolation) |
-| F — 8+ repetitive, same-shaped tasks | Native `workflow` tool considered first | Protocol steps 2 and 3 |
+| Scenario | Expected behavior | Governing rule | Live |
+|---|---|---|---|
+| A — fixes in 3 independent packages | Same wave, launched as one batch | Protocol step 5 (launch together) | PASS (below) |
+| B — tasks that both write the same schema/config file | Not in the same wave (same-file ownership ban) | Protocol step 4 (never same file) | static only |
+| B2 — tasks that share a schema/resource but write disjoint files | Same wave allowed only with lowered concurrency (down to 2) | Protocol step 3 | static only |
+| C — independent file searches and configuration reads | One parallel read-only batch | Protocol step 1 (batched investigation) | PASS (below) |
+| D — integration tests sharing one database and port | Never unconditionally parallel; serialized, with the order stated | Protocol step 4 (overlap ban list) | static only |
+| E — 6 subsystem tasks with proven independence | Up to 6 concurrent implementation agents | Protocol step 3 (raise toward 8 only on proven isolation) | static only |
+| F — 8+ repetitive, same-shaped tasks | Native `workflow` tool considered first | Protocol steps 2 and 3 | static only |
+
+## Live Scheduling Smokes for Scenarios A and C
+
+Ran with `grok` 0.2.112 headless (`grok -p` / `--single`) after the scheduling follow-ups landed on `main` (`abed75c`). The plugin under test was the local install at `oh-my-grok-build-5cffb366` sourced from `plugins/oh-my-grok-build` in this repository.
+
+### Scenario C — parallel read-only investigation
+
+- Cwd: this repository (read-only).
+- Prompt: three independent lookups (spawn shape, no-fan-out invariants, `package.json` test scripts), no file edits.
+- Verdict: PASS.
+
+| Check | Evidence |
+|---|---|
+| One wave, batch launch | Parent report: three `oh-my-grok-build:explorer` agents in one wave; investigation described as one parallel batch, not sequential |
+| Qualified spawn + isolation | All three: `subagent_type: oh-my-grok-build:explorer`, isolation `none`, no worktree |
+| Findings correct | Spawn shapes in `ogb-ultrawork/SKILL.md`; no-fan-out on `executor.md` L13 and `explorer.md` L14; `npm test` → `node scripts/validate.mjs` |
+| Read-only boundary | `git status` clean after the run (`main...origin/main`, HEAD `abed75c`) |
+| Report contract | Parallel-report structure filled (concurrency, agents table, verification, remaining risks) |
+
+### Scenario A — three independent package fixes
+
+- Cwd: throwaway git repo with `packages/{alpha,beta,gamma}/index.js`, each returning a truncated name (`alph` / `bet` / `gamm`).
+- Prompt: one wave of three independent worktree executors; fix returns to `'alpha'` / `'beta'` / `'gamma'`; no commit or push.
+- Verdict: PASS.
+
+| Check | Evidence |
+|---|---|
+| One wave, batch launch | Parent report: concurrency 3; three `oh-my-grok-build:executor` agents launched together with `background: true` |
+| Worktree isolation | Each child used `isolation: worktree` with a distinct worktree path under `~/.grok/worktrees/...` |
+| Ownership disjoint | alpha / beta / gamma each owned a single package file; no conflicts |
+| Integration | All three files integrated into the main workspace; returns verified as full names |
+| No commit/push | Working tree dirty only for the three package files; no commit created |
 
 ## Still Unverified
 
 - The worktree merge **conflict** handling path. The runs above had no overlapping file ownership, so no conflict occurred.
 - The chain across a **session boundary**. Grok writes the plan to `plan.md` inside the session directory, so a new session cannot see it — confirmed by running `/view-plan` in a fresh session in a directory that already held two plans, which reported no saved plan. Returning with `grok -c` or `grok -r <session-id>` restores it, also confirmed. The skills do not yet tell the user this.
 - Live execution of an authored workflow. `validate_only` only proves one path — metadata/compile/representative-args — while the branches for missing arguments, budget exhaustion, or parallel slot failure remain unverified.
-- Live scheduling-scenario runs. The A–F mapping above is static: each scenario cites its governing rule, but none has been exercised against a real Grok session.
+- Live scheduling scenarios B, B2, D, E, and F. A and C are exercised above; the rest of the mapping is still static design only.
 - A non-blocking shell-command primitive in Grok Build. The long-command overlap guidance in `ogb-ultrawork` step 4 is written capability-neutral — a backgrounded child can own the command — because this repository has only confirmed `background: true` as a subagent spawn field, not a command-level background mechanism.
 
 ## Run Commands

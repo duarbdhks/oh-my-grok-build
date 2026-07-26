@@ -105,24 +105,56 @@ Grok은 플러그인 에이전트를 `oh-my-grok-build:<agent>`로 등록하지�
 
 ## `/ogb-ultrawork` 스케줄링 시나리오 매핑
 
-이 표는 라이브 실행이 아니라 정적 설계 매핑입니다. 위의 이름 규칙들이 정확한 메커니즘을 인용하는 것과 같은 방식으로, 각 시나리오를 `ogb-ultrawork` `SKILL.md`에서 그것을 지배하는 구체적 규칙과 대조합니다. 라이브 스케줄링 실행은 아래 남은 미검증에 있습니다.
+각 행을 `ogb-ultrawork` `SKILL.md`에서 그것을 지배하는 규칙과 대조합니다. 위의 이름 규칙이 정확한 메커니즘을 인용하는 것과 같은 방식입니다. 시나리오 A와 C는 다음 절에 라이브 headless 증거가 있고, B–F는 설계 매핑만 있습니다.
 
-| 시나리오 | 기대 동작 | 지배 규칙 |
-|---|---|---|
-| A — 독립 3개 패키지 수정 | 같은 Wave, 한 배치로 일괄 시작 | Protocol step 5 (launch together) |
-| B — 동일 schema/config 파일을 둘 다 쓰는 작업 | 같은 Wave에 두지 않음 (동일 파일 소유 금지) | Protocol step 4 (never same file) |
-| B2 — schema/자원을 공유하되 쓰는 파일은 서로 다른 작업 | 동시성을 2까지 낮춘 경우에만 같은 Wave 허용 | Protocol step 3 |
-| C — 독립적인 파일 검색과 설정 읽기 | 하나의 병렬 read-only 배치 | Protocol step 1 (조사 일괄 실행) |
-| D — 동일 database와 port를 공유하는 integration test | 무조건 병렬 실행하지 않음; 순서를 명시해 직렬화 | Protocol step 4 (겹침 금지 목록) |
-| E — 독립성이 증명된 6개 subsystem 작업 | 최대 6개 동시 구현 에이전트 | Protocol step 3 (격리 증명 시에만 8까지 상향) |
-| F — 8개 이상의 반복적·동형 작업 | 네이티브 `workflow` 도구를 우선 검토 | Protocol step 2와 3 |
+| 시나리오 | 기대 동작 | 지배 규칙 | 라이브 |
+|---|---|---|---|
+| A — 독립 3개 패키지 수정 | 같은 Wave, 한 배치로 일괄 시작 | Protocol step 5 (launch together) | PASS (아래) |
+| B — 동일 schema/config 파일을 둘 다 쓰는 작업 | 같은 Wave에 두지 않음 (동일 파일 소유 금지) | Protocol step 4 (never same file) | 정적만 |
+| B2 — schema/자원을 공유하되 쓰는 파일은 서로 다른 작업 | 동시성을 2까지 낮춘 경우에만 같은 Wave 허용 | Protocol step 3 | 정적만 |
+| C — 독립적인 파일 검색과 설정 읽기 | 하나의 병렬 read-only 배치 | Protocol step 1 (조사 일괄 실행) | PASS (아래) |
+| D — 동일 database와 port를 공유하는 integration test | 무조건 병렬 실행하지 않음; 순서를 명시해 직렬화 | Protocol step 4 (겹침 금지 목록) | 정적만 |
+| E — 독립성이 증명된 6개 subsystem 작업 | 최대 6개 동시 구현 에이전트 | Protocol step 3 (격리 증명 시에만 8까지 상향) | 정적만 |
+| F — 8개 이상의 반복적·동형 작업 | 네이티브 `workflow` 도구를 우선 검토 | Protocol step 2와 3 | 정적만 |
+
+## 시나리오 A·C 라이브 스케줄링 스모크
+
+스케줄링 후속 커밋이 `main` (`abed75c`)에 반영된 뒤 `grok` 0.2.112 headless (`grok -p` / `--single`)로 실행했습니다. 테스트 대상 플러그인은 이 저장소의 `plugins/oh-my-grok-build`를 소스로 한 로컬 설치 `oh-my-grok-build-5cffb366`입니다.
+
+### 시나리오 C — 병렬 read-only 조사
+
+- cwd: 이 저장소 (읽기 전용).
+- 프롬프트: 독립 조회 3건 (spawn shape, no-fan-out 불변, `package.json` 테스트 스크립트), 파일 수정 금지.
+- 판정: PASS.
+
+| 확인 | 증거 |
+|---|---|
+| 한 wave, 일괄 런치 | 부모 리포트: `oh-my-grok-build:explorer` 3명을 한 wave에서 동시 실행, 조사를 순차가 아닌 한 parallel batch로 기술 |
+| 자격 있는 spawn + isolation | 3명 모두 `subagent_type: oh-my-grok-build:explorer`, isolation `none`, worktree 없음 |
+| 조사 결과 정확 | spawn shape는 `ogb-ultrawork/SKILL.md`; no-fan-out은 `executor.md` L13·`explorer.md` L14; `npm test` → `node scripts/validate.mjs` |
+| 읽기 전용 경계 | 실행 후 `git status` clean (`main...origin/main`, HEAD `abed75c`) |
+| 리포트 계약 | parallel-report 구조 채움 (concurrency, agents 표, verification, remaining risks) |
+
+### 시나리오 A — 독립 3개 패키지 수정
+
+- cwd: throwaway git 저장소. `packages/{alpha,beta,gamma}/index.js`가 각각 잘린 이름(`alph` / `bet` / `gamm`)을 반환.
+- 프롬프트: worktree executor 3개를 한 wave로 일괄 실행해 반환값을 `'alpha'` / `'beta'` / `'gamma'`로 수정. 커밋·푸시 금지.
+- 판정: PASS.
+
+| 확인 | 증거 |
+|---|---|
+| 한 wave, 일괄 런치 | 부모 리포트: concurrency 3; `oh-my-grok-build:executor` 3명을 `background: true`로 동시 발사 |
+| worktree 격리 | 각 자식이 `isolation: worktree`와 `~/.grok/worktrees/...` 아래 서로 다른 worktree 경로 사용 |
+| 소유권 비겹침 | alpha / beta / gamma가 각각 패키지 파일 1개만 소유, 충돌 없음 |
+| 통합 | 세 파일 모두 main workspace에 통합, 전체 이름 반환 확인 |
+| 커밋/푸시 없음 | 변경은 패키지 파일 3개뿐, 커밋 생성 없음 |
 
 ## 남은 미검증
 
 - worktree 병합 **충돌** 처리 경로. 위 실행은 파일 소유권이 겹치지 않아 충돌이 발생하지 않았습니다.
 - **세션 경계를 넘는** 체인. Grok은 계획을 세션 디렉터리의 `plan.md`에 쓰므로 새 세션은 이를 볼 수 없습니다. 계획 파일이 이미 두 개 있는 디렉터리에서 새 세션으로 `/view-plan`을 실행해 "저장된 계획 없음"을 확인했습니다. `grok -c` 또는 `grok -r <session-id>`로 돌아가면 복원되는 것도 확인했습니다. 스킬은 아직 이 사실을 사용자에게 알려주지 않습니다.
 - 작성된 워크플로의 라이브 실행. `validate_only`는 메타데이터·컴파일·대표 args 경로 하나만 증명하며, 인자 누락·예산 소진·병렬 슬롯 실패 분기는 미검증입니다.
-- 라이브 스케줄링 시나리오 실행. 위의 A–F 매핑은 정적입니다. 각 시나리오는 지배 규칙을 인용하지만, 실제 Grok 세션에서 실행된 것은 없습니다.
+- 라이브 스케줄링 시나리오 B, B2, D, E, F. A와 C는 위에서 실행했고, 나머지 매핑은 여전히 정적 설계뿐입니다.
 - Grok Build의 non-blocking 셸 명령 프리미티브. `ogb-ultrawork` step 4의 장시간 명령 겹침 지침은 capability-neutral로 작성되어 있습니다 — 백그라운드 child가 명령을 소유할 수 있습니다 — 이 저장소가 확인한 것은 subagent spawn 필드로서의 `background: true`뿐이고, 명령 수준의 백그라운드 메커니즘은 확인하지 못했기 때문입니다.
 
 ## 실행 명령

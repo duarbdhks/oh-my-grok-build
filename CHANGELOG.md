@@ -18,7 +18,7 @@ All notable changes to this project are documented here.
 - The executor agent gained an invariant: it must not spawn subagents, invoke an orchestration skill, or launch a workflow — the parent that delegated the task owns all fan-out.
 - The explorer agent gained the same no-fan-out invariant (parent owns all fan-out), so both leaf agents used by `/ogb-ultrawork` refuse nested orchestration.
 - `docs/architecture.md` and its Korean pair now describe dynamic concurrency (4 default, at most 8 with proven isolation, lowered on shared resources) instead of a flat default of 4, and distinguish baseline/`/ogb-start` between-wave review from `/ogb-ultrawork` progressive mid-wave review, slot backfill, and one-at-a-time integration.
-- `docs/validation.md` and its pair gained a static scheduling-scenario mapping for `/ogb-ultrawork` (including B same-file ban vs B2 shared-resource lowered concurrency), with live scenario runs and the shell-command background primitive recorded as still unverified.
+- `docs/validation.md` and its pair gained a scheduling-scenario mapping for `/ogb-ultrawork` (including B same-file ban vs B2 shared-resource lowered concurrency). Scenarios A and C were live-smoked with headless `grok` 0.2.112; B/B2/D/E/F and the shell-command background primitive remain unverified.
 - `ogb-ultrawork/references/parallel-report-template.md` now records each agent's qualified `subagent_type`, isolation mode, worktree path, whether `ogb-verify` ran, and the integrated check command.
 
 ### Notes
@@ -28,6 +28,7 @@ All notable changes to this project are documented here.
 - Verified with static validation, `grok plugin validate`, and two headless `grok` 0.2.112 runs in a throwaway Express repository. The skill explored before asking, kept one question per turn with a recommended answer, reported the readiness table with a named bottleneck, and left the working tree untouched. Evidence is in `docs/validation.md`.
 - The chain from `/ogb-interview` through `/ogb-verify` has since been run continuously inside one interactive session, with every skill behaving as documented. That covers the handoffs between skills, which the earlier per-skill runs did not.
 - A plan does not survive into a fresh session — Grok stores it in the session directory. `grok -c` or `grok -r <session-id>` restores it. Both directions were confirmed. The skills do not yet say this, so it is recorded under Still Unverified in `docs/validation.md` rather than treated as covered.
+- Scheduling smokes: Scenario C used three concurrent `oh-my-grok-build:explorer` agents on this repo (read-only, tree stayed clean). Scenario A used three concurrent worktree `oh-my-grok-build:executor` agents on a throwaway three-package fixture and integrated full-name fixes without commit or push.
 
 ## 0.1.0 - 2026-07-25
 
