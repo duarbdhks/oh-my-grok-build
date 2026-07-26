@@ -51,7 +51,7 @@ v0.1은 별도 데이터베이스나 JSON 상태 파일을 만들지 않습니�
 
 ## 병렬 실행 규칙
 
-- 기본 동시 구현 에이전트는 4개입니다.
+- 기본 동시 구현 에이전트는 4개이며, 파일·subsystem 소유권과 실행 자원 격리가 모두 증명될 때만 최대 8개로 올리고, schema·설정·generated file·dependency lock·build output·cache·port·database·외부 환경을 공유하면 최소 2개까지 낮춥니다.
 - 반복형 fan-out은 네이티브 workflow를 사용하며 기본 `agent_budget`은 8개입니다.
 - 쓰기 작업은 worktree 격리를 기본으로 합니다.
 - 같은 파일을 두 에이전트가 동시에 소유하지 않습니다.

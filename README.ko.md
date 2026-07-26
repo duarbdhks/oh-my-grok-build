@@ -26,7 +26,7 @@ Grok Build 네이티브 계획·병렬 실행·검증 도구 모음입니다. `o
 | `/ogb-interview` | 모호한 아이디어를 한 번에 한 질문씩 방향 브리프로 정리 | 소스 수정 금지, 질문만 수행하며 계획·구현 금지 |
 | `/ogb-plan` | Planner → Architect → Critic 합의 계획 | 소스 수정 금지, 최대 3회 검토 루프 |
 | `/ogb-start` | 승인된 계획 실행 | 작업 소유권 분리, 쓰기 작업은 워크트리 격리 |
-| `/ogb-ultrawork` | 독립 작업 병렬 처리 | 기본 동시 작업 4개, 워크플로 에이전트 예산 8개 |
+| `/ogb-ultrawork` | 독립 작업을 병렬 실행해 elapsed time 단축 | 기본 동시 작업 4개, 소유권·자원 격리 증명 시 최대 8개, 워크플로 에이전트 예산 8개 |
 | `/ogb-verify` | 테스트·타입체크·빌드·독립 검증 | 최신 실행 증거 없이는 완료 판정 금지 |
 | `/ogb-workflow` | 재사용 가능한 Grok 워크플로 작성 | `create-workflow` 선행, `validate_only` 필수 |
 | `/ogb-doctor` | 플러그인·에이전트·네이티브 기능 진단 | 기본 읽기 전용 |
@@ -101,6 +101,8 @@ Grok Build 세션에서는 `/plugins`에서 플러그인을 다시 불러오거�
 ```text
 /ogb-ultrawork 독립적인 세 모듈의 TypeScript 오류를 수정하고 각각 검증해줘
 ```
+
+`/ogb-ultrawork`는 Grok Build 자체의 서브에이전트, 백그라운드 실행, `workflow` 도구만으로 스케줄링하며, `oh-my-claudecode`의 `ultrawork` 등 외부 오케스트레이터를 호출하지 않습니다. 속도는 직렬 대기 제거에서 나오며, worktree 격리·소유권·예산·검증은 완화하지 않습니다.
 
 ### 검증만 다시 수행
 

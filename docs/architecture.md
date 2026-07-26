@@ -51,7 +51,7 @@ This boundary keeps session recovery and concurrent-execution responsibility ins
 
 ## Parallel execution rules
 
-- The default number of concurrent implementation agents is 4.
+- The default number of concurrent implementation agents is 4, raised to at most 8 only when file or subsystem ownership and execution-resource isolation are both proven, and lowered — as far as 2 — when tasks share a schema, configuration, generated file, dependency lock, build output, cache, port, database, or external environment.
 - Repeated fan-out uses native workflow, with a default `agent_budget` of 8.
 - Writes default to worktree isolation.
 - No two agents own the same file at the same time.

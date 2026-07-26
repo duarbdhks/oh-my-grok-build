@@ -103,11 +103,26 @@ What this adds over the per-skill runs is the handoffs: the interview's brief fe
 
 It also stays inside one session, which is the supported path. A plan does not survive into a fresh session; see the note in Still Unverified below.
 
+## Scheduling Scenario Mapping for `/ogb-ultrawork`
+
+This table is a static design mapping, not a live run: each scenario is checked against the specific rule that governs it in the `ogb-ultrawork` `SKILL.md`, the same way the naming rules above cite their exact mechanism. Live scheduling runs remain in Still Unverified below.
+
+| Scenario | Expected behavior | Governing rule |
+|---|---|---|
+| A — fixes in 3 independent packages | Same wave, launched as one batch | Protocol step 5 (launch together) |
+| B — tasks sharing a common schema file | Not placed in the same wave | Protocol step 4 (shared resources) and step 3 (lowered concurrency) |
+| C — independent file searches and configuration reads | One parallel read-only batch | Protocol step 1 (batched investigation) |
+| D — integration tests sharing one database and port | Never unconditionally parallel; serialized, with the order stated | Protocol step 4 (overlap ban list) |
+| E — 6 subsystem tasks with proven independence | Up to 6 concurrent implementation agents | Protocol step 3 (raise toward 8 only on proven isolation) |
+| F — 8+ repetitive, same-shaped tasks | Native `workflow` tool considered first | Protocol steps 2 and 3 |
+
 ## Still Unverified
 
 - The worktree merge **conflict** handling path. The runs above had no overlapping file ownership, so no conflict occurred.
 - The chain across a **session boundary**. Grok writes the plan to `plan.md` inside the session directory, so a new session cannot see it — confirmed by running `/view-plan` in a fresh session in a directory that already held two plans, which reported no saved plan. Returning with `grok -c` or `grok -r <session-id>` restores it, also confirmed. The skills do not yet tell the user this.
 - Live execution of an authored workflow. `validate_only` only proves one path — metadata/compile/representative-args — while the branches for missing arguments, budget exhaustion, or parallel slot failure remain unverified.
+- Live scheduling-scenario runs. The A–F mapping above is static: each scenario cites its governing rule, but none has been exercised against a real Grok session.
+- A non-blocking shell-command primitive in Grok Build. The long-command overlap guidance in `ogb-ultrawork` step 4 is written capability-neutral — a backgrounded child can own the command — because this repository has only confirmed `background: true` as a subagent spawn field, not a command-level background mechanism.
 
 ## Run Commands
 
