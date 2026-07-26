@@ -1,5 +1,5 @@
 ---
-name: ogb-verifier
+name: verifier
 description: Independently verifies final changes against acceptance criteria by inspecting the diff and reproducing high-signal checks without editing files.
 model: inherit
 permissionMode: plan

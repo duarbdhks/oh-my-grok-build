@@ -30,8 +30,8 @@ Implement an approved plan without broadening scope, damaging unrelated work, or
 
 2. **Assign ownership**
    - Give each task a non-overlapping file or subsystem boundary.
-   - Use `oh-my-grok-build:ogb-explorer` with `capability_mode: read-only` for investigation.
-   - Use `oh-my-grok-build:ogb-executor` for implementation.
+   - Use `oh-my-grok-build:explorer` with `capability_mode: read-only` for investigation.
+   - Use `oh-my-grok-build:executor` for implementation.
 
 3. **Run parallel waves**
    - Spawn independent implementation agents in the same wave with `background: true`.
@@ -65,7 +65,7 @@ Implement an approved plan without broadening scope, damaging unrelated work, or
 For a write task, use the equivalent of:
 
 ```text
-subagent_type: oh-my-grok-build:ogb-executor
+subagent_type: oh-my-grok-build:executor
 capability_mode: all
 isolation: worktree
 background: true
@@ -74,7 +74,7 @@ background: true
 For exploration, use the equivalent of:
 
 ```text
-subagent_type: oh-my-grok-build:ogb-explorer
+subagent_type: oh-my-grok-build:explorer
 capability_mode: read-only
 isolation: none
 background: true

@@ -37,27 +37,27 @@
         ],
         "agents": [
           {
-            "name": "ogb-planner",
+            "name": "planner",
             "description": "Implementation planning specialist"
           },
           {
-            "name": "ogb-architect",
+            "name": "architect",
             "description": "Architecture and trade-off reviewer"
           },
           {
-            "name": "ogb-critic",
+            "name": "critic",
             "description": "Plan quality and acceptance-criteria critic"
           },
           {
-            "name": "ogb-explorer",
+            "name": "explorer",
             "description": "Read-only codebase investigator"
           },
           {
-            "name": "ogb-executor",
+            "name": "executor",
             "description": "Bounded implementation worker"
           },
           {
-            "name": "ogb-verifier",
+            "name": "verifier",
             "description": "Independent evidence-based verifier"
           }
         ]

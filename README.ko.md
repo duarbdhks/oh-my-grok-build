@@ -33,14 +33,16 @@ Grok Build 네이티브 계획·병렬 실행·검증 도구 모음입니다. `o
 
 플러그인은 다음 에이전트를 함께 제공합니다.
 
-- `ogb-planner`: 범위, 작업 그래프, 수용 기준을 설계합니다.
-- `ogb-architect`: 구조적 타당성과 트레이드오프를 검토합니다.
-- `ogb-critic`: 누락, 모순, 검증 불가능한 항목을 차단합니다.
-- `ogb-explorer`: 읽기 전용으로 코드베이스 근거를 수집합니다.
-- `ogb-executor`: 범위가 제한된 구현 작업을 수행합니다.
-- `ogb-verifier`: 구현자와 독립적으로 최종 결과를 재현합니다.
+- `oh-my-grok-build:planner`: 범위, 작업 그래프, 수용 기준을 설계합니다.
+- `oh-my-grok-build:architect`: 구조적 타당성과 트레이드오프를 검토합니다.
+- `oh-my-grok-build:critic`: 누락, 모순, 검증 불가능한 항목을 차단합니다.
+- `oh-my-grok-build:explorer`: 읽기 전용으로 코드베이스 근거를 수집합니다.
+- `oh-my-grok-build:executor`: 범위가 제한된 구현 작업을 수행합니다.
+- `oh-my-grok-build:verifier`: 구현자와 독립적으로 최종 결과를 재현합니다.
 
-위 이름은 파일명이자 frontmatter의 `name`입니다. Grok은 플러그인 에이전트를 `oh-my-grok-build:ogb-planner`처럼 플러그인 이름으로 한정해 등록하므로, 서브에이전트를 생성할 때는 한정된 이름을 써야 합니다. 스킬은 반대로 `ogb-plan`처럼 bare 이름 그대로 등록됩니다.
+Grok은 플러그인 에이전트를 플러그인 이름으로 한정해 등록하고 스킬은 bare 이름으로 등록하므로, 이 저장소에서 둘은 서로 반대되는 규칙을 따릅니다. 에이전트에는 `ogb-` 접두사가 없습니다. `oh-my-grok-build:` 한정자가 이미 네임스페이스 역할을 하며, 파일명과 frontmatter의 `name`이 짧은 형태입니다. 스킬은 접두사를 유지합니다. `/ogb-plan`을 구분해 줄 다른 장치가 없기 때문입니다.
+
+에이전트는 항상 한정된 이름으로 생성하십시오. 접두사를 빠뜨려도 요란하게 실패하지 않습니다. bare `planner`나 `executor`는 사용자 환경의 `~/.grok/agents/` 또는 `~/.claude/agents/`에 있는 동명의 다른 에이전트로 해석될 수 있고, 그러면 잘못된 프롬프트로 작업이 진행됩니다. `npm test`는 스킬 안의 한정되지 않은 에이전트 참조를 거부하고, `/ogb-doctor`는 사용자 환경의 동명 에이전트를 경고로 보고합니다.
 
 ### 더 넓은 에이전트 모음과 함께 쓰기
 

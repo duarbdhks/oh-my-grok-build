@@ -1,5 +1,5 @@
 ---
-name: ogb-architect
+name: architect
 description: Reviews implementation plans and designs for architectural soundness, compatibility, maintainability, operational risk, and honest trade-offs.
 model: inherit
 permissionMode: plan

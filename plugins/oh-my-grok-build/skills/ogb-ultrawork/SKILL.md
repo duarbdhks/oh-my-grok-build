@@ -54,12 +54,12 @@ Use this skill when two or more tasks can proceed without depending on each othe
 
 ## Recommended spawn shape
 
-Grok registers plugin agents under a plugin-qualified name. A bare `ogb-executor` does not resolve, so always spawn with the full name.
+Grok registers plugin agents under a plugin-qualified name, and this plugin's agents use short names because the qualifier already carries the namespace. Dropping the `oh-my-grok-build:` prefix does not fail loudly — it can resolve to an unrelated agent of the same short name from the user's own environment, and the wave then runs with the wrong prompt. Always spawn with the qualified name.
 
 For a write task, use the equivalent of:
 
 ```text
-subagent_type: oh-my-grok-build:ogb-executor
+subagent_type: oh-my-grok-build:executor
 capability_mode: all
 isolation: worktree
 background: true
@@ -68,7 +68,7 @@ background: true
 For exploration, use the equivalent of:
 
 ```text
-subagent_type: oh-my-grok-build:ogb-explorer
+subagent_type: oh-my-grok-build:explorer
 capability_mode: read-only
 isolation: none
 background: true

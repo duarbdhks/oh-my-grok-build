@@ -6,8 +6,14 @@ All notable changes to this project are documented here.
 
 ### Added
 
-- `/ogb-interview`: a questioning-only skill that turns a vague idea or an unproven design into a direction brief for `/ogb-plan`. One question per turn, weakest-dimension targeting, repository evidence gathered through `ogb-explorer` before the user is asked anything the code can answer, contrarian/simplifier/essence challenge passes, and coarse `CLEAR`/`PARTIAL`/`UNKNOWN` readiness ratings instead of a computed score.
+- `/ogb-interview`: a questioning-only skill that turns a vague idea or an unproven design into a direction brief for `/ogb-plan`. One question per turn, weakest-dimension targeting, repository evidence gathered through `oh-my-grok-build:explorer` before the user is asked anything the code can answer, contrarian/simplifier/essence challenge passes, and coarse `CLEAR`/`PARTIAL`/`UNKNOWN` readiness ratings instead of a computed score.
 - `ogb-interview/references/direction-brief-template.md` for the brief structure.
+
+### Changed
+
+- **Breaking:** the six agents dropped their `ogb-` prefix. Spawn `oh-my-grok-build:planner` instead of `oh-my-grok-build:ogb-planner`, and likewise for `architect`, `critic`, `explorer`, `executor`, and `verifier`. Grok registers plugin agents plugin-qualified, so the prefix repeated a namespace the qualified name already carried. The seven skills are unchanged and keep the prefix, because they register bare — `/ogb-plan` has nothing else to distinguish it.
+- The rename removes a loud failure. A prefix-less `ogb-planner` used to resolve to nothing; a prefix-less `planner` can resolve to a same-named agent in the user's `~/.grok/agents/` or `~/.claude/agents/` and run with the wrong prompt. `scripts/validate.mjs` gained two rules to compensate: every `subagent_type:` value must be qualified and name a real agent, and a backtick-delimited bare agent name fails. Both rules cover every markdown file a skill ships, `references/` included. Each was confirmed to fail on an introduced defect before being reverted. `ogb-doctor` now reports same-named agents in the environment as warnings rather than treating their absence as expected.
+- That the qualified name is the registry key was checked against a live `grok inspect --json`, not assumed: `oh-my-claudecode:planner` and a user-level `planner` coexist there without displacement.
 
 ### Notes
 

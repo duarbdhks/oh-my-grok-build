@@ -1,5 +1,5 @@
 ---
-name: ogb-planner
+name: planner
 description: Creates evidence-backed implementation plans with explicit scope, alternatives, dependency waves, acceptance criteria, rollback, and verification.
 model: inherit
 permissionMode: plan

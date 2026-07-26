@@ -42,7 +42,7 @@ Turn “it should work” into reproducible evidence. This skill verifies; it do
    - Operational evidence such as logs, metrics, query plans, or migration dry-runs when relevant.
 
 4. **Independent verification**
-   - Spawn `oh-my-grok-build:ogb-verifier` with the final diff, acceptance criteria, and direct-check results.
+   - Spawn `oh-my-grok-build:verifier` with the final diff, acceptance criteria, and direct-check results.
    - Use a non-writing capability or Plan permission mode.
    - Require the verifier to reproduce critical checks rather than merely review the executor's report.
 

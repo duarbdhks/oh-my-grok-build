@@ -20,7 +20,7 @@
 4. ✅ `/ogb-start`가 두 개의 독립 worktree 작업을 통합
 5. ⬜ 충돌하는 파일 소유권을 실행 전에 차단 — 소유권이 겹치는 시나리오를 아직 만들지 않음
 6. ✅ 실패한 테스트를 성공으로 오판하지 않음
-7. ✅ `ogb-verifier`와 `check-work`가 독립적으로 실행
+7. ✅ `oh-my-grok-build:verifier`와 `check-work`가 독립적으로 실행
 8. ✅ `/ogb-workflow`가 `validate_only`를 통과한 스크립트만 제안
 
 증거는 `docs/validation.ko.md`에 있습니다. 5번만 미확인이며, 이는 충돌하는 작업 분할을 의도적으로 만들어야 재현됩니다.

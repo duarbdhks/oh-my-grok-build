@@ -42,7 +42,7 @@ Rate every dimension after every answer as `CLEAR`, `PARTIAL`, or `UNKNOWN`. The
 
 2. **Collect repository evidence**
    - Use direct reads for narrow context.
-   - For separate subsystems, spawn `oh-my-grok-build:ogb-explorer` agents in parallel with `capability_mode: read-only`.
+   - For separate subsystems, spawn `oh-my-grok-build:explorer` agents in parallel with `capability_mode: read-only`.
    - Require file paths, symbols, commands, and observed behavior in every report, and cite them when a question depends on them.
 
 3. **Interview loop**

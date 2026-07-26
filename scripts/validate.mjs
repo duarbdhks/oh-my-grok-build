@@ -14,13 +14,15 @@ const expectedSkills = [
   'ogb-workflow',
   'ogb-doctor',
 ].sort();
+// Agents carry no `ogb-` prefix: Grok registers them as `oh-my-grok-build:<agent>`, so the
+// qualifier already namespaces them. Skills do keep the prefix, because they register bare.
 const expectedAgents = [
-  'ogb-planner',
-  'ogb-architect',
-  'ogb-critic',
-  'ogb-explorer',
-  'ogb-executor',
-  'ogb-verifier',
+  'planner',
+  'architect',
+  'critic',
+  'explorer',
+  'executor',
+  'verifier',
 ].sort();
 
 const failures = [];
@@ -64,6 +66,13 @@ function listMarkdownStems(absolutePath) {
   return fs.readdirSync(absolutePath, { withFileTypes: true })
     .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
     .map((entry) => entry.name.slice(0, -3))
+    .sort();
+}
+
+function listMarkdownFilesRecursively(absolutePath) {
+  return fs.readdirSync(absolutePath, { withFileTypes: true, recursive: true })
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
+    .map((entry) => path.join(entry.parentPath ?? entry.path, entry.name))
     .sort();
 }
 
@@ -127,30 +136,55 @@ for (const skillName of actualSkills) {
 // rejected here. Plugin agents may not declare `bypassPermissions` at all.
 const grokPermissionModes = new Set(['default', 'auto', 'plan']);
 // Grok registers plugin agents as `oh-my-grok-build:<agent>` but keeps skills on their bare name.
-// Referring to a skill with the qualified form resolves to nothing at spawn time, so every
-// qualified reference in a SKILL.md must name a real agent.
+// Three rules guard the two directions of that asymmetry. They cover different shapes and are not
+// redundant; do not collapse them.
 //
-// This check is deliberately one-way. The opposite mistake -- naming an agent without the prefix --
-// is not detectable here: a bare `ogb-executor` in prose is indistinguishable from a legitimate
-// mention of the file, and scanning for it produces false positives. That case is covered by the
-// spawn-shape blocks in `ogb-start` and `ogb-ultrawork`, and by running `/ogb-doctor` in a live
-// session. See docs/validation.md.
+// Rule 0 (qualified -> real agent): referring to a *skill* with the qualified form resolves to
+// nothing at spawn time, so every qualified reference must name a real agent.
+//
+// Rules A and B cover the opposite mistake -- naming an agent without the prefix. Since agent names
+// are short (`executor`, not `ogb-executor`), a missing prefix no longer fails loudly: it can
+// resolve to an unrelated same-named agent from the user's own `~/.grok/agents/` or
+// `~/.claude/agents/`. See docs/validation.md.
+//
+// Rule A (the executable shape): every `subagent_type:` value must be qualified and name a real
+// agent. This is the rule that catches the mistake that actually matters -- the spawn shapes in
+// `ogb-start` and `ogb-ultrawork` live in fenced text blocks with no backticks, so Rule B alone
+// would never see them. The key appears nowhere but spawn shapes, so there are no false positives.
+//
+// Rule B (prose identifiers): a backtick-delimited bare agent name is always an identifier, and
+// always the wrong one. Backticks are the deliberate boundary -- bare prose ("the executor reports
+// its evidence") is left alone, because matching it produces false positives on ordinary English.
+// All three rules cover every markdown file a skill ships, not just its SKILL.md. A `references/`
+// file becomes instructions the moment the skill loads it, so a bad spawn shape there is as live as
+// one in the skill body.
+const bareAgentInBackticks = new RegExp(`\`(${expectedAgents.join('|')})\``, 'g');
 for (const skillName of actualSkills) {
-  const skillFile = path.join(skillsRoot, skillName, 'SKILL.md');
-  if (!fs.existsSync(skillFile)) continue;
-  const body = fs.readFileSync(skillFile, 'utf8');
-  const referenced = [...body.matchAll(/oh-my-grok-build:([a-z0-9-]+)/g)].map((m) => m[1]);
-  const unknown = [...new Set(referenced)].filter((ref) => !expectedAgents.includes(ref));
-  check(unknown.length === 0, `${skillName}: qualified references name real agents${unknown.length ? ` (found: ${unknown.join(', ')})` : ''}`);
+  for (const file of listMarkdownFilesRecursively(path.join(skillsRoot, skillName))) {
+    const label = path.relative(skillsRoot, file);
+    const body = fs.readFileSync(file, 'utf8');
+
+    const referenced = [...body.matchAll(/oh-my-grok-build:([a-z0-9-]+)/g)].map((m) => m[1]);
+    const unknown = [...new Set(referenced)].filter((ref) => !expectedAgents.includes(ref));
+    check(unknown.length === 0, `${label}: qualified references name real agents${unknown.length ? ` (found: ${unknown.join(', ')})` : ''}`);
+
+    const spawnTargets = [...body.matchAll(/subagent_type:\s*(\S+)/g)].map((m) => m[1]);
+    const badSpawns = [...new Set(spawnTargets)]
+      .filter((target) => !expectedAgents.includes(target.replace(/^oh-my-grok-build:/, '')) || !target.startsWith('oh-my-grok-build:'));
+    check(badSpawns.length === 0, `${label}: every subagent_type is a qualified agent${badSpawns.length ? ` (found: ${badSpawns.join(', ')})` : ''}`);
+
+    const bareMentions = [...new Set([...body.matchAll(bareAgentInBackticks)].map((m) => m[1]))];
+    check(bareMentions.length === 0, `${label}: agent names are never written bare${bareMentions.length ? ` (found: ${bareMentions.join(', ')})` : ''}`);
+  }
 }
 
 const expectedPermissionModes = {
-  'ogb-planner': 'plan',
-  'ogb-architect': 'plan',
-  'ogb-critic': 'plan',
-  'ogb-explorer': 'plan',
-  'ogb-executor': 'auto',
-  'ogb-verifier': 'plan',
+  planner: 'plan',
+  architect: 'plan',
+  critic: 'plan',
+  explorer: 'plan',
+  executor: 'auto',
+  verifier: 'plan',
 };
 // Frontmatter keys Grok Build does not document for agent definitions. Keeping them would look
 // like configuration while having no effect.

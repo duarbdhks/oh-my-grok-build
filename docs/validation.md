@@ -3,6 +3,8 @@
 [한국어](validation.ko.md)
 
 > The counts in the `0.1.0` sections below describe that release's live run, when the plugin shipped six skills. `/ogb-interview` was added afterwards and is validated separately in [its own section](#live-execution-validation-of-ogb-interview).
+>
+> The agents were renamed after these runs — `ogb-planner` became `planner`, and so on for the other five, since the `oh-my-grok-build:` qualifier already namespaces them. The `ogb-*` agent names recorded below are left as they were, because they describe what actually ran at the time. Re-confirming registration under the new names is listed in [Still Unverified](#still-unverified).
 
 ## Completed Validation
 
@@ -46,12 +48,15 @@ Both were fixed, and a check was added to `scripts/validate.mjs` to reject quali
 
 Frontmatter consistency is therefore handled by `npm test` (`scripts/validate.mjs`). This script checks the set of allowed `permissionMode` values and the absence of unsupported fields.
 
-`scripts/validate.mjs` also has a limitation: the component name check is **one-way**.
+`scripts/validate.mjs` checks component naming in both directions, with three rules over every markdown file a skill ships — its `SKILL.md` and everything under `references/`, since a reference file becomes instructions the moment the skill loads it:
 
-- Catches: a `oh-my-grok-build:<name>` reference in SKILL.md that isn't a real agent
-- Does not catch: an instruction that spawns an agent by its bare name, without the prefix
+- **Rule 0** — a `oh-my-grok-build:<name>` reference must name a real agent. Catches a skill referenced with agent syntax.
+- **Rule A** — every `subagent_type:` value must be qualified and name a real agent. This is the one that matters most: the spawn shapes in `ogb-start` and `ogb-ultrawork` sit in fenced text blocks, so nothing else sees them.
+- **Rule B** — an agent name written backtick-delimited and bare, like `` `executor` ``, fails. Backticks are the boundary: a backticked bare name is always an identifier and always the wrong one.
 
-The latter is not statically detected, because a bare `ogb-executor` in prose is indistinguishable from a file mention, which would produce false positives. Instead, the spawn shape blocks in `ogb-start` and `ogb-ultrawork` pin the correct format, and it is confirmed via `/ogb-doctor` in a real session.
+Both new rules were confirmed to actually fail, one at a time, by introducing the defect and observing a non-zero exit before reverting.
+
+What is still not statically detected: a bare agent name in ordinary prose, with no backticks and no `subagent_type:` key, that the model then acts on. Matching that produces false positives on ordinary English — "the executor reports its evidence" is a legitimate sentence. That gap matters more than it used to, because a bare `executor` now resolves to a same-named agent in the user's environment instead of failing. `/ogb-doctor` reports those same-named agents as warnings, and a live session run remains the backstop.
 
 ## Live Execution Validation of All 6 Skills
 
@@ -98,6 +103,7 @@ It also stays inside one session, which is the supported path. A plan does not s
 
 ## Still Unverified
 
+- Live re-registration under the renamed agents. `grok inspect --json` was used to settle the design question before the rename — the `oh-my-claudecode` plugin already ships agents on short names, and its `oh-my-claudecode:planner` coexists in the same registry with a user-level `planner` from `~/.claude/agents/planner.md` without either displacing the other. That proves the qualified name is the registry key. What has not been re-run is this plugin's own install: reinstall or reload it, confirm the six agents appear as `oh-my-grok-build:planner` and friends, and run `/ogb-doctor`.
 - The worktree merge **conflict** handling path. The runs above had no overlapping file ownership, so no conflict occurred.
 - The chain across a **session boundary**. Grok writes the plan to `plan.md` inside the session directory, so a new session cannot see it — confirmed by running `/view-plan` in a fresh session in a directory that already held two plans, which reported no saved plan. Returning with `grok -c` or `grok -r <session-id>` restores it, also confirmed. The skills do not yet tell the user this.
 - Live execution of an authored workflow. `validate_only` only proves one path — metadata/compile/representative-args — while the branches for missing arguments, budget exhaustion, or parallel slot failure remain unverified.

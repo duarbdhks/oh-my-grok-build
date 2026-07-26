@@ -20,7 +20,7 @@ Before a stable release, the following real-session scenarios must pass.
 4. ✅ `/ogb-start` merges two independent worktree jobs
 5. ⬜ Blocking conflicting file ownership before execution — a scenario with overlapping ownership hasn't been created yet
 6. ✅ Does not misjudge a failed test as a success
-7. ✅ `ogb-verifier` and `check-work` run independently
+7. ✅ `oh-my-grok-build:verifier` and `check-work` run independently
 8. ✅ `/ogb-workflow` only proposes scripts that passed `validate_only`
 
 Evidence is in `docs/validation.md`. Only item 5 is unverified, and it can only be reproduced by deliberately creating a conflicting work split.

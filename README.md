@@ -33,14 +33,16 @@ So this repository focuses on exactly one thing:
 
 The plugin also ships the following agents:
 
-- `ogb-planner`: Designs scope, task graphs, and acceptance criteria.
-- `ogb-architect`: Reviews structural soundness and trade-offs.
-- `ogb-critic`: Blocks gaps, contradictions, and unverifiable items.
-- `ogb-explorer`: Gathers codebase evidence, read-only.
-- `ogb-executor`: Performs scope-limited implementation work.
-- `ogb-verifier`: Reproduces the final result independently of the implementer.
+- `oh-my-grok-build:planner`: Designs scope, task graphs, and acceptance criteria.
+- `oh-my-grok-build:architect`: Reviews structural soundness and trade-offs.
+- `oh-my-grok-build:critic`: Blocks gaps, contradictions, and unverifiable items.
+- `oh-my-grok-build:explorer`: Gathers codebase evidence, read-only.
+- `oh-my-grok-build:executor`: Performs scope-limited implementation work.
+- `oh-my-grok-build:verifier`: Reproduces the final result independently of the implementer.
 
-Those names are both the file names and the frontmatter `name`. Grok registers plugin agents under a plugin-qualified name, like `oh-my-grok-build:ogb-planner`, so you must use the qualified name when spawning a subagent. Skills, by contrast, register under the bare name, like `ogb-plan`.
+Grok registers plugin agents under a plugin-qualified name and skills under a bare name, so the two follow opposite conventions here. Agents carry no `ogb-` prefix — the `oh-my-grok-build:` qualifier already namespaces them, and the file name and frontmatter `name` are the short form. Skills keep the prefix, because `/ogb-plan` has nothing else to distinguish it.
+
+Always spawn agents with the qualified name. Dropping the prefix does not fail loudly: a bare `planner` or `executor` can resolve to an unrelated agent of the same name in your own `~/.grok/agents/` or `~/.claude/agents/`, and the work then runs with the wrong prompt. `npm test` rejects an unqualified agent reference inside a skill, and `/ogb-doctor` reports same-named agents in your environment as warnings.
 
 ### Pairing with a wider agent roster
 

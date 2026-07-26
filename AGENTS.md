@@ -6,6 +6,7 @@ This repository is a content-only Grok Build plugin marketplace.
 - Prefer native Grok Build features over custom orchestration code.
 - Keep all heavy skills explicit by retaining `disable-model-invocation: true`.
 - Keep plugin agents under `plugins/oh-my-grok-build/agents/` and skill names under the `ogb-` namespace.
+- Agent names take no `ogb-` prefix. Grok registers them as `oh-my-grok-build:<agent>`, so the qualifier already namespaces them, and every reference from a skill must use that qualified form.
 - Do not add hooks, `.mcp.json`, `.lsp.json`, executable binaries, or network installers without an accepted architecture decision.
 - Run `npm test` after every manifest, skill, agent, or index change.
 - Run `npm run validate:grok` when a Grok Build CLI is available.

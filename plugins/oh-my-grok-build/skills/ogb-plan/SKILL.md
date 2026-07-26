@@ -31,21 +31,21 @@ Create a decision-ready implementation plan through a sequential Planner → Arc
 
 2. **Collect evidence**
    - Use direct reads for narrow context.
-   - For separate subsystems, spawn `oh-my-grok-build:ogb-explorer` agents in parallel with `capability_mode: read-only`.
+   - For separate subsystems, spawn `oh-my-grok-build:explorer` agents in parallel with `capability_mode: read-only`.
    - Require file paths, symbols, commands, and observed behavior in every exploration report.
 
 3. **Draft**
-   - Spawn `oh-my-grok-build:ogb-planner` with the user goal, constraints, exploration evidence, and current repository state.
+   - Spawn `oh-my-grok-build:planner` with the user goal, constraints, exploration evidence, and current repository state.
    - Require at least two viable options when a real architectural choice exists.
 
 4. **Architecture review**
    - Wait for the planner to finish.
-   - Then spawn `oh-my-grok-build:ogb-architect` with the complete draft and evidence.
+   - Then spawn `oh-my-grok-build:architect` with the complete draft and evidence.
    - The architect must state the strongest alternative and the trade-off that prevents a trivial decision.
 
 5. **Critic review**
    - Wait for the architect to finish.
-   - Then spawn `oh-my-grok-build:ogb-critic` with the revised plan and architecture review.
+   - Then spawn `oh-my-grok-build:critic` with the revised plan and architecture review.
    - The critic checks scope, ordering, rollback, acceptance criteria, observability, and verification feasibility.
 
 6. **Closed review loop**

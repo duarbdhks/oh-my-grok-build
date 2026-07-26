@@ -62,7 +62,7 @@ v0.1은 별도 데이터베이스나 JSON 상태 파일을 만들지 않습니�
 ```text
 수용 기준 정의
   → 직접 테스트·타입체크·빌드
-  → 독립 ogb-verifier 재현
+  → 독립 verifier 재현
   → bundled check-work 최종 검사
   → PASS / FAIL / INCONCLUSIVE
 ```

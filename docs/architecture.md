@@ -62,7 +62,7 @@ This boundary keeps session recovery and concurrent-execution responsibility ins
 ```text
 Define acceptance criteria
   → direct test/typecheck/build
-  → independent ogb-verifier reproduction
+  → independent verifier reproduction
   → bundled check-work final check
   → PASS / FAIL / INCONCLUSIVE
 ```

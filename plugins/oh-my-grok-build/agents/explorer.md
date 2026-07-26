@@ -1,5 +1,5 @@
 ---
-name: ogb-explorer
+name: explorer
 description: Performs read-only codebase investigation and returns concise evidence with file paths, symbols, commands, and uncertainty.
 model: inherit
 permissionMode: plan

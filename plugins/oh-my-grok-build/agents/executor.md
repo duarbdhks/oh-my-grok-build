@@ -1,5 +1,5 @@
 ---
-name: ogb-executor
+name: executor
 description: Implements one bounded engineering task in an isolated worktree, preserves unrelated changes, and reports fresh validation evidence.
 model: inherit
 permissionMode: auto

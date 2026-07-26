@@ -1,5 +1,5 @@
 ---
-name: ogb-critic
+name: critic
 description: Enforces plan completeness, internal consistency, fair alternatives, testable acceptance criteria, verification feasibility, and bounded execution risk.
 model: inherit
 permissionMode: plan
