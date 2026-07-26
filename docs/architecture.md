@@ -55,7 +55,8 @@ This boundary keeps session recovery and concurrent-execution responsibility ins
 - Repeated fan-out uses native workflow, with a default `agent_budget` of 8.
 - Writes default to worktree isolation.
 - No two agents own the same file at the same time.
-- Between waves, run diff review and narrow verification.
+- Default (baseline / `/ogb-start` style): between waves, run diff review and narrow verification.
+- `/ogb-ultrawork` is progressive within a wave: review each child's diff as soon as that child finishes (read-only; do not wait for a wave-wide comparison before reviewing a finished child); backfill freed slots when an unstarted task's ownership is already proven disjoint; integrate worktree results one at a time and rerun narrow checks after each apply.
 
 ## Verification rules
 

@@ -110,7 +110,8 @@ This table is a static design mapping, not a live run: each scenario is checked 
 | Scenario | Expected behavior | Governing rule |
 |---|---|---|
 | A — fixes in 3 independent packages | Same wave, launched as one batch | Protocol step 5 (launch together) |
-| B — tasks sharing a common schema file | Not placed in the same wave | Protocol step 4 (shared resources) and step 3 (lowered concurrency) |
+| B — tasks that both write the same schema/config file | Not in the same wave (same-file ownership ban) | Protocol step 4 (never same file) |
+| B2 — tasks that share a schema/resource but write disjoint files | Same wave allowed only with lowered concurrency (down to 2) | Protocol step 3 |
 | C — independent file searches and configuration reads | One parallel read-only batch | Protocol step 1 (batched investigation) |
 | D — integration tests sharing one database and port | Never unconditionally parallel; serialized, with the order stated | Protocol step 4 (overlap ban list) |
 | E — 6 subsystem tasks with proven independence | Up to 6 concurrent implementation agents | Protocol step 3 (raise toward 8 only on proven isolation) |

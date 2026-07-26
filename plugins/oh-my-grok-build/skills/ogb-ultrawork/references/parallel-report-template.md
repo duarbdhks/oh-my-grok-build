@@ -23,10 +23,12 @@ verdict: PASS | PARTIAL | BLOCKED
 
 ## Agents
 
-| Agent | Task | Ownership | Result |
-|---|---|---|---|
+| Agent | subagent_type | Isolation | Worktree | Task | Ownership | Result |
+|---|---|---|---|---|---|---|
 
 - child-agent calls used, against the approved budget:
+- isolation: `worktree` | `none` (per agent row above)
+- worktree path: absolute path when isolation is `worktree`; leave blank when `none`
 
 ## Integration
 
@@ -41,5 +43,8 @@ verdict: PASS | PARTIAL | BLOCKED
 
 | Command | Exit status | Result summary |
 |---|---:|---|
+
+- ogb-verify invoked: yes | no | n/a
+- integrated check command:
 
 ## Remaining risks and unverified scope

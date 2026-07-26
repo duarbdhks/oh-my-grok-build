@@ -110,7 +110,8 @@ Grok은 플러그인 에이전트를 `oh-my-grok-build:<agent>`로 등록하지�
 | 시나리오 | 기대 동작 | 지배 규칙 |
 |---|---|---|
 | A — 독립 3개 패키지 수정 | 같은 Wave, 한 배치로 일괄 시작 | Protocol step 5 (launch together) |
-| B — 공통 schema 파일 공유 작업 | 같은 Wave에 배치하지 않음 | Protocol step 4 (공유 자원)와 step 3 (동시성 하향) |
+| B — 동일 schema/config 파일을 둘 다 쓰는 작업 | 같은 Wave에 두지 않음 (동일 파일 소유 금지) | Protocol step 4 (never same file) |
+| B2 — schema/자원을 공유하되 쓰는 파일은 서로 다른 작업 | 동시성을 2까지 낮춘 경우에만 같은 Wave 허용 | Protocol step 3 |
 | C — 독립적인 파일 검색과 설정 읽기 | 하나의 병렬 read-only 배치 | Protocol step 1 (조사 일괄 실행) |
 | D — 동일 database와 port를 공유하는 integration test | 무조건 병렬 실행하지 않음; 순서를 명시해 직렬화 | Protocol step 4 (겹침 금지 목록) |
 | E — 독립성이 증명된 6개 subsystem 작업 | 최대 6개 동시 구현 에이전트 | Protocol step 3 (격리 증명 시에만 8까지 상향) |
