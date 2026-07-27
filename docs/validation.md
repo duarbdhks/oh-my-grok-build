@@ -81,19 +81,26 @@ This run also confirmed the following:
 
 ## Live Execution Validation of `/ogb-interview`
 
-`/ogb-interview` shipped after the `0.1.0` run above, so it was validated on its own. Ran with `grok` 0.2.112 headless (`grok -p`) in a throwaway git repository holding a two-route Express app (`src/server.js`, `package.json`, no auth and no existing rate limiting).
+`/ogb-interview` shipped after the `0.1.0` run above, so it was validated on its own. Ran with `grok` 0.2.112 headless (`grok -p`) in a throwaway git repository holding a two-route Express app (`src/server.js` defining `GET /status` and `POST /messages`, `package.json` depending only on `express`, no auth and no existing rate limiting).
+
+The table below was re-observed after the `## Question format` change, which moved the question to the top of every turn and the readiness bookkeeping into a trailing `Status:` block. `Registration` and `Manifest` are carried forward from the original run: this was a prose-only change, and the current procedure never re-ran `grok inspect --json`, so their evidence is not restamped.
+
+The `Interview loop` row is not a routine refresh like the other four. Its previous text recorded the now-banned behavior — the bottleneck pair stated ahead of the question — as PASS. Its verdict criterion is inverted, not merely re-confirmed.
 
 | Check | Verdict | Evidence |
 |---|---|---|
 | Registration | PASS | `grok inspect --json` lists `ogb-interview` with `userInvocable: true` under the plugin source |
 | Manifest | PASS | `grok plugin validate plugins/oh-my-grok-build` reports a valid manifest with the added skill directory |
-| Scope-shape gate | PASS | Round 0 read the repository first, cited `src/server.js` and `package.json`, proposed four top-level components, and asked exactly one confirmation question |
-| Evidence before questions | PASS | Stated that no middleware, auth, or rate limiting exists before asking anything, rather than asking the user what the code answers |
-| Interview loop | PASS | Reported the `CLEAR`/`PARTIAL`/`UNKNOWN` readiness table per component, named the bottleneck pair (`rate limit policy` × `Goal`) with a one-sentence rationale, and asked one question |
-| Recommended answer | PASS | Every question carried a recommended answer with reasoning, numbered alternatives, and a free-text option |
-| Read-only boundary | PASS | `git status --short --branch` clean after both runs; no plan created, no commit, no dependency installed |
+| Scope-shape gate | PASS | Round 0 read the repository first, cited `src/server.js` and `package.json` on the `Evidence:` line, proposed the same four components it then labelled in `Status:`, and asked exactly one confirmation question |
+| Evidence before questions | PASS | Stated that no middleware, auth, or rate-limit dependency exists before asking anything, rather than asking the user what the code answers |
+| Interview loop | PASS (inverted criterion) | The resumed turn opened with the question ("Should the limit count requests per client IP, or is there some other key you want to count against?") and deferred all bookkeeping to a trailing `Status:` block. Measured mechanically: byte offset of `Status:` = 999, and none of `CLEAR`/`PARTIAL`/`UNKNOWN`/`dimension`/`bottleneck`/`component`/`readiness` occurs before it. The `Status:` block was component-aware as specified — deferred components named once with their reason, the settled component as `Cleared: Routes covered.` with no rating repeated, and the open one as `Limit policy: Goal — PARTIAL, counting key (per-IP vs other) not chosen.` |
+| Recommended answer | PASS | Every question carried a recommended answer with reasoning, numbered alternatives whose text stated a consequence rather than a label, and a free-text option |
+| Language | PASS | A Korean prompt produced the question, why-it-matters line, `Recommended:` reasoning and alternatives in Korean while `Recommended:`/`Evidence:`/`Status:`, the component labels (`Routes covered`, `Limit policy`, …) and the ratings stayed English. A control run with an English prompt and the ambient Korean instruction removed produced an English turn, which separates the rule's effect from the environment — see the note below |
+| Read-only boundary | PASS | `git status --short --branch` clean in the fixture after all four runs, with no untracked files; no plan created, no commit, no dependency installed |
 
-Two runs were used: one from a cold start, and one that pasted the confirmed components and the Round 0 answer back in as the argument, which is the documented way to resume without a state file.
+Four runs were used: a cold start (English prompt), a resume that pasted the confirmed components and the Round 0 answer back in as the argument — the documented way to resume without a state file, and the only run that reaches the step 3 interview loop — a Korean cold start, and a control cold start. The control was needed because this machine's `~/.claude/CLAUDE.md` instructs Korean output and Grok reads it through its Claude compatibility layer, so the first English-prompt run also answered in Korean. Re-running it with `HOME` pointed at a directory without that file produced an English turn, which is what distinguishes the skill's language rule from the ambient instruction.
+
+Two limits of this evidence are worth stating. The step 4 challenge passes (rounds 4, 6, 8) and the step 5 round-10 checkpoint are never reached by a four-run design, so their conformance to `## Question format` rests on static text audit only, with no live evidence. And in each run a short preamble sentence precedes the governed turn; `## Question format` governs the turn, not that preamble, so it was not treated as a violation.
 
 ## End-to-End Chain in One Session
 

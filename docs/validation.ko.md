@@ -81,19 +81,26 @@ Grok은 플러그인 에이전트를 `oh-my-grok-build:<agent>`로 등록하지�
 
 ## `/ogb-interview` 라이브 실행 검증
 
-`/ogb-interview`는 위 `0.1.0` 실행 이후에 추가되어 별도로 검증했습니다. `grok` 0.2.112 headless(`grok -p`)로, 라우트 2개짜리 Express 앱(`src/server.js`, `package.json`, 인증·기존 rate limit 없음)만 있는 임시 git 저장소에서 실행했습니다.
+`/ogb-interview`는 위 `0.1.0` 실행 이후에 추가되어 별도로 검증했습니다. `grok` 0.2.112 headless(`grok -p`)로, 라우트 2개짜리 Express 앱(`src/server.js`가 `GET /status`와 `POST /messages`를 정의, `package.json` 의존성은 `express`뿐, 인증·기존 rate limit 없음)만 있는 임시 git 저장소에서 실행했습니다.
+
+아래 표는 `## Question format` 변경 이후 다시 관찰한 것입니다. 이 변경으로 질문이 매 턴 맨 위로 올라오고 준비도 부기는 맨 끝 `Status:` 블록으로 내려갔습니다. `등록`과 `매니페스트` 행은 최초 실행분을 그대로 둡니다. 이번은 산문 전용 변경이고, 이번 절차에서 `grok inspect --json`을 다시 실행하지 않았으므로 그 증거에 새 날짜를 찍지 않습니다.
+
+`인터뷰 루프` 행은 나머지 네 행과 성격이 다릅니다. 이전 문구는 지금 금지하는 동작(질문보다 병목 쌍을 먼저 진술)을 PASS로 기록한 것이므로, 이 행은 재확인이 아니라 판정 기준이 뒤집힌 것입니다.
 
 | 검사 | 판정 | 증거 |
 |---|---|---|
 | 등록 | PASS | `grok inspect --json`에 `ogb-interview`가 플러그인 소스로 `userInvocable: true` 등록 |
 | 매니페스트 | PASS | `grok plugin validate plugins/oh-my-grok-build`가 추가된 스킬 디렉터리를 포함해 유효 판정 |
-| 스코프 형태 게이트 | PASS | Round 0에서 저장소를 먼저 읽고 `src/server.js`·`package.json`을 인용, 상위 컴포넌트 4개 제시 후 확인 질문 1개만 제시 |
-| 질문보다 증거 우선 | PASS | 미들웨어·인증·rate limit 부재를 먼저 확인한 뒤 질문, 코드가 답하는 내용을 사용자에게 되묻지 않음 |
-| 인터뷰 루프 | PASS | 컴포넌트별 `CLEAR`/`PARTIAL`/`UNKNOWN` 준비도 표 보고, 병목 쌍(`rate limit policy` × `Goal`)과 한 문장 근거 지목, 질문 1개 유지 |
-| 추천 답 제시 | PASS | 모든 질문에 근거 붙은 추천 답, 번호 대안, 자유 입력 옵션 동반 |
-| 읽기 전용 경계 | PASS | 두 실행 후 `git status --short --branch` 깨끗, plan 생성·커밋·의존성 설치 없음 |
+| 스코프 형태 게이트 | PASS | Round 0에서 저장소를 먼저 읽고 `src/server.js`·`package.json`을 `Evidence:` 줄에 인용, 제시한 컴포넌트 4개를 그대로 `Status:`에 라벨로 옮김, 확인 질문 1개만 제시 |
+| 질문보다 증거 우선 | PASS | 미들웨어·인증·rate-limit 의존성 부재를 먼저 확인한 뒤 질문, 코드가 답하는 내용을 사용자에게 되묻지 않음 |
+| 인터뷰 루프 | PASS (기준 반전) | 재개 실행의 턴이 질문("Should the limit count requests per client IP, or is there some other key you want to count against?")으로 시작하고 부기는 전부 맨 끝 `Status:` 블록으로 밀려남. 기계적 측정: `Status:`의 바이트 오프셋 999, 그 앞 구간에 `CLEAR`/`PARTIAL`/`UNKNOWN`/`dimension`/`bottleneck`/`component`/`readiness` 0건. `Status:` 블록은 명세대로 컴포넌트를 인지함 — 보류 컴포넌트는 사유와 함께 한 번만 언급, 끝난 컴포넌트는 `Cleared: Routes covered.`로 이름만(등급 반복 없음), 남은 컴포넌트는 `Limit policy: Goal — PARTIAL, counting key (per-IP vs other) not chosen.` |
+| 추천 답 제시 | PASS | 모든 질문에 근거 붙은 추천 답, 라벨이 아니라 결과를 서술하는 번호 대안, 자유 입력 옵션 동반 |
+| 언어 | PASS | 한국어 프롬프트에서 질문·왜 중요한지·`Recommended:` 사유·대안이 한국어로 나오고, `Recommended:`/`Evidence:`/`Status:`와 컴포넌트 라벨(`Routes covered`, `Limit policy` 등)·등급은 영어로 유지됨. 전역 한국어 지시를 제거한 대조 실행에서는 영어 프롬프트가 영어 턴을 만들어, 규칙의 효과와 환경의 효과가 분리됨 — 아래 주석 참고 |
+| 읽기 전용 경계 | PASS | 네 번의 실행 후 fixture에서 `git status --short --branch` 깨끗, untracked 파일도 없음. plan 생성·커밋·의존성 설치 없음 |
 
-실행은 두 번입니다. 하나는 콜드 스타트, 하나는 확정된 컴포넌트와 Round 0 답변을 인자로 다시 붙여 넣은 실행으로, 상태 파일 없이 재개하는 문서화된 방식입니다.
+실행은 네 번입니다. 영어 콜드 스타트, 확정된 컴포넌트와 Round 0 답변을 인자로 다시 붙여 넣은 재개 실행(상태 파일 없이 재개하는 문서화된 방식이며, step 3 인터뷰 루프에 도달하는 유일한 실행), 한국어 콜드 스타트, 그리고 대조 실행입니다. 대조 실행이 필요했던 이유는 이 머신의 `~/.claude/CLAUDE.md`가 한국어 출력을 지시하고 Grok이 Claude 호환 레이어로 그 파일을 읽기 때문입니다 — 그래서 첫 영어 프롬프트 실행도 한국어로 답했습니다. `HOME`을 그 파일이 없는 디렉터리로 바꿔 다시 실행하니 영어 턴이 나왔고, 이것이 스킬의 언어 규칙과 환경 지시를 구분해 줍니다.
+
+이 증거의 한계 두 가지를 남깁니다. step 4 챌린지 패스(라운드 4·6·8)와 step 5 round-10 체크포인트는 네 번의 실행으로는 도달하지 못하므로, 두 턴이 `## Question format`을 지키는지는 정적 텍스트 감사로만 확인되었고 라이브 증거가 없습니다. 그리고 매 실행에서 규칙이 적용되는 턴 앞에 짧은 도입 문장이 하나씩 붙었습니다. `## Question format`이 지배하는 대상은 턴이지 그 도입 문장이 아니므로 위반으로 보지 않았습니다.
 
 ## 한 세션 안에서의 전체 체인 실행
 
