@@ -1,13 +1,34 @@
-# oh-my-grok-build
+<p align="center">
+  <img src="assets/brand/oh-my-grok-build-avatar.png" width="88" alt="oh-my-grok-build terminal mark">
+</p>
 
-[![built for](https://img.shields.io/badge/built%20for-grok--build-black)](https://github.com/xai-org/grok-build)
-[![validate](https://github.com/duarbdhks/oh-my-grok-build/actions/workflows/validate.yml/badge.svg)](https://github.com/duarbdhks/oh-my-grok-build/actions/workflows/validate.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+<h1 align="center">oh-my-grok-build</h1>
 
-> A plugin for **[Grok Build](https://github.com/xai-org/grok-build)** — xAI's terminal coding agent.
-> Official docs: [docs.x.ai/build/overview](https://docs.x.ai/build/overview)
+<p align="center">
+  <em>A field manual for native planning, bounded parallel execution, and independent verification.</em>
+</p>
 
-[한국어](README.ko.md) · [Design Evaluation](docs/upstream-evaluation.md) · [Architecture](docs/architecture.md) · [Roadmap](docs/roadmap.md)
+<p align="center">
+  Independent open-source plugin for <a href="https://github.com/xai-org/grok-build">Grok Build</a>.<br>
+  <sub>Not affiliated with or endorsed by xAI. · <a href="https://docs.x.ai/build/overview">Official Grok Build docs</a></sub>
+</p>
+
+<p align="center">
+  <a href="https://github.com/xai-org/grok-build"><img src="https://img.shields.io/badge/built%20for-grok--build-black" alt="Built for Grok Build"></a>
+  <a href="https://github.com/duarbdhks/oh-my-grok-build/actions/workflows/validate.yml"><img src="https://github.com/duarbdhks/oh-my-grok-build/actions/workflows/validate.yml/badge.svg" alt="Validate"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
+</p>
+
+<p align="center">
+  <a href="README.ko.md">한국어</a> ·
+  <a href="docs/upstream-evaluation.md">Design Evaluation</a> ·
+  <a href="docs/architecture.md">Architecture</a> ·
+  <a href="docs/roadmap.md">Roadmap</a>
+</p>
+
+<p align="center">
+  <img src="assets/brand/oh-my-grok-build-social-preview.png" width="887" alt="oh-my-grok-build workflow: plan, execute, verify">
+</p>
 
 A Grok Build-native toolkit for planning, parallel execution, and verification. It draws on the good work discipline of `oh-my-claudecode`, but instead of forking the Claude runtime, it builds directly on Grok Build's own plugins, subagents, worktrees, workflows, and goal mode.
 

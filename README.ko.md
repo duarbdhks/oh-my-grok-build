@@ -1,15 +1,36 @@
-# oh-my-grok-build
+<p align="center">
+  <img src="assets/brand/oh-my-grok-build-avatar.png" width="88" alt="oh-my-grok-build 터미널 마크">
+</p>
 
-[![built for](https://img.shields.io/badge/built%20for-grok--build-black)](https://github.com/xai-org/grok-build)
-[![validate](https://github.com/duarbdhks/oh-my-grok-build/actions/workflows/validate.yml/badge.svg)](https://github.com/duarbdhks/oh-my-grok-build/actions/workflows/validate.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+<h1 align="center">oh-my-grok-build</h1>
 
-> **[Grok Build](https://github.com/xai-org/grok-build)** — xAI 터미널 코딩 에이전트 — 전용 플러그인입니다.
-> 공식 문서: [docs.x.ai/build/overview](https://docs.x.ai/build/overview)
+<p align="center">
+  <em>네이티브 계획, 제한된 병렬 실행, 독립 검증을 위한 개발자 작업 교범.</em>
+</p>
+
+<p align="center">
+  <a href="https://github.com/xai-org/grok-build">Grok Build</a>용 독립 오픈소스 플러그인입니다.<br>
+  <sub>xAI와 제휴하거나 공식 승인을 받은 프로젝트가 아닙니다. · <a href="https://docs.x.ai/build/overview">Grok Build 공식 문서</a></sub>
+</p>
+
+<p align="center">
+  <a href="https://github.com/xai-org/grok-build"><img src="https://img.shields.io/badge/built%20for-grok--build-black" alt="Grok Build용"></a>
+  <a href="https://github.com/duarbdhks/oh-my-grok-build/actions/workflows/validate.yml"><img src="https://github.com/duarbdhks/oh-my-grok-build/actions/workflows/validate.yml/badge.svg" alt="검증"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT 라이선스"></a>
+</p>
+
+<p align="center">
+  <a href="README.md">English</a> ·
+  <a href="docs/upstream-evaluation.ko.md">설계 평가</a> ·
+  <a href="docs/architecture.ko.md">아키텍처</a> ·
+  <a href="docs/roadmap.ko.md">로드맵</a>
+</p>
+
+<p align="center">
+  <img src="assets/brand/oh-my-grok-build-social-preview.png" width="887" alt="oh-my-grok-build 작업 흐름: 계획, 실행, 검증">
+</p>
 
 Grok Build 네이티브 계획·병렬 실행·검증 도구 모음입니다. `oh-my-claudecode`의 좋은 작업 규율에서 영감을 받았지만, Claude 런타임을 포크하지 않고 Grok Build의 플러그인·서브에이전트·워크트리·워크플로·목표 모드를 그대로 활용합니다.
-
-[English](README.md) · [설계 평가](docs/upstream-evaluation.ko.md) · [아키텍처](docs/architecture.ko.md) · [로드맵](docs/roadmap.ko.md)
 
 ## 결론
 
