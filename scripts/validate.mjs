@@ -64,7 +64,8 @@ function listDirectories(absolutePath) {
 
 function listMarkdownStems(absolutePath) {
   return fs.readdirSync(absolutePath, { withFileTypes: true })
-    .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
+    // Hierarchical AI docs (AGENTS.md) are not Grok agent definitions.
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.md') && entry.name !== 'AGENTS.md')
     .map((entry) => entry.name.slice(0, -3))
     .sort();
 }
@@ -223,9 +224,11 @@ for (const required of ['README.md', 'README.ko.md', 'LICENSE', 'NOTICE.md', 'SE
 // ships as a pair: `<name>.md` (English) alongside `<name>.ko.md` (Korean). A missing half means
 // one language silently fell behind.
 const docsRoot = path.join(root, 'docs');
+// Product docs only. AGENTS.md is hierarchical AI-readable map docs (deepinit), not a bilingual
+// user document, so it is excluded from EN/KO pair and language-switcher inventory checks.
 const koreanDocs = fs.readdirSync(docsRoot).filter((name) => name.endsWith('.ko.md')).sort();
 const englishDocs = fs.readdirSync(docsRoot)
-  .filter((name) => name.endsWith('.md') && !name.endsWith('.ko.md'))
+  .filter((name) => name.endsWith('.md') && !name.endsWith('.ko.md') && name !== 'AGENTS.md')
   .sort();
 check(koreanDocs.length > 0, 'docs directory contains Korean translations');
 check(sameMembers(englishDocs, koreanDocs.map((name) => name.replace(/\.ko\.md$/, '.md'))),
