@@ -22,7 +22,7 @@ Use this skill when two or more tasks can proceed without depending on each othe
 
 These rules do not bend for throughput:
 
-- Never call another orchestrator from this skill — not `oh-my-claudecode`'s `ultrawork`, not a second run of this skill. This skill is the only orchestration layer in the run.
+- Never call another orchestrator from this skill — not an external orchestrator, not a second run of this skill. This skill is the only orchestration layer in the run.
 - A child agent must not fan out again: no spawning subagents, no invoking an orchestration skill (this one included), no launching workflows. The parent owns all fan-out.
 - A workflow, or any agent a workflow spawned, must not start another workflow.
 - Do not assign the same task to several agents and settle the result by vote. A review from explicitly independent perspectives is a distinct task per perspective, not a duplicate.

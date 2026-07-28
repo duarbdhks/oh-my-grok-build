@@ -1,6 +1,8 @@
-# `oh-my-claudecode` 기반 구성 평가
+# 전체 upstream 포크를 택하지 않은 이유
 
 [English](upstream-evaluation.md)
+
+이 문서는 [`NOTICE.md`](../NOTICE.md)에 적힌 업스트림 영감 프로젝트(`oh-my-claudecode`, MIT)를 포크하지 않기로 한 설계 근거입니다. 아래에서는 정식 이름을 다시 쓰지 않고 “원본”·“upstream”만 사용합니다.
 
 ## 최종 판단
 
@@ -20,7 +22,7 @@
 
 ## 전체 포크가 불리한 이유
 
-원본은 단순 프롬프트 모음이 아닙니다. Claude Code용 플러그인, Node.js CLI, Claude Agent SDK, 상태 저장, 훅, 브리지, tmux 기반 외부 CLI 작업자, 설치·마이그레이션 로직을 함께 가집니다. 이를 Grok Build에 맞추려면 이름 치환이 아니라 런타임 경계를 다시 작성해야 합니다.
+원본은 단순 프롬프트 모음이 아닙니다. 호스트 전용 플러그인 런타임, Node.js CLI, 에이전트 SDK 브리지, 상태 저장, 훅, 브리지, tmux 기반 외부 CLI 작업자, 설치·마이그레이션 로직을 함께 가집니다. 이를 Grok Build에 맞추려면 이름 치환이 아니라 런타임 경계를 다시 작성해야 합니다.
 
 동시에 Grok Build는 이미 다음을 네이티브로 제공합니다.
 
@@ -45,10 +47,10 @@
 
 ## 가져오지 않은 부분
 
-- Claude 전용 모델 티어와 라우팅,
+- 호스트 전용 모델 티어와 라우팅,
 - tmux CLI 작업자,
-- OMC 자체 상태 JSON과 세션 훅,
-- Claude SDK 브리지,
+- upstream 자체 상태 JSON과 세션 훅,
+- 외부 에이전트 SDK 브리지,
 - 신규 MCP 서버,
 - Grok Build가 이미 가진 worktree, workflow, goal, memory 기능.
 

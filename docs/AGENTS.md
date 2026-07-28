@@ -4,7 +4,7 @@
 # docs
 
 ## Purpose
-Authoritative design and evidence documentation for the plugin marketplace. Covers architecture boundaries, validation status, roadmap gates, publishing steps, and upstream (OMC) redesign rationale. Every English page has a required Korean pair.
+Authoritative design and evidence documentation for the plugin marketplace. Covers architecture boundaries, validation status, roadmap gates, publishing steps, and upstream-inspiration redesign rationale. Every English page has a required Korean pair.
 
 ## Key Files
 
@@ -14,7 +14,7 @@ Authoritative design and evidence documentation for the plugin marketplace. Cove
 | `validation.md` / `validation.ko.md` | Static and live validation evidence; scenario map; known gaps |
 | `roadmap.md` / `roadmap.ko.md` | Version plan and validation gate checklist |
 | `publishing.md` / `publishing.ko.md` | Marketplace install, tags, and official listing notes |
-| `upstream-evaluation.md` / `upstream-evaluation.ko.md` | Why Grok-native redesign over a full OMC fork |
+| `upstream-evaluation.md` / `upstream-evaluation.ko.md` | Why Grok-native redesign over a full upstream fork |
 
 ## Subdirectories
 

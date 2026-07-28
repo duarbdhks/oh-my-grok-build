@@ -1,6 +1,8 @@
-# Evaluation of an `oh-my-claudecode`-based build
+# Why not a full upstream fork
 
 [한국어](upstream-evaluation.ko.md)
+
+This document records the design choice against forking the upstream inspiration named in [`NOTICE.md`](../NOTICE.md) (`oh-my-claudecode`, MIT). After that one citation, this page talks only about “the original” and “upstream.”
 
 ## Final verdict
 
@@ -20,7 +22,7 @@ A good idea, but recommended **only as a Grok Build-native plugin redesign, not 
 
 ## Why a full fork is unfavorable
 
-The original is not a simple collection of prompts. It bundles a Claude Code plugin, a Node.js CLI, the Claude Agent SDK, state storage, hooks, bridges, a tmux-based external CLI worker, and install/migration logic. Fitting this to Grok Build would require rewriting the runtime boundary, not just substituting names.
+The original is not a simple collection of prompts. It bundles a host-specific plugin runtime, a Node.js CLI, an agent SDK bridge, state storage, hooks, bridges, a tmux-based external CLI worker, and install/migration logic. Fitting this to Grok Build would require rewriting the runtime boundary, not just substituting names.
 
 At the same time, Grok Build already natively provides:
 
@@ -45,10 +47,10 @@ So porting the original's execution engine over would pit two state machines, tw
 
 ## What was not brought over
 
-- Claude-only model tiers and routing,
+- host-only model tiers and routing,
 - the tmux CLI worker,
-- OMC's own state JSON and session hooks,
-- the Claude SDK bridge,
+- upstream's own state JSON and session hooks,
+- the foreign agent SDK bridge,
 - new MCP servers,
 - the worktree, workflow, goal, and memory features Grok Build already has.
 

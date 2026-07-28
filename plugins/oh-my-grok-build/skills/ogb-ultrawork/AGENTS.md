@@ -23,7 +23,7 @@ Bounded parallel execution engine for independent tasks. Parallelism is a schedu
 ### Working In This Directory
 - Keep `disable-model-invocation: true`.
 - Admission: only when ≥2 tasks are independent; otherwise single executor or `/ogb-start`.
-- Never nest orchestrators (no OMC ultrawork, no recursive ultrawork, no nested workflows).
+- Never nest orchestrators (no external orchestrator, no recursive ultrawork, no nested workflows).
 - Children must not spawn agents, invoke orchestration skills, or launch workflows.
 - Concurrency default 4; hard max 8 when fully isolated; shared resources → lower to 2 or serialize.
 - Default workflow `agent_budget` 8; >16 child calls needs user approval and a finite list.

@@ -30,15 +30,15 @@
   <img src="assets/brand/oh-my-grok-build-social-preview.png" width="887" alt="oh-my-grok-build 작업 흐름: 계획, 실행, 검증">
 </p>
 
-Grok Build 네이티브 계획·병렬 실행·검증 도구 모음입니다. `oh-my-claudecode`의 좋은 작업 규율에서 영감을 받았지만, Claude 런타임을 포크하지 않고 Grok Build의 플러그인·서브에이전트·워크트리·워크플로·목표 모드를 그대로 활용합니다.
+Grok Build 네이티브 계획·병렬 실행·검증 도구 모음입니다. 별도의 런타임·훅 데몬·외부 오케스트레이터 없이 Grok Build의 플러그인·서브에이전트·워크트리·워크플로·목표 모드를 그대로 활용합니다.
 
-## 결론
+## 집중 범위
 
-`oh-my-claudecode` 전체를 Grok Build용으로 이름만 바꾸는 포크는 권장하지 않습니다. 원본은 Claude Code용 Node.js 런타임, 훅, 상태 관리, CLI 브리지, tmux 작업자까지 포함하고 있으며, Grok Build는 이미 플러그인, 병렬 서브에이전트, 격리 워크트리, 네이티브 워크플로와 `/goal`을 제공합니다.
-
-따라서 이 저장소는 아래 한 가지에 집중합니다.
+이 저장소는 아래 한 가지에 집중합니다.
 
 > Grok Build가 이미 잘하는 실행 기반은 재사용하고, 계획→실행→독립 검증의 품질 규율만 얇게 추가합니다.
+
+전체 upstream 포크를 택하지 않은 이유는 [설계 평가](docs/upstream-evaluation.ko.md)를 참고하세요.
 
 ## 포함 기능
 
@@ -123,7 +123,7 @@ Grok Build 세션에서는 `/plugins`에서 플러그인을 다시 불러오거�
 /ogb-ultrawork 독립적인 세 모듈의 TypeScript 오류를 수정하고 각각 검증해줘
 ```
 
-`/ogb-ultrawork`는 Grok Build 자체의 서브에이전트, 백그라운드 실행, `workflow` 도구만으로 스케줄링하며, `oh-my-claudecode`의 `ultrawork` 등 외부 오케스트레이터를 호출하지 않습니다. 속도는 직렬 대기 제거에서 나오며, worktree 격리·소유권·예산·검증은 완화하지 않습니다.
+`/ogb-ultrawork`는 Grok Build 자체의 서브에이전트, 백그라운드 실행, `workflow` 도구만으로 스케줄링하며, 외부 오케스트레이터를 호출하지 않습니다. 속도는 직렬 대기 제거에서 나오며, worktree 격리·소유권·예산·검증은 완화하지 않습니다.
 
 ### 검증만 다시 수행
 
@@ -184,9 +184,9 @@ npm run validate:grok
 
 ## 출처 및 상표
 
-이 프로젝트는 `Yeachan-Heo/oh-my-claudecode`의 계획·병렬 실행·검증 개념에서 영감을 받은 독립 구현입니다. 원본 프로젝트는 MIT 라이선스입니다. 자세한 고지는 `NOTICE.md`를 확인하세요.
+독립 clean-room 구현입니다. 업스트림 영감과 전체 법적 고지는 [`NOTICE.md`](NOTICE.md)를 확인하세요. 설계 근거는 [`docs/upstream-evaluation.ko.md`](docs/upstream-evaluation.ko.md)에 있습니다.
 
-이 프로젝트는 xAI 또는 `oh-my-claudecode` 프로젝트와 제휴하거나 보증받지 않았습니다. Grok 및 Grok Build는 각 권리자의 상표일 수 있습니다.
+xAI 및 고지에 이름이 오른 업스트림 프로젝트와 제휴하거나 보증받지 않았습니다. Grok 및 Grok Build는 각 권리자의 상표일 수 있습니다.
 
 ## 라이선스
 

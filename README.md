@@ -30,15 +30,15 @@
   <img src="assets/brand/oh-my-grok-build-social-preview.png" width="887" alt="oh-my-grok-build workflow: plan, execute, verify">
 </p>
 
-A Grok Build-native toolkit for planning, parallel execution, and verification. It draws on the good work discipline of `oh-my-claudecode`, but instead of forking the Claude runtime, it builds directly on Grok Build's own plugins, subagents, worktrees, workflows, and goal mode.
+A Grok Build-native toolkit for planning, parallel execution, and verification. It builds directly on Grok Build's own plugins, subagents, worktrees, workflows, and goal mode — no separate runtime, hooks daemon, or external orchestrator.
 
-## Conclusion
+## Focus
 
-We do not recommend a rename-only fork of the entire `oh-my-claudecode` project for Grok Build. The original includes a Node.js runtime for Claude Code, hooks, state management, a CLI bridge, and tmux workers, while Grok Build already provides plugins, parallel subagents, isolated worktrees, native workflows, and `/goal`.
-
-So this repository focuses on exactly one thing:
+This repository does one thing:
 
 > Reuse the execution foundation Grok Build already does well, and add only a thin layer of plan → execute → independent-verify quality discipline.
+
+For why a full upstream fork was rejected, see [Design Evaluation](docs/upstream-evaluation.md).
 
 ## Commands
 
@@ -123,7 +123,7 @@ Review the plan with `/view-plan`, then execute it.
 /ogb-ultrawork Fix the TypeScript errors in these three independent modules and verify each one
 ```
 
-`/ogb-ultrawork` schedules with Grok Build's own subagents, background execution, and `workflow` tool only — it never calls `oh-my-claudecode`'s `ultrawork` or any other external orchestrator. Speed comes from removing serial waits, not from relaxing worktree isolation, ownership, budgets, or verification.
+`/ogb-ultrawork` schedules with Grok Build's own subagents, background execution, and `workflow` tool only — it never calls an external orchestrator. Speed comes from removing serial waits, not from relaxing worktree isolation, ownership, budgets, or verification.
 
 ### Re-running verification only
 
@@ -184,9 +184,9 @@ An authored minimal workflow body has now completed a live run, and its missing-
 
 ## Attribution and trademarks
 
-This project is an independent implementation inspired by the planning, parallel-execution, and verification concepts of `Yeachan-Heo/oh-my-claudecode`. The original project is MIT licensed. See `NOTICE.md` for the full notice.
+Independent clean-room implementation. Upstream inspiration and full legal notice: [`NOTICE.md`](NOTICE.md). Design rationale: [`docs/upstream-evaluation.md`](docs/upstream-evaluation.md).
 
-This project is not affiliated with or endorsed by xAI or the `oh-my-claudecode` project. Grok and Grok Build may be trademarks of their respective owners.
+Not affiliated with or endorsed by xAI or any upstream project named in the notice. Grok and Grok Build may be trademarks of their respective owners.
 
 ## License
 
