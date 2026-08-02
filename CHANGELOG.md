@@ -13,6 +13,7 @@ All notable changes to this project are documented here.
 
 ### Changed
 
+- OGB now exposes a clearer native-first UX contract: `/ogb-workflow` delegates authoring to Grok's bundled `create-workflow`, both READMEs map all seven commands to their non-overlapping use cases and native controls, execution reports separate plan source from actual session continuity and assign residual-worktree cleanup, and validation docs distinguish historical `0.2.112` live evidence from the current `0.2.118` static and direct-plugin receipt.
 - `scripts/validate.mjs` ignores hierarchical `AGENTS.md` files when building the plugin agent inventory and when enforcing docs EN/KO pair and language-switcher rules, so deepinit maps are not mistaken for agent definitions or bilingual product docs.
 - Both READMEs use a centered hero with the brand avatar, disclaimer, badges, nav links, and social-preview image.
 

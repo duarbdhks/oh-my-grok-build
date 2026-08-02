@@ -38,6 +38,19 @@ Grok Build 네이티브 계층
 | 실행 파동과 작업 소유권 규칙 | oh-my-grok-build |
 | 완료 증거와 독립 검증 순서 | oh-my-grok-build |
 
+## 수명주기 경계
+
+OGB는 계획 재사용을 세션이나 워크플로 재개로 잘못 해석하지 않도록 관련된 `4개` 수명주기를 분리합니다.
+
+| 수명주기 | 소유자 | OGB 기록 |
+|---|---|---|
+| 저장된 계획 | Grok Build 계획 기능 | `current-saved-plan`, `explicit-plan-path`, `concrete-task` |
+| 세션 계속·재개 | Grok Build `grok -c` / `grok -r` | `same-session`, `grok-continue`, `grok-resume`, `not-applicable` |
+| 저장된 워크플로 정의와 실행 | Grok Build 워크플로 런타임 | 정의 경로, 검증 상태, 실행 상태, 네이티브 재개 경로를 각각 기록 |
+| 워크트리 통합·정리 | 실행 사용자나 에이전트가 지시하는 Grok Build 워크트리 | 통합한 워크트리, 남은 워크트리, 정리 담당자, 수동 다음 조치 |
+
+현재 저장된 계획을 실행할 때만 세션 연속성 메타데이터를 기록할 수 있습니다. 명시적 계획 파일이나 구체적 작업에는 `not-applicable`을 사용하며, 입력이 비슷하다는 이유로 네이티브 재개를 주장하지 않습니다.
+
 ## 상태 전략
 
 v0.1은 별도 데이터베이스나 JSON 상태 파일을 만들지 않습니다.

@@ -52,6 +52,28 @@ For why a full upstream fork was rejected, see [Design Evaluation](docs/upstream
 | `/ogb-workflow` | Author reusable Grok workflows | Requires `create-workflow` first, and `validate_only` |
 | `/ogb-doctor` | Diagnose plugin, agent, and native-capability status | Read-only by default |
 
+### Choose the right command
+
+| Request shape | Choose | Avoid when | Native boundary |
+|---|---|---|---|
+| The direction is still vague | `/ogb-interview` | Requirements and acceptance criteria are already concrete | Produces a direction brief; it does not save or execute a plan |
+| The change is structural, risky, or needs agreement | `/ogb-plan` | The task is already small, concrete, and approved | Save and inspect the result with Grok's plan controls such as `/view-plan` |
+| An approved plan or concrete task should run sequentially | `/ogb-start` | Two or more tasks are safely independent | Grok owns session continuity and worktrees; OGB reports their lifecycle |
+| Two or more bounded tasks can run independently | `/ogb-ultrawork` | Files, resources, or acceptance criteria overlap | Grok owns subagents, worktrees, and workflow execution |
+| Existing work needs fresh evidence | `/ogb-verify` | The user is asking for implementation | Runs verification only; it does not repair failures unless separately requested |
+| A repeated multi-step process should become reusable | `/ogb-workflow` | The need is a one-off execution or plan | Grok's bundled `create-workflow` authors the workflow; native workflow controls run and resume it |
+| Installation or capability status is unclear | `/ogb-doctor` | The task is application debugging | Complements, but does not replace, Grok's native `/doctor` and `grok inspect` |
+
+### Native controls OGB does not replace
+
+| Native control | Use it for | OGB relationship |
+|---|---|---|
+| `/view-plan` | Inspecting the currently saved plan | Review an `/ogb-plan` result before execution |
+| `/goal` | Long-running autonomous execution | Run an approved plan, then use `/ogb-verify` for independent verification |
+| Native workflow run and resume | Executing or resuming a saved workflow run | `/ogb-workflow` authors the definition; it does not create a second workflow runtime |
+| Native `/doctor` and `grok inspect` | Grok-wide diagnostics | `/ogb-doctor` adds plugin-specific checks |
+| `grok -c` and `grok -r` | Continuing or resuming Grok sessions | OGB records continuity when it actually occurred; it never emulates it |
+
 The plugin also ships the following agents:
 
 - `oh-my-grok-build:planner`: Designs scope, task graphs, and acceptance criteria.
@@ -174,13 +196,13 @@ npm run validate:grok
 
 ## Status
 
-The current version is `0.1.0`. Alongside static validation, the six skills that shipped in `0.1.0` were run against a real Grok Build 0.2.112 session, confirming installation, invocation, subagent spawning, worktree integration, and independent verification.
+The current version is `0.1.0`. Its six original skills were run against a real Grok Build `0.2.112` session, confirming installation, invocation, subagent spawning, worktree integration, and independent verification. That is historical release evidence, not a claim about the current working candidate.
 
 `/ogb-interview` shipped after that release and was validated on its own, in two headless runs against a throwaway Express repository.
 
 The chain from `/ogb-interview` through `/ogb-verify` has also been run continuously inside one session, which covers the handoffs between skills rather than each skill alone.
 
-An authored minimal workflow body has now completed a live run, and its missing-argument path blocked before spawning an agent. Still unverified: worktree merge **conflict** handling, saved project-workflow loading through `script_path` under folder trust, and the chain across a session boundary — a plan does not carry into a fresh session, so return with `grok -c` before `/ogb-start`. Full evidence is in `docs/validation.md`.
+The current uncommitted candidate passes `215` repository checks and direct plugin validation on Grok `0.2.118`. Its edited command UX, workflow path, and saved project-workflow loading through `script_path` have not been rerun, so they are `NOT RUN`; the historical `0.2.112` `script_path` attempt remains a trust-boundary `LIMITATION`. A plan does not carry into a fresh session, so return with `grok -c` or `grok -r` before `/ogb-start`. Full historical and current receipts are in `docs/validation.md`.
 
 ## Attribution and trademarks
 

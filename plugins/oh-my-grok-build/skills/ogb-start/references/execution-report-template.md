@@ -23,5 +23,11 @@ verdict: PASS | PARTIAL | BLOCKED
 ## Git state
 
 - branch:
+- plan source kind: `current-saved-plan` | `explicit-plan-path` | `concrete-task`
+- session continuity: `same-session` | `grok-continue` | `grok-resume` | `not-applicable`
+- integrated worktrees: `none` | `<absolute path list>`
+- residual worktrees: `none` | `<absolute path list>`
+- cleanup owner: `user` | `host` | `none`
+- manual next action: `none` | `<text>`
 - unrelated pre-existing changes preserved:
 - commit/push/PR performed: no, unless explicitly requested

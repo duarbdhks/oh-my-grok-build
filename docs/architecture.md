@@ -38,6 +38,19 @@ Grok Build native layer
 | Execution wave and task-ownership rules | oh-my-grok-build |
 | Completion evidence and independent verification order | oh-my-grok-build |
 
+## Lifecycle boundaries
+
+OGB keeps four related lifecycles separate so that reusing a plan is never mistaken for resuming a session or workflow.
+
+| Lifecycle | Owner | OGB record |
+|---|---|---|
+| Saved plan | Grok Build plan controls | `current-saved-plan`, `explicit-plan-path`, or `concrete-task` |
+| Session continue or resume | Grok Build `grok -c` / `grok -r` | `same-session`, `grok-continue`, `grok-resume`, or `not-applicable` |
+| Saved workflow definition and workflow run | Grok Build workflow runtime | Definition path, validation state, run state, and native resume path as separate facts |
+| Worktree integration and cleanup | Grok Build worktrees, directed by the executing user or agent | Integrated worktrees, residual worktrees, cleanup owner, and manual next action |
+
+Only execution from the current saved plan can carry session-continuity metadata. An explicit plan file or concrete task uses `not-applicable`; OGB never claims a native resume merely because the inputs look similar.
+
 ## State strategy
 
 v0.1 does not create a separate database or JSON state file.

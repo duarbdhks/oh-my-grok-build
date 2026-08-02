@@ -6,6 +6,21 @@
 >
 > The agents were renamed after these runs — `ogb-planner` became `planner`, and so on for the other five, since the `oh-my-grok-build:` qualifier already namespaces them. The `ogb-*` agent names recorded below are left as they were, because they describe what actually ran at the time. Registration under the new names was re-confirmed separately; see the CLI section below.
 
+## Current Compatibility Receipt — 2026-08-02
+
+This receipt applies to the uncommitted P0 candidate under `plugins/oh-my-grok-build`, based on repository commit `a8c07bd460c95e3a779767f1dc3d1b7291c4a702`. It does not restamp the historical live runs below.
+
+| Check | Status | Current evidence |
+|---|---|---|
+| Source identity | PASS | Plugin version `0.1.0`; source path `plugins/oh-my-grok-build`; uncommitted candidate based on the commit above |
+| Repository static gate | PASS | `npm test` completed `215` checks |
+| Current CLI identity | PASS | `grok 0.2.118 (1e1687c1cf6a) [stable]` |
+| Direct plugin validation | PASS | `grok plugin validate plugins/oh-my-grok-build` reported a valid `0.1.0` manifest with `1` skill directory and `1` agent directory |
+| Current source UX contract | PASS | Source review confirms the `7`-command selection matrix, native `create-workflow` authoring path, separate plan/session/workflow lifecycles, and residual-worktree ownership fields |
+| Current command live UX | NOT RUN | The edited skills were not invoked in a new `0.2.118` Grok session |
+| Current saved workflow loading via `script_path` | NOT RUN | This candidate did not change global folder trust or rerun the path; the historical `0.2.112` attempt remains a `LIMITATION` below |
+| Current authored-workflow live run | NOT RUN | Historical `0.2.112` inline-body evidence remains below and is not promoted to current-candidate evidence |
+
 ## Completed Validation
 
 - JSON parsing: marketplace, plugin index, plugin manifest
@@ -18,7 +33,7 @@
 - confirmed content-type boundaries: no hooks, MCP, LSP, executable binaries, or npm dependencies
 - Node.js static validation script and GitHub Actions configuration
 
-## Validation Confirmed with the Real Grok CLI
+## Historical Validation with the Real Grok CLI
 
 Run directly in a `grok` 0.2.112 (stable) environment.
 
@@ -238,7 +253,7 @@ The success journal recorded one `spawn_agent` result with `success: true`, `con
 ## Still Unverified
 
 - The worktree merge **conflict** handling path. The runs above had no overlapping file ownership, so no conflict occurred.
-- The chain across a **session boundary**. Grok writes the plan to `plan.md` inside the session directory, so a new session cannot see it — confirmed by running `/view-plan` in a fresh session in a directory that already held two plans, which reported no saved plan. Returning with `grok -c` or `grok -r <session-id>` restores it, also confirmed. The skills do not yet tell the user this.
+- A fresh live run of the chain across a **session boundary**. The historical check confirmed that a new session cannot see the prior session's `plan.md`, while `grok -c` or `grok -r <session-id>` restores it. The current source now documents that boundary and reports continuity separately, but the edited path has not been rerun on `0.2.118`.
 - Loading a saved project workflow through `script_path` in the throwaway repository. The tool required explicit folder trust even though the same authored body validated and ran through `script`; the run deliberately did not mutate user-global trust state.
 - Workflow budget exhaustion and parallel-slot failure. Live success and missing-argument handling are now exercised, but those two failure branches remain unverified.
 - Live scheduling scenarios B and B2. A, C, D, E, and F are exercised above; only the same-file ban and shared-resource lowered-concurrency mappings remain static design evidence.

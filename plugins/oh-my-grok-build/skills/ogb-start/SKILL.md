@@ -16,11 +16,14 @@ Implement an approved plan without broadening scope, damaging unrelated work, or
 
 ## Preconditions
 
-1. Prefer the current native saved plan or an explicit plan path.
-2. Treat this skill invocation as execution authorization only for the stated scope.
-3. If the request is vague, has no acceptance criteria, or introduces a high-risk decision not covered by the plan, stop and route to `/ogb-plan`.
-4. Inspect `git status`, the current branch, and existing diffs before delegation. Never absorb, reset, overwrite, stage, or commit unrelated user changes.
-5. Record a baseline command or test result when one is available so regressions can be distinguished from pre-existing failures.
+1. Classify the input as exactly one plan source kind: `current-saved-plan`, `explicit-plan-path`, or `concrete-task`.
+2. Prefer `current-saved-plan` or `explicit-plan-path`. Accept `concrete-task` only when its scope, acceptance criteria, and authorization are already explicit and no high-risk design decision remains.
+3. Record session continuity separately from plan source. Only `current-saved-plan` can report `same-session`, `grok-continue`, or `grok-resume`; use `not-applicable` for `explicit-plan-path` and `concrete-task`.
+4. Never infer continuity from similar text or a plan path. Report `grok-continue` or `grok-resume` only when the corresponding native Grok session operation actually occurred.
+5. Treat this skill invocation as execution authorization only for the stated scope.
+6. If the request is vague, has no acceptance criteria, or introduces a high-risk decision not covered by the plan, stop and route to `/ogb-plan`.
+7. Inspect `git status`, the current branch, and existing diffs before delegation. Never absorb, reset, overwrite, stage, or commit unrelated user changes.
+8. Record a baseline command or test result when one is available so regressions can be distinguished from pre-existing failures.
 
 ## Execution protocol
 
@@ -58,6 +61,8 @@ Implement an approved plan without broadening scope, damaging unrelated work, or
 
 8. **Finish safely**
    - Summarize the final diff, validation evidence, remaining risk, and rollback notes.
+   - Report the plan source kind and session continuity without conflating plan reuse with session resume.
+   - List integrated and residual worktrees by absolute path, or report `none`. For every residual worktree, name the cleanup owner as `user` or `host` and the exact manual next action; use `none` when no cleanup remains.
    - Do not commit, push, open a pull request, merge, deploy, or modify remote state unless the user explicitly requested that action.
 
 ## Recommended spawn shape

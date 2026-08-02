@@ -34,6 +34,10 @@ verdict: PASS | PARTIAL | BLOCKED
 
 - integrated:
 - rejected, and why:
+- integrated worktrees: `none` | `<absolute path list>`
+- residual worktrees: `none` | `<absolute path list>`
+- cleanup owner: `user` | `host` | `none`
+- manual next action: `none` | `<text>`
 
 ## Overlap achieved
 
