@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="oh-my-grok-build mark for light backgrounds">
+  <title>oh-my-grok-build mark (light)</title>
+  <rect width="128" height="128" rx="28" fill="#F7F9FC"/>
+  <rect x="18" y="22" width="92" height="84" rx="12" fill="#FFFFFF" stroke="#D0D7E2" stroke-width="2"/>
+  <circle cx="34" cy="38" r="4" fill="#E85D5D"/>
+  <circle cx="48" cy="38" r="4" fill="#D9A441"/>
+  <circle cx="62" cy="38" r="4" fill="#2F9E6B"/>
+  <path d="M30 58h8l6 8-6 8h-8l6-8z" fill="#5B6B82"/>
+  <rect x="52" y="54" width="40" height="8" rx="4" fill="#3B6FDB"/>
+  <rect x="52" y="70" width="48" height="8" rx="4" fill="#1FA971"/>
+  <rect x="52" y="86" width="32" height="8" rx="4" fill="#C98A12"/>
+</svg>

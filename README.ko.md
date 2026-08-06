@@ -1,107 +1,40 @@
 <p align="center">
-  <img src="assets/brand/oh-my-grok-build-avatar.png" width="88" alt="oh-my-grok-build 터미널 마크">
+  <img src="assets/brand/oh-my-grok-build-avatar.png" width="96" alt="oh-my-grok-build 마크: plan·execute·verify 바가 있는 터미널 창">
 </p>
 
 <h1 align="center">oh-my-grok-build</h1>
 
 <p align="center">
-  <em>네이티브 계획, 제한된 병렬 실행, 독립 검증을 위한 개발자 작업 교범.</em>
+  <strong>Grok Build용 경량 오케스트레이션 규율:</strong><br>
+  합의 계획, 제한된 병렬 실행, 독립 검증 — 네이티브 런타임 기능은 대체하지 않습니다.
 </p>
 
 <p align="center">
-  <a href="https://github.com/xai-org/grok-build">Grok Build</a>용 독립 오픈소스 플러그인입니다.<br>
+  <a href="https://github.com/xai-org/grok-build">Grok Build</a>용 독립 오픈소스 플러그인입니다. 콘텐츠 전용 스킬·에이전트. 별도 데몬, 상태 DB, 외부 오케스트레이터 없음.<br>
   <sub>xAI와 제휴하거나 공식 승인을 받은 프로젝트가 아닙니다. · <a href="https://docs.x.ai/build/overview">Grok Build 공식 문서</a></sub>
 </p>
 
 <p align="center">
   <a href="https://github.com/xai-org/grok-build"><img src="https://img.shields.io/badge/built%20for-grok--build-black" alt="Grok Build용"></a>
-  <a href="https://github.com/duarbdhks/oh-my-grok-build/actions/workflows/validate.yml"><img src="https://github.com/duarbdhks/oh-my-grok-build/actions/workflows/validate.yml/badge.svg" alt="검증"></a>
+  <a href="https://github.com/duarbdhks/oh-my-grok-build/actions/workflows/validate.yml"><img src="https://github.com/duarbdhks/oh-my-grok-build/actions/workflows/validate.yml/badge.svg" alt="Validate CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT 라이선스"></a>
+  <a href="plugins/oh-my-grok-build/plugin.json"><img src="https://img.shields.io/badge/version-0.1.0-informational" alt="플러그인 버전 0.1.0"></a>
 </p>
 
 <p align="center">
   <a href="README.md">English</a> ·
-  <a href="docs/upstream-evaluation.ko.md">설계 평가</a> ·
+  <a href="docs/getting-started.ko.md">시작하기</a> ·
+  <a href="docs/concepts.ko.md">개념</a> ·
+  <a href="docs/command-reference.ko.md">명령</a> ·
   <a href="docs/architecture.ko.md">아키텍처</a> ·
-  <a href="docs/roadmap.ko.md">로드맵</a>
+  <a href="docs/validation.ko.md">검증</a>
 </p>
 
 <p align="center">
-  <img src="assets/brand/oh-my-grok-build-social-preview.png" width="887" alt="oh-my-grok-build 작업 흐름: 계획, 실행, 검증">
+  <img src="assets/brand/oh-my-grok-build-hero.png" width="900" alt="히어로: interview → plan → execute → verify 파이프라인">
 </p>
 
-Grok Build 네이티브 계획·병렬 실행·검증 도구 모음입니다. 별도의 런타임·훅 데몬·외부 오케스트레이터 없이 Grok Build의 플러그인·서브에이전트·워크트리·워크플로·목표 모드를 그대로 활용합니다.
-
-## 집중 범위
-
-이 저장소는 아래 한 가지에 집중합니다.
-
-> Grok Build가 이미 잘하는 실행 기반은 재사용하고, 계획→실행→독립 검증의 품질 규율만 얇게 추가합니다.
-
-전체 upstream 포크를 택하지 않은 이유는 [설계 평가](docs/upstream-evaluation.ko.md)를 참고하세요.
-
-## 포함 기능
-
-| 명령 | 역할 | 기본 안전장치 |
-|---|---|---|
-| `/ogb-interview` | 모호한 아이디어를 한 번에 한 질문씩 방향 브리프로 정리 | 소스 수정 금지, 질문만 수행하며 계획·구현 금지 |
-| `/ogb-plan` | Planner → Architect → Critic 합의 계획 | 소스 수정 금지, 최대 3회 검토 루프 |
-| `/ogb-start` | 승인된 계획 실행 | 작업 소유권 분리, 쓰기 작업은 워크트리 격리 |
-| `/ogb-ultrawork` | 독립 작업을 병렬 실행해 elapsed time 단축 | max-safe `C*` 동시성(기본 iso 4, 격리 증명 시 최대 8, 공유 자원 시 2)과 child별 ROLE_LENS; 워크플로 에이전트 예산 8개 |
-| `/ogb-verify` | 테스트·타입체크·빌드·독립 검증 | 최신 실행 증거 없이는 완료 판정 금지 |
-| `/ogb-workflow` | 재사용 가능한 Grok 워크플로 작성 | `create-workflow` 선행, `validate_only` 필수 |
-| `/ogb-doctor` | 플러그인·에이전트·네이티브 기능 진단 | 기본 읽기 전용 |
-
-### 알맞은 명령 선택
-
-| 요청 형태 | 선택 | 피해야 할 때 | 네이티브 경계 |
-|---|---|---|---|
-| 방향이 아직 모호함 | `/ogb-interview` | 요구사항과 수용 기준이 이미 구체적임 | 방향 브리프만 만들며 계획을 저장하거나 실행하지 않음 |
-| 구조적이거나 위험하며 합의가 필요한 변경 | `/ogb-plan` | 작고 구체적이며 이미 승인된 작업 | 결과는 `/view-plan` 같은 Grok 계획 기능으로 저장·검토 |
-| 승인된 계획이나 구체적 작업을 순차 실행 | `/ogb-start` | 안전하게 독립된 작업이 `2개` 이상임 | 세션 연속성과 워크트리는 Grok이 소유하고 OGB는 수명주기를 보고 |
-| 범위가 제한된 작업 `2개` 이상을 독립 실행 | `/ogb-ultrawork` | 파일·자원·수용 기준이 겹침 | 서브에이전트·워크트리·워크플로 실행은 Grok이 소유 |
-| 기존 결과에 최신 증거가 필요함 | `/ogb-verify` | 사용자가 구현을 요청함 | 검증만 수행하며 별도 요청 없이 실패를 수정하지 않음 |
-| 반복되는 여러 단계를 재사용 가능하게 만듦 | `/ogb-workflow` | 일회성 실행이나 계획이 필요함 | Grok 번들 `create-workflow`가 작성하고 네이티브 기능이 실행·재개 |
-| 설치나 기능 상태가 불명확함 | `/ogb-doctor` | 애플리케이션 자체를 디버깅하는 작업 | Grok 네이티브 `/doctor`, `grok inspect`를 대체하지 않고 보완 |
-
-### 대체하지 않는 기능
-
-| 네이티브 기능 | 용도 | OGB 관계 |
-|---|---|---|
-| `/view-plan` | 현재 저장된 계획 검토 | `/ogb-plan` 결과를 실행 전에 검토 |
-| `/goal` | 장시간 자율 실행 | 승인된 계획을 실행한 뒤 `/ogb-verify`로 독립 검증 |
-| 네이티브 워크플로 실행·재개 | 저장된 워크플로 실행을 시작하거나 재개 | `/ogb-workflow`는 정의만 작성하며 별도 런타임을 만들지 않음 |
-| 네이티브 `/doctor`, `grok inspect` | Grok 전체 진단 | `/ogb-doctor`가 플러그인 전용 검사를 추가 |
-| `grok -c`, `grok -r` | Grok 세션 계속·재개 | 실제로 연속성이 발생했을 때만 기록하며 이를 모방하지 않음 |
-
-플러그인은 다음 에이전트를 함께 제공합니다.
-
-- `oh-my-grok-build:planner`: 범위, 작업 그래프, 수용 기준을 설계합니다.
-- `oh-my-grok-build:architect`: 구조적 타당성과 트레이드오프를 검토합니다.
-- `oh-my-grok-build:critic`: 누락, 모순, 검증 불가능한 항목을 차단합니다.
-- `oh-my-grok-build:explorer`: 읽기 전용으로 코드베이스 근거를 수집합니다.
-- `oh-my-grok-build:executor`: 범위가 제한된 구현 작업을 수행합니다.
-- `oh-my-grok-build:verifier`: 구현자와 독립적으로 최종 결과를 재현합니다.
-
-Grok은 플러그인 에이전트를 플러그인 이름으로 한정해 등록하고 스킬은 bare 이름으로 등록하므로, 이 저장소에서 둘은 서로 반대되는 규칙을 따릅니다. 에이전트에는 `ogb-` 접두사가 없습니다. `oh-my-grok-build:` 한정자가 이미 네임스페이스 역할을 하며, 파일명과 frontmatter의 `name`이 짧은 형태입니다. 스킬은 접두사를 유지합니다. `/ogb-plan`을 구분해 줄 다른 장치가 없기 때문입니다.
-
-에이전트는 항상 한정된 이름으로 생성하십시오. 접두사를 빠뜨려도 요란하게 실패하지 않습니다. bare `planner`나 `executor`는 사용자 환경의 `~/.grok/agents/` 또는 `~/.claude/agents/`에 있는 동명의 다른 에이전트로 해석될 수 있고, 그러면 잘못된 프롬프트로 작업이 진행됩니다. `npm test`는 스킬 안의 한정되지 않은 에이전트 참조를 거부하고, `/ogb-doctor`는 사용자 환경의 동명 에이전트를 경고로 보고합니다.
-
-### 더 넓은 에이전트 모음과 함께 쓰기
-
-이 여섯 개가 스킬 일곱 개에 필요한 전부입니다. `/ogb-interview`부터 `/ogb-doctor`까지 동작하는 데 다른 설치는 필요하지 않습니다. 이 플러그인은 범용 에이전트 라이브러리가 되는 대신 여기서 의도적으로 멈춥니다.
-
-그 범위 밖의 작업 — 코드 리뷰, 보안 감사, 데이터베이스 튜닝, 장애 대응 — 에 특화된 에이전트가 필요하면 [`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents)(MIT) 같은 서드파티 모음이 있습니다. Grok 전용 설치 경로는 없지만, Grok이 Claude 호환 레이어를 통해 `~/.claude/agents/`의 에이전트 정의를 인식하므로 Claude Code 대상 설치가 그대로 동작합니다.
-
-```bash
-./scripts/install.sh --tool claude-code
-```
-
-제안일 뿐 의존성이 아닙니다. 이 플러그인은 해당 프로젝트에서 무엇도 번들하지 않으며 제휴 관계도 없습니다.
-
-## 설치
-
-### 마켓플레이스 방식
+## 30초 Quick Start
 
 ```bash
 grok plugin marketplace add duarbdhks/oh-my-grok-build
@@ -109,107 +42,291 @@ grok plugin install oh-my-grok-build --trust
 grok plugin enable oh-my-grok-build
 ```
 
-### 저장소 하위 디렉터리 직접 설치
+Grok Build 세션에서 (`/plugins` 리로드 또는 새 세션):
+
+```text
+/ogb-doctor
+/ogb-plan Add a health endpoint that returns 200 and a build id
+/view-plan
+/ogb-start Implement the currently approved plan
+/ogb-verify Re-check the acceptance criteria for the current changes
+```
+
+설치 옵션 더 보기: [시작하기](docs/getting-started.ko.md).
+
+---
+
+## 왜 oh-my-grok-build인가
+
+멀티 에이전트 코딩은 자주 같은 방식으로 실패합니다.
+
+| 고통 | 무엇이 잘못되나 |
+|---|---|
+| 모호함 → 코드 | 거친 요청이 미검토 소스 수정이 됨 |
+| 병렬 충돌 | 여러 에이전트가 같은 파일을 고침 |
+| 자기 승인 | 구현자가 자기 결과를 통과시킴 |
+| 가짜 속도 | 에이전트는 늘지만 소유권·검증이 없음 |
+
+OGB는 Grok Build가 이미 가진 기능 위에 얇은 규율만 더합니다.
+
+1. 구조가 불명확하면 **interview / plan 먼저** — 계획 단계 소스 수정 없음
+2. **제한된 소유 실행** — 네이티브 워크트리와 max-safe 동시성
+3. **독립 검증** — 구현자와 분리된 최신 증거
+
+별도 런타임을 만들지 않습니다. 세션, goal, 워크트리, 워크플로, 권한 상태는 Grok Build에 남습니다.
+
+---
+
+## 동작 방식
+
+![워크플로 다이어그램: 사용자 → OGB 스킬 → Grok Build 네이티브](assets/brand/diagrams/workflow.svg)
+
+```mermaid
+flowchart LR
+  U[User] --> I["/ogb-interview"]
+  I --> P["/ogb-plan"]
+  P --> V["/view-plan native"]
+  V --> E["/ogb-start or /ogb-ultrawork"]
+  E --> R["/ogb-verify"]
+  E -. long run .-> G["/goal native"]
+  G --> R
+```
+
+| 단계 | 명령 | 에이전트 | 소스 수정 | 안전장치 | 결과 |
+|---|---|---|---|---|---|
+| 정리 | `/ogb-interview` | explorer (선택) | 없음 | 턴당 질문 1개 | 방향 브리프 |
+| 계획 | `/ogb-plan` | planner → architect → critic | 없음 | 승인 대기 | 저장 계획 |
+| 검토 | `/view-plan` (네이티브) | — | 없음 | 사람/에이전트 검토 | 확인된 계획 |
+| 실행 | `/ogb-start` | explorer, executor | 있음 (소유) | 워크트리 격리 | 구현 |
+| 병렬 | `/ogb-ultrawork` | executor / explorer | 있음 (소유) | max-safe `C*` | 병렬 리포트 |
+| 검증 | `/ogb-verify` | verifier | 없음 | 최신 증거 | PASS / FAIL / INCONCLUSIVE |
+
+같은 루프의 정적 터미널 일러스트 (라이브 캡처 아님):
+
+<p align="center">
+  <img src="assets/brand/diagrams/terminal-flow.svg" width="720" alt="ogb-doctor, ogb-plan, view-plan, ogb-start, ogb-verify 정적 터미널 목업">
+</p>
+
+---
+
+## Quick Start (전체)
+
+### 마켓플레이스 설치
+
+```bash
+grok plugin marketplace add duarbdhks/oh-my-grok-build
+grok plugin install oh-my-grok-build --trust
+grok plugin enable oh-my-grok-build
+```
+
+### 저장소 하위 경로 설치
 
 ```bash
 grok plugin install duarbdhks/oh-my-grok-build#plugins/oh-my-grok-build --trust
 grok plugin enable oh-my-grok-build
 ```
 
-설치 상태는 다음 명령으로 확인합니다.
+### 확인
 
 ```bash
 grok plugin details oh-my-grok-build
 grok inspect
 ```
 
-Grok Build 세션에서는 `/plugins`에서 플러그인을 다시 불러오거나 새 세션을 시작한 뒤 `/ogb-doctor`를 실행합니다.
+이어서 `/ogb-doctor` → 첫 `/ogb-plan` → `/view-plan` → `/ogb-start` → `/ogb-verify`.
 
-## 권장 사용 흐름
+---
 
-### 안전한 기능 구현
+## 명령 매트릭스
+
+| 명령 | 언제 | 산출물 | 소스 수정 | 병렬 | 주요 안전장치 |
+|---|---|---|---|---|---|
+| `/ogb-interview` | 아이디어가 모호 | 방향 브리프 | 없음 | 읽기 전용 explorer만 | 질문만 |
+| `/ogb-plan` | 코드 전 합의 필요 | 저장 계획 | 없음 | 탐색만 | 같은 호출에서 실행 금지 |
+| `/ogb-start` | 승인된 계획/구체 작업 | 구현 | 있음 | 웨이브 + 워크트리 | 소유권, 조용한 git 작업 금지 |
+| `/ogb-ultrawork` | 독립 작업 준비됨 | 병렬 리포트 | 있음 | 예, 제한 `C*` | 같은 파일 금지, 예산 |
+| `/ogb-verify` | 최신 증거 필요 | 판정 리포트 | 없음 | 읽기 전용 점검 | 구현자와 독립 |
+| `/ogb-workflow` | 재사용 다단계 프로세스 | 워크플로 정의 | 정의만* | 워크플로 예산 안 | `validate_only` 선행 |
+| `/ogb-doctor` | 설치 이상 | 진단 | 기본 없음 | 없음 | 네이티브 `/doctor` 보완 |
+
+\*작성 시 워크플로 파일은 쓸 수 있으며, 기본으로 제품 기능을 구현하지 않습니다.
+
+전체 계약: [명령 참고](docs/command-reference.ko.md).
+
+### 제공 에이전트
+
+| 에이전트 | 역할 |
+|---|---|
+| `oh-my-grok-build:planner` | 범위, 웨이브, 수용 기준 |
+| `oh-my-grok-build:architect` | 구조 검토 |
+| `oh-my-grok-build:critic` | 완성도·위험 게이트 |
+| `oh-my-grok-build:explorer` | 읽기 전용 증거 |
+| `oh-my-grok-build:executor` | 제한된 구현 |
+| `oh-my-grok-build:verifier` | 독립 최종 점검 |
+
+항상 **한정 이름**으로 spawn 하세요. bare `executor`는 같은 이름의 사용자 에이전트로 갈 수 있습니다.
+
+---
+
+## 실제 예시
 
 ```text
-/ogb-plan 사용자 프로필 API에 낙관적 잠금을 추가하고 충돌 시 409를 반환해줘
+# 작은 버그
+/ogb-plan Fix null displayName handling in the profile API without changing the response shape
+/view-plan
+/ogb-start Implement the currently approved plan
+/ogb-verify Confirm null and happy-path cases
+
+# 구조적 기능
+/ogb-plan Add optimistic locking on profile update; return 409 on conflict; include tests
+
+# 독립 모듈 병렬
+/ogb-ultrawork Fix TypeScript errors in three independent packages with worktree isolation
+
+# 기존 작업 재검증
+/ogb-verify Re-verify origin/main...HEAD against the plan acceptance criteria; do not edit source
+
+# 네이티브 /goal과 장시간
+/ogb-plan Fix duplicate processing in the payment webhook
+/goal Implement the currently saved plan. Preserve unrelated changes. No commit, push, or deploy.
+/ogb-verify Final re-check of the saved plan acceptance criteria
+
+# 모호한 요청
+/ogb-interview We need rate limiting on the public API but keys and limits are undecided
 ```
 
-계획을 `/view-plan`으로 검토한 뒤 실행합니다.
+더 보기: [예시](docs/examples.ko.md).
 
-```text
-/ogb-start 현재 승인된 계획을 구현해줘
-```
+---
 
-### 병렬 작업
+## 아키텍처
 
-```text
-/ogb-ultrawork 독립적인 세 모듈의 TypeScript 오류를 수정하고 각각 검증해줘
-```
+OGB는 실행 엔진이 아니라 운영 규율 계층입니다.
 
-`/ogb-ultrawork`는 Grok Build 자체의 서브에이전트, 백그라운드 실행, `workflow` 도구만으로 스케줄링하며, 외부 오케스트레이터를 호출하지 않습니다. 소유권·격리로 max-safe 동시 수 `C*` 를 점수화해 그 상한까지 띄우고, 각 child에 닫힌 ROLE_LENS 를 붙이며, 큰 스키마형 fan-out은 네이티브 workflow를 우선합니다. 속도는 직렬 대기 제거에서 나오며, worktree 격리·소유권·예산·검증은 완화하지 않습니다.
+![데몬·상태 DB 없는 아키텍처 개요](assets/brand/diagrams/architecture-overview.svg)
 
-### 검증만 다시 수행
+| 관심사 | 소유자 |
+|---|---|
+| 세션 저장/재개 | Grok Build |
+| `/goal` 자율 상태 | Grok Build |
+| 서브에이전트 생명주기 | Grok Build |
+| 워크트리 | Grok Build |
+| 워크플로 런타임 | Grok Build |
+| 계획 품질 게이트 | OGB |
+| 소유권/웨이브 규칙 | OGB |
+| 독립 검증 순서 | OGB |
 
-```text
-/ogb-verify origin/main...HEAD 변경이 요구사항을 충족하는지 재검증해줘
-```
+상세: [아키텍처](docs/architecture.ko.md).
 
-### 장시간 자율 작업
+---
 
-이 프로젝트는 별도 Autopilot 상태 머신을 만들지 않습니다. 먼저 OGB로 계획을 확정하고, Grok Build의 네이티브 `/goal`로 장시간 실행한 뒤 OGB 검증을 별도로 수행합니다.
+## 네이티브 vs OGB
 
-```text
-/ogb-plan 결제 웹훅 중복 처리 버그를 수정해줘
-/goal 현재 saved plan을 구현한다. 관련 없는 변경을 보존하고, 병렬 쓰기는 worktree로 격리하며, commit·push·deploy는 하지 않는다.
-/ogb-verify 현재 saved plan의 수용 기준을 최종 재검증해줘
-```
+| 기능 | Grok Build 네이티브 | OGB |
+|---|---|---|
+| 세션 연속성 | `grok -c` / `grok -r` | 네이티브 재개가 있을 때만 기록 |
+| 워크트리 관리 | 생성/적용/정리 | 스킬에서 격리 정책 지시 |
+| 서브에이전트 실행 | `spawn_subagent` | 한정 플러그인 에이전트 계약 |
+| 워크플로 런타임 | Rhai, 예산, 일시정지 | `/ogb-workflow` + 가드로 작성 |
+| Goal 모드 | `/goal` | 재구현하지 않음; plan + verify와 조합 |
+| 계획 규율 | Plan mode + 저장 계획 | Planner → Architect → Critic |
+| 소유권 경계 | — | 웨이브당 겹치지 않는 파일 소유 |
+| 독립 검증 | `check-work` 가용 | `/ogb-verify` + `verifier` |
+| 증거 기반 완료 | — | 실제 실행한 로그만 PASS |
 
-`disable-model-invocation`이 활성화되어 있으므로 `/goal`이 OGB 스킬을 몰래 호출하지 않습니다. 운영·보안·인증·데이터 마이그레이션·결제·PII 작업은 위처럼 계획과 검증을 명시적으로 분리합니다.
+---
 
-## 설계 원칙
+## 안전·설계 원칙
 
-1. **네이티브 우선**: 세션, 목표, 워크트리, 서브에이전트, 워크플로 상태를 중복 구현하지 않습니다.
-2. **명시적 비용**: 무제한 병렬화를 금지하고 기본 예산을 작게 둡니다.
-3. **계획과 실행 분리**: `/ogb-plan`은 실행하지 않습니다.
-4. **증거 기반 완료**: 테스트 로그, 타입체크, 빌드, 재현 결과 중 실제 실행한 것만 보고합니다.
-5. **조용한 실패 금지**: 모델·도구·MCP 대체 경로를 몰래 선택하지 않습니다.
-6. **사용자 Git 보호**: 명시 요청 없이 커밋, 푸시, PR 생성, 강제 리셋을 하지 않습니다.
+1. **Native-first** — session, goal, worktree, subagent, workflow 상태 재구현 금지
+2. **Bounded parallelism** — max-safe `C*`, 잔여 예산, 워크플로 `agent_budget`
+3. **계획과 실행 분리** — `/ogb-plan`은 구현하지 않음
+4. **독립 검증** — 구현자가 최종 게이트를 스스로 통과시키지 않음
+5. **Evidence over confidence** — 실제로 돌린 점검만 보고
+6. **No silent fallback** — 조용한 모델/도구/MCP 교체 금지
+7. **Git 보호** — 명시 요청 없이 commit, push, PR, force-reset 금지
 
-## 의도적으로 제외한 것
+스킬 7개 모두 `disable-model-invocation: true`.
 
-- Claude Agent SDK 또는 Anthropic API 의존성
-- 별도 Node.js 실행 데몬과 SQLite 상태 저장소
-- tmux 기반 외부 모델 작업자
-- 신규 MCP 서버와 자동 설치 바이너리
-- 전역 훅을 이용한 강제 상태 전이
-- Grok Build 네이티브 `/goal`, `/workflow`, worktree 기능의 재구현
+---
 
-## 개발 및 검증
+## 프로젝트 상태
 
-런타임 의존성은 없습니다. 저장소 검증에는 Node.js 20 이상만 사용합니다.
+플러그인 버전 **0.1.0**. 독립 서드파티 마켓플레이스 플러그인입니다 (별도 공식 리스팅 절차가 끝나기 전까지 xAI 공식 목록이 아님 — [게시](docs/publishing.ko.md)).
+
+| 범위 | 상태 |
+|---|---|
+| 정적 저장소 게이트 (`npm test`) | 현재 트리에서 PASS (로컬/CI 실행) |
+| Grok `0.2.112` 역사 라이브 스킬 | PASS (원본 6스킬 + 이후 `/ogb-interview` + 체인/스케줄링 증거) |
+| Grok `0.2.118` 호환 영수증 | 정적 + `grok plugin validate` PASS; **현재 명령 라이브 UX `NOT RUN`** |
+| 저장 워크플로 `script_path` 폴더 신뢰 | 역사적 **LIMITATION** |
+| 워크트리 충돌 경로 | 미검증 (성공 런에 소유 겹침 없음) |
+
+역사적 `0.2.112` 라이브 런을 이후 CLI 빌드의 자동 증명으로 보지 마세요. 전체 영수증: [검증](docs/validation.ko.md).
+
+---
+
+## FAQ
+
+| 질문 | 짧은 답 |
+|---|---|
+| Grok Build 포크? | 아니오 — 서드파티 플러그인 |
+| Claude 데몬 같은 별도 엔진? | 아니오 — 콘텐츠 전용 |
+| Claude / Anthropic API 필요? | 아니오 |
+| 외부 agent pack 필수? | 아니오 |
+| `/goal` 대체? | 아니오 |
+| 무제한 병렬? | 아니오 — 상한 있음 |
+| Git 상태 보호? | 스킬 지시로 보호 (권한은 사용자) |
+| 검증된 Grok 버전? | 라이브 `0.2.112`; 정적 영수증 `0.2.118` |
+| 새 세션에 계획 유지? | 자동 아니오 — `grok -c` / `grok -r` |
+| 프로덕션 자동 승인? | 아니오 |
+
+전체 FAQ: [docs/faq.ko.md](docs/faq.ko.md).
+
+---
+
+## 문서 탐색
+
+| 목적 | 문서 |
+|---|---|
+| 시작하기 | [docs/getting-started.ko.md](docs/getting-started.ko.md) |
+| 개념 | [docs/concepts.ko.md](docs/concepts.ko.md) |
+| 아키텍처 | [docs/architecture.ko.md](docs/architecture.ko.md) |
+| 명령 참고 | [docs/command-reference.ko.md](docs/command-reference.ko.md) |
+| 예시 | [docs/examples.ko.md](docs/examples.ko.md) |
+| 문제 해결 | [docs/troubleshooting.ko.md](docs/troubleshooting.ko.md) |
+| 검증 증거 | [docs/validation.ko.md](docs/validation.ko.md) |
+| 호환성 | [docs/compatibility.ko.md](docs/compatibility.ko.md) |
+| 설계 결정 | [docs/design-decisions.ko.md](docs/design-decisions.ko.md) |
+| 로드맵 | [docs/roadmap.ko.md](docs/roadmap.ko.md) |
+| 게시 | [docs/publishing.ko.md](docs/publishing.ko.md) |
+| GitHub 소유자 메타 | [docs/github-metadata.ko.md](docs/github-metadata.ko.md) |
+| 업스트림 평가 | [docs/upstream-evaluation.ko.md](docs/upstream-evaluation.ko.md) |
+| 기여 | [CONTRIBUTING.md](CONTRIBUTING.md) |
+| 보안 | [SECURITY.md](SECURITY.md) |
+| 변경 이력 | [CHANGELOG.md](CHANGELOG.md) |
+| 브랜드 에셋 | [assets/brand/README.md](assets/brand/README.md) |
+| 법적 고지 | [NOTICE.md](NOTICE.md) · [LICENSE](LICENSE) |
+
+---
+
+## 개발·검증 (이 저장소)
+
+런타임 패키지 의존성 없음. 정적 검사용 Node.js `>=20`.
 
 ```bash
 npm test
 npm run validate:grok
 ```
 
-`npm test`는 매니페스트, 마켓플레이스 인덱스, 스킬·에이전트 frontmatter, 구성 요소 일치 여부를 검사합니다. `npm run validate:grok`는 로컬에 `grok` CLI가 있을 때 공식 플러그인 검증 명령도 실행합니다.
+---
 
-## 상태
+## 귀속·상표
 
-현재 버전은 `0.1.0`입니다. 최초 스킬 `6개`를 실제 Grok Build `0.2.112` 세션에서 실행해 설치·호출·서브에이전트 생성·워크트리 통합·독립 검증을 확인했습니다. 이는 과거 릴리스 증거이며 현재 작업 후보의 라이브 동작을 뜻하지 않습니다.
+독립 clean-room 구현. 업스트림 영감과 법적 고지: [NOTICE.md](NOTICE.md).
 
-`/ogb-interview`는 그 릴리스 이후에 추가되어, 임시 Express 저장소에서 headless 2회 실행으로 따로 검증했습니다.
-
-`/ogb-interview`부터 `/ogb-verify`까지의 체인도 한 세션 안에서 연속으로 실행했습니다. 스킬 하나씩이 아니라 스킬 사이의 이음새를 확인한 실행입니다.
-
-현재 미커밋 후보는 Grok `0.2.118`에서 저장소 검사 `215개`와 직접 플러그인 검증을 통과했습니다. 수정한 명령 UX, 워크플로 경로, `script_path` 저장 프로젝트 워크플로 로드는 재실행하지 않아 `NOT RUN`입니다. 과거 `0.2.112`의 `script_path` 시도만 trust 경계의 `LIMITATION`으로 남습니다. 계획은 새 세션으로 넘어가지 않으므로 `/ogb-start` 전에 `grok -c` 또는 `grok -r`로 돌아와야 합니다. 과거와 현재 영수증은 `docs/validation.ko.md`에 있습니다.
-
-## 출처 및 상표
-
-독립 clean-room 구현입니다. 업스트림 영감과 전체 법적 고지는 [`NOTICE.md`](NOTICE.md)를 확인하세요. 설계 근거는 [`docs/upstream-evaluation.ko.md`](docs/upstream-evaluation.ko.md)에 있습니다.
-
-xAI 및 고지에 이름이 오른 업스트림 프로젝트와 제휴하거나 보증받지 않았습니다. Grok 및 Grok Build는 각 권리자의 상표일 수 있습니다.
+xAI 및 고지에 적힌 업스트림 프로젝트와 제휴·공식 승인 관계가 없습니다. Grok과 Grok Build는 각 소유자의 상표일 수 있습니다.
 
 ## 라이선스
 
-MIT
+[MIT](LICENSE)

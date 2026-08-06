@@ -1,20 +1,29 @@
 <!-- Parent: ../AGENTS.md -->
-<!-- Generated: 2026-07-28 | Updated: 2026-07-28 -->
+<!-- Generated: 2026-07-28 | Updated: 2026-08-06 -->
 
 # docs
 
 ## Purpose
-Authoritative design and evidence documentation for the plugin marketplace. Covers architecture boundaries, validation status, roadmap gates, publishing steps, and upstream-inspiration redesign rationale. Every English page has a required Korean pair.
+Authoritative design and evidence documentation for the plugin marketplace. Covers architecture boundaries, validation status, roadmap gates, publishing steps, upstream-inspiration redesign rationale, and user-facing guides linked from the README landing page. Every English page has a required Korean pair.
 
 ## Key Files
 
 | File | Description |
 |------|-------------|
-| `architecture.md` / `architecture.ko.md` | Operating discipline, concurrency rules, verify order, security boundary |
-| `validation.md` / `validation.ko.md` | Static and live validation evidence; scenario map; known gaps |
-| `roadmap.md` / `roadmap.ko.md` | Version plan and validation gate checklist |
-| `publishing.md` / `publishing.ko.md` | Marketplace install, tags, and official listing notes |
-| `upstream-evaluation.md` / `upstream-evaluation.ko.md` | Why Grok-native redesign over a full upstream fork |
+| `getting-started.md` / `.ko.md` | Install, doctor, first plan→execute→verify loop |
+| `concepts.md` / `.ko.md` | Positioning, ownership, parallelism, verification, naming |
+| `command-reference.md` / `.ko.md` | Full contracts for all seven skills |
+| `examples.md` / `.ko.md` | Copy-paste usage scenarios |
+| `troubleshooting.md` / `.ko.md` | Install and runtime common issues |
+| `compatibility.md` / `.ko.md` | Versions, native capabilities, limitations summary |
+| `faq.md` / `.ko.md` | Common product questions |
+| `design-decisions.md` / `.ko.md` | Short decision log (DD-001…) |
+| `github-metadata.md` / `.ko.md` | Owner checklist for GitHub UI settings |
+| `architecture.md` / `.ko.md` | Operating discipline, concurrency rules, verify order, security boundary |
+| `validation.md` / `.ko.md` | Static and live validation evidence; scenario map; known gaps |
+| `roadmap.md` / `.ko.md` | Version plan and validation gate checklist |
+| `publishing.md` / `.ko.md` | Marketplace install, tags, and official listing notes |
+| `upstream-evaluation.md` / `.ko.md` | Why Grok-native redesign over a full upstream fork |
 
 ## Subdirectories
 
@@ -30,6 +39,7 @@ Authoritative design and evidence documentation for the plugin marketplace. Cove
 - Keep `validation.md` honest: distinguish live vs static-only claims; do not invent verified scenarios.
 - Stay consistent with skills/agents on concurrency (default 4, max 8 when isolated, lower when resources shared).
 - Do not document runtime components (hooks, MCP, daemons) that violate the content-only boundary.
+- README is the landing page; put long detail here, not duplicate contradictory status tables.
 
 ### Testing Requirements
 - Pair completeness and language-switcher hygiene are enforced by `scripts/validate.mjs`.
@@ -45,6 +55,7 @@ Authoritative design and evidence documentation for the plugin marketplace. Cove
 - `plugins/oh-my-grok-build/skills/` and `agents/` for behavioral truth
 - Root `README.md` / `README.ko.md` for user-facing summaries
 - `scripts/validate.mjs` for pair rules
+- `assets/brand/` for diagrams referenced from architecture and README
 
 ### External
 - Grok Build CLI behavior as observed at validation time

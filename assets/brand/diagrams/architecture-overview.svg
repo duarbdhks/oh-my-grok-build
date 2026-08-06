@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" role="img" aria-label="Architecture overview: user, OGB skills and agents, Grok Build native layer, independent verifier">
+  <title>Architecture overview</title>
+  <rect width="960" height="480" rx="16" fill="#0B1220"/>
+  <text x="32" y="40" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="18" font-weight="700" fill="#E8EEF5">Architecture at a glance</text>
+
+  <rect x="32" y="70" width="180" height="80" rx="12" fill="#151D2B" stroke="#6B7C93"/>
+  <text x="90" y="118" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="16" fill="#E8EEF5">User</text>
+
+  <rect x="260" y="60" width="400" height="200" rx="14" fill="#101826" stroke="#5B8DEF"/>
+  <text x="280" y="90" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="14" fill="#9EC0FF">OGB plugin (markdown content)</text>
+  <text x="280" y="130" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#C9D4E5">Skills: interview · plan · start · ultrawork</text>
+  <text x="280" y="154" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#C9D4E5">          verify · workflow · doctor</text>
+  <text x="280" y="190" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#C9D4E5">Agents: planner · architect · critic</text>
+  <text x="280" y="214" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#C9D4E5">        explorer · executor · verifier</text>
+  <text x="280" y="240" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12" fill="#5B6B82">No hooks · no MCP · no binaries · no package deps</text>
+
+  <rect x="700" y="60" width="228" height="200" rx="14" fill="#101826" stroke="#3DDC97"/>
+  <text x="720" y="90" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="14" fill="#8FF0C4">Grok Build native</text>
+  <text x="720" y="130" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#C9D4E5">session continuity</text>
+  <text x="720" y="154" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#C9D4E5">subagents</text>
+  <text x="720" y="178" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#C9D4E5">worktrees</text>
+  <text x="720" y="202" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#C9D4E5">workflows /goal</text>
+  <text x="720" y="226" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#C9D4E5">permissions</text>
+
+  <rect x="260" y="300" width="400" height="120" rx="14" fill="#101826" stroke="#F0B429"/>
+  <text x="280" y="340" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="14" fill="#F6D27A">Independent verification lane</text>
+  <text x="280" y="372" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#C9D4E5">oh-my-grok-build:verifier + bundled check-work</text>
+  <text x="280" y="396" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12" fill="#5B6B82">Does not implement · requires fresh evidence</text>
+
+  <path d="M212 110h40" stroke="#3A4A61" stroke-width="2"/>
+  <path d="M660 160h32" stroke="#3A4A61" stroke-width="2"/>
+  <path d="M460 260v40" stroke="#3A4A61" stroke-width="2"/>
+
+  <text x="32" y="450" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#5B6B82">OGB is an operating discipline layer, not a second execution engine</text>
+</svg>

@@ -6,6 +6,10 @@
 
 `oh-my-grok-build`는 실행 엔진이 아니라 **운영 규율 계층**입니다. Grok Build가 세션과 도구를 소유하고, 이 플러그인은 어떤 순서와 증거 기준으로 사용할지를 정의합니다.
 
+한 줄 포지셔닝: Grok Build 네이티브 기능을 대체하지 않고, 합의 계획·제한된 병렬 실행·독립 검증 규율을 더하는 경량 오케스트레이션 툴킷.
+
+![아키텍처 개요: 사용자, OGB 스킬·에이전트, Grok Build 네이티브 계층, 독립 검증자](../assets/brand/diagrams/architecture-overview.svg)
+
 ```text
 사용자
   └─ OGB 스킬
@@ -22,6 +26,11 @@ Grok Build 네이티브 계층
   ├─ Rhai workflows
   ├─ skills / agents / plugins
   └─ MCP inheritance / permissions
+
+OGB에 없는 것
+  ├─ daemon / 상주 프로세스
+  ├─ 상태 데이터베이스
+  └─ 외부 오케스트레이터
 ```
 
 ## 책임 경계

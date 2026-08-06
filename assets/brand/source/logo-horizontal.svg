@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 128" role="img" aria-label="oh-my-grok-build horizontal logo">
+  <title>oh-my-grok-build logo</title>
+  <!-- Geometric wordmark using shapes only; no external fonts. -->
+  <rect width="640" height="128" rx="20" fill="#0B1220"/>
+  <!-- Mark -->
+  <g transform="translate(20,16)">
+    <rect width="96" height="96" rx="22" fill="#111827"/>
+    <rect x="14" y="16" width="68" height="64" rx="10" fill="#0A0F18" stroke="#2A3648" stroke-width="2"/>
+    <circle cx="26" cy="28" r="3" fill="#F07178"/>
+    <circle cx="36" cy="28" r="3" fill="#E6C07B"/>
+    <circle cx="46" cy="28" r="3" fill="#7FD99A"/>
+    <rect x="24" y="40" width="28" height="6" rx="3" fill="#5B8DEF"/>
+    <rect x="24" y="52" width="36" height="6" rx="3" fill="#3DDC97"/>
+    <rect x="24" y="64" width="22" height="6" rx="3" fill="#F0B429"/>
+  </g>
+  <!-- Word blocks spelling OGB as abstract bars + label strip -->
+  <g fill="#E8EEF5">
+    <text x="140" y="58" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="28" font-weight="700">oh-my-grok-build</text>
+    <text x="140" y="92" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="14" fill="#8B9BB4">plan · execute · verify</text>
+  </g>
+  <!-- Stage chips -->
+  <rect x="430" y="34" width="54" height="22" rx="11" fill="#1A2740" stroke="#5B8DEF" stroke-width="1.5"/>
+  <rect x="494" y="34" width="66" height="22" rx="11" fill="#10281F" stroke="#3DDC97" stroke-width="1.5"/>
+  <rect x="570" y="34" width="50" height="22" rx="11" fill="#2A220F" stroke="#F0B429" stroke-width="1.5"/>
+  <text x="443" y="49" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11" fill="#9EC0FF">plan</text>
+  <text x="504" y="49" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11" fill="#8FF0C4">execute</text>
+  <text x="579" y="49" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11" fill="#F6D27A">verify</text>
+</svg>

@@ -1,107 +1,40 @@
 <p align="center">
-  <img src="assets/brand/oh-my-grok-build-avatar.png" width="88" alt="oh-my-grok-build terminal mark">
+  <img src="assets/brand/oh-my-grok-build-avatar.png" width="96" alt="oh-my-grok-build mark: terminal window with plan, execute, verify bars">
 </p>
 
 <h1 align="center">oh-my-grok-build</h1>
 
 <p align="center">
-  <em>A field manual for native planning, bounded parallel execution, and independent verification.</em>
+  <strong>Lightweight orchestration discipline for Grok Build:</strong><br>
+  consensus planning, bounded parallel execution, and independent verification — without replacing native runtime features.
 </p>
 
 <p align="center">
-  Independent open-source plugin for <a href="https://github.com/xai-org/grok-build">Grok Build</a>.<br>
+  Independent open-source plugin for <a href="https://github.com/xai-org/grok-build">Grok Build</a>. Content-only skills and agents. No second daemon, state database, or external orchestrator.<br>
   <sub>Not affiliated with or endorsed by xAI. · <a href="https://docs.x.ai/build/overview">Official Grok Build docs</a></sub>
 </p>
 
 <p align="center">
   <a href="https://github.com/xai-org/grok-build"><img src="https://img.shields.io/badge/built%20for-grok--build-black" alt="Built for Grok Build"></a>
-  <a href="https://github.com/duarbdhks/oh-my-grok-build/actions/workflows/validate.yml"><img src="https://github.com/duarbdhks/oh-my-grok-build/actions/workflows/validate.yml/badge.svg" alt="Validate"></a>
+  <a href="https://github.com/duarbdhks/oh-my-grok-build/actions/workflows/validate.yml"><img src="https://github.com/duarbdhks/oh-my-grok-build/actions/workflows/validate.yml/badge.svg" alt="Validate CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
+  <a href="plugins/oh-my-grok-build/plugin.json"><img src="https://img.shields.io/badge/version-0.1.0-informational" alt="Plugin version 0.1.0"></a>
 </p>
 
 <p align="center">
   <a href="README.ko.md">한국어</a> ·
-  <a href="docs/upstream-evaluation.md">Design Evaluation</a> ·
+  <a href="docs/getting-started.md">Getting started</a> ·
+  <a href="docs/concepts.md">Concepts</a> ·
+  <a href="docs/command-reference.md">Commands</a> ·
   <a href="docs/architecture.md">Architecture</a> ·
-  <a href="docs/roadmap.md">Roadmap</a>
+  <a href="docs/validation.md">Validation</a>
 </p>
 
 <p align="center">
-  <img src="assets/brand/oh-my-grok-build-social-preview.png" width="887" alt="oh-my-grok-build workflow: plan, execute, verify">
+  <img src="assets/brand/oh-my-grok-build-hero.png" width="900" alt="Hero: interview, plan, execute, verify pipeline on Grok Build">
 </p>
 
-A Grok Build-native toolkit for planning, parallel execution, and verification. It builds directly on Grok Build's own plugins, subagents, worktrees, workflows, and goal mode — no separate runtime, hooks daemon, or external orchestrator.
-
-## Focus
-
-This repository does one thing:
-
-> Reuse the execution foundation Grok Build already does well, and add only a thin layer of plan → execute → independent-verify quality discipline.
-
-For why a full upstream fork was rejected, see [Design Evaluation](docs/upstream-evaluation.md).
-
-## Commands
-
-| Command | Role | Default safeguard |
-|---|---|---|
-| `/ogb-interview` | One question at a time until a vague idea becomes a direction brief | No source edits; questioning only, never plans or implements |
-| `/ogb-plan` | Planner → Architect → Critic consensus plan | No source edits; up to 3 review loops |
-| `/ogb-start` | Execute an approved plan | Separates task ownership; writes are isolated in worktrees |
-| `/ogb-ultrawork` | Cut the elapsed time of independent tasks by running them in parallel | Max-safe `C*` concurrency (default iso 4, up to 8 when isolation proven, 2 on shared resources) plus ROLE_LENS on each child; workflow agent budget of 8 |
-| `/ogb-verify` | Test / type-check / build / independent verification | No completion verdict without fresh execution evidence |
-| `/ogb-workflow` | Author reusable Grok workflows | Requires `create-workflow` first, and `validate_only` |
-| `/ogb-doctor` | Diagnose plugin, agent, and native-capability status | Read-only by default |
-
-### Choose the right command
-
-| Request shape | Choose | Avoid when | Native boundary |
-|---|---|---|---|
-| The direction is still vague | `/ogb-interview` | Requirements and acceptance criteria are already concrete | Produces a direction brief; it does not save or execute a plan |
-| The change is structural, risky, or needs agreement | `/ogb-plan` | The task is already small, concrete, and approved | Save and inspect the result with Grok's plan controls such as `/view-plan` |
-| An approved plan or concrete task should run sequentially | `/ogb-start` | Two or more tasks are safely independent | Grok owns session continuity and worktrees; OGB reports their lifecycle |
-| Two or more bounded tasks can run independently | `/ogb-ultrawork` | Files, resources, or acceptance criteria overlap | Grok owns subagents, worktrees, and workflow execution |
-| Existing work needs fresh evidence | `/ogb-verify` | The user is asking for implementation | Runs verification only; it does not repair failures unless separately requested |
-| A repeated multi-step process should become reusable | `/ogb-workflow` | The need is a one-off execution or plan | Grok's bundled `create-workflow` authors the workflow; native workflow controls run and resume it |
-| Installation or capability status is unclear | `/ogb-doctor` | The task is application debugging | Complements, but does not replace, Grok's native `/doctor` and `grok inspect` |
-
-### Native controls OGB does not replace
-
-| Native control | Use it for | OGB relationship |
-|---|---|---|
-| `/view-plan` | Inspecting the currently saved plan | Review an `/ogb-plan` result before execution |
-| `/goal` | Long-running autonomous execution | Run an approved plan, then use `/ogb-verify` for independent verification |
-| Native workflow run and resume | Executing or resuming a saved workflow run | `/ogb-workflow` authors the definition; it does not create a second workflow runtime |
-| Native `/doctor` and `grok inspect` | Grok-wide diagnostics | `/ogb-doctor` adds plugin-specific checks |
-| `grok -c` and `grok -r` | Continuing or resuming Grok sessions | OGB records continuity when it actually occurred; it never emulates it |
-
-The plugin also ships the following agents:
-
-- `oh-my-grok-build:planner`: Designs scope, task graphs, and acceptance criteria.
-- `oh-my-grok-build:architect`: Reviews structural soundness and trade-offs.
-- `oh-my-grok-build:critic`: Blocks gaps, contradictions, and unverifiable items.
-- `oh-my-grok-build:explorer`: Gathers codebase evidence, read-only.
-- `oh-my-grok-build:executor`: Performs scope-limited implementation work.
-- `oh-my-grok-build:verifier`: Reproduces the final result independently of the implementer.
-
-Grok registers plugin agents under a plugin-qualified name and skills under a bare name, so the two follow opposite conventions here. Agents carry no `ogb-` prefix — the `oh-my-grok-build:` qualifier already namespaces them, and the file name and frontmatter `name` are the short form. Skills keep the prefix, because `/ogb-plan` has nothing else to distinguish it.
-
-Always spawn agents with the qualified name. Dropping the prefix does not fail loudly: a bare `planner` or `executor` can resolve to an unrelated agent of the same name in your own `~/.grok/agents/` or `~/.claude/agents/`, and the work then runs with the wrong prompt. `npm test` rejects an unqualified agent reference inside a skill, and `/ogb-doctor` reports same-named agents in your environment as warnings.
-
-### Pairing with a wider agent roster
-
-These six agents are all the seven skills need — nothing else has to be installed for `/ogb-interview` through `/ogb-doctor` to work. The plugin deliberately stops there rather than shipping a general agent library.
-
-If you want specialists for work outside that scope — code review, security audit, database tuning, incident response — a third-party roster such as [`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) (MIT) covers it. It has no Grok-specific installer, but Grok discovers agent definitions in `~/.claude/agents/` through its Claude compatibility layer, so its Claude Code target works:
-
-```bash
-./scripts/install.sh --tool claude-code
-```
-
-This is a suggestion, not a dependency. Nothing in this plugin is bundled from or affiliated with that project.
-
-## Install
-
-### Marketplace method
+## 30-second Quick Start
 
 ```bash
 grok plugin marketplace add duarbdhks/oh-my-grok-build
@@ -109,107 +42,291 @@ grok plugin install oh-my-grok-build --trust
 grok plugin enable oh-my-grok-build
 ```
 
-### Install the repository subdirectory directly
+In a Grok Build session (reload `/plugins` or start a new session):
+
+```text
+/ogb-doctor
+/ogb-plan Add a health endpoint that returns 200 and a build id
+/view-plan
+/ogb-start Implement the currently approved plan
+/ogb-verify Re-check the acceptance criteria for the current changes
+```
+
+More install options: [Getting started](docs/getting-started.md).
+
+---
+
+## Why oh-my-grok-build
+
+Multi-agent coding often fails in predictable ways:
+
+| Pain | What goes wrong |
+|---|---|
+| Vague → code | A rough request becomes unreviewed source edits |
+| Parallel collisions | Several agents edit the same files and thrash the tree |
+| Self-approval | The implementer marks its own work done |
+| Fake speed | More agents run, but ownership and verification are missing |
+
+OGB adds a thin discipline layer on top of capabilities Grok Build already has:
+
+1. **Interview / plan first** when structure is unclear — no source edits in planning
+2. **Bounded, owned execution** with native worktrees and max-safe concurrency
+3. **Independent verification** with fresh evidence, separate from the implementer
+
+It does **not** invent a second runtime. Session, goal, worktree, workflow, and permission state stay in Grok Build.
+
+---
+
+## How it works
+
+![Workflow diagram: User → OGB skills → Grok Build native layer](assets/brand/diagrams/workflow.svg)
+
+```mermaid
+flowchart LR
+  U[User] --> I["/ogb-interview"]
+  I --> P["/ogb-plan"]
+  P --> V["/view-plan native"]
+  V --> E["/ogb-start or /ogb-ultrawork"]
+  E --> R["/ogb-verify"]
+  E -. long run .-> G["/goal native"]
+  G --> R
+```
+
+| Stage | Command | Agents | Edits source? | Safeguard | Result |
+|---|---|---|---|---|---|
+| Clarify | `/ogb-interview` | explorer (optional) | No | One question / turn | Direction brief |
+| Plan | `/ogb-plan` | planner → architect → critic | No | Pending approval | Saved plan |
+| Inspect | `/view-plan` (native) | — | No | Human/agent review | Confirmed plan |
+| Execute | `/ogb-start` | explorer, executor | Yes (owned) | Worktree isolation | Implementation |
+| Parallel | `/ogb-ultrawork` | executor / explorer | Yes (owned) | Max-safe `C*` | Parallel report |
+| Verify | `/ogb-verify` | verifier | No | Fresh evidence | PASS / FAIL / INCONCLUSIVE |
+
+Static terminal illustration of the same loop (not a live capture):
+
+<p align="center">
+  <img src="assets/brand/diagrams/terminal-flow.svg" width="720" alt="Static terminal mockup of ogb-doctor, ogb-plan, view-plan, ogb-start, ogb-verify">
+</p>
+
+---
+
+## Quick Start (full)
+
+### Marketplace install
+
+```bash
+grok plugin marketplace add duarbdhks/oh-my-grok-build
+grok plugin install oh-my-grok-build --trust
+grok plugin enable oh-my-grok-build
+```
+
+### Install from repository subdirectory
 
 ```bash
 grok plugin install duarbdhks/oh-my-grok-build#plugins/oh-my-grok-build --trust
 grok plugin enable oh-my-grok-build
 ```
 
-Check the install status with:
+### Confirm
 
 ```bash
 grok plugin details oh-my-grok-build
 grok inspect
 ```
 
-In a Grok Build session, reload the plugin from `/plugins` or start a new session, then run `/ogb-doctor`.
+Then `/ogb-doctor` → first `/ogb-plan` → `/view-plan` → `/ogb-start` → `/ogb-verify`.
 
-## Recommended usage flows
+---
 
-### Safe feature implementation
+## Command matrix
+
+| Command | When | Produces | Edits source? | Parallel? | Main safeguard |
+|---|---|---|---|---|---|
+| `/ogb-interview` | Idea is vague | Direction brief | No | Read-only explorers only | Questioning only |
+| `/ogb-plan` | Need agreement before code | Saved plan | No | Exploration only | No execution in same call |
+| `/ogb-start` | Approved plan / concrete task | Implementation | Yes | Waves + worktrees | Ownership + no silent git ops |
+| `/ogb-ultrawork` | Independent tasks ready | Parallel report | Yes | Yes, bounded `C*` | Same-file ban, budgets |
+| `/ogb-verify` | Need fresh evidence | Verdict report | No | Read-only checks | Independent of implementer |
+| `/ogb-workflow` | Reusable multi-step process | Workflow definition | Definition only* | Inside workflow budget | `validate_only` first |
+| `/ogb-doctor` | Install looks wrong | Diagnosis | No (default) | No | Complements native `/doctor` |
+
+\*May write workflow files when authoring; does not implement product features by default.
+
+Full contracts: [Command reference](docs/command-reference.md).
+
+### Agents shipped
+
+| Agent | Role |
+|---|---|
+| `oh-my-grok-build:planner` | Scope, waves, acceptance criteria |
+| `oh-my-grok-build:architect` | Structural review |
+| `oh-my-grok-build:critic` | Completeness / risk gate |
+| `oh-my-grok-build:explorer` | Read-only evidence |
+| `oh-my-grok-build:executor` | Bounded implementation |
+| `oh-my-grok-build:verifier` | Independent final check |
+
+Always spawn the **qualified** name. A bare `executor` can hit a same-named user agent.
+
+---
+
+## Real examples
 
 ```text
-/ogb-plan Add optimistic locking to the user profile API and return 409 on conflict
-```
-
-Review the plan with `/view-plan`, then execute it.
-
-```text
+# Small bug
+/ogb-plan Fix null displayName handling in the profile API without changing the response shape
+/view-plan
 /ogb-start Implement the currently approved plan
+/ogb-verify Confirm null and happy-path cases
+
+# Structural feature
+/ogb-plan Add optimistic locking on profile update; return 409 on conflict; include tests
+
+# Parallel independent modules
+/ogb-ultrawork Fix TypeScript errors in three independent packages with worktree isolation
+
+# Re-verify existing work
+/ogb-verify Re-verify origin/main...HEAD against the plan acceptance criteria; do not edit source
+
+# Long run with native /goal
+/ogb-plan Fix duplicate processing in the payment webhook
+/goal Implement the currently saved plan. Preserve unrelated changes. No commit, push, or deploy.
+/ogb-verify Final re-check of the saved plan acceptance criteria
+
+# Vague request
+/ogb-interview We need rate limiting on the public API but keys and limits are undecided
 ```
 
-### Parallel work
+More: [Examples](docs/examples.md).
 
-```text
-/ogb-ultrawork Fix the TypeScript errors in these three independent modules and verify each one
-```
+---
 
-`/ogb-ultrawork` schedules with Grok Build's own subagents, background execution, and `workflow` tool only — it never calls an external orchestrator. It scores a max-safe concurrent count `C*` from ownership and isolation, launches up to that ceiling with a closed ROLE_LENS on each child, and prefers native workflow for large schema-shaped fan-out. Speed comes from removing serial waits, not from relaxing worktree isolation, ownership, budgets, or verification.
+## Architecture
 
-### Re-running verification only
+OGB is an operating discipline layer, not an execution engine.
 
-```text
-/ogb-verify Re-verify that the changes in origin/main...HEAD meet the requirements
-```
+![Architecture overview showing no OGB daemon or state database](assets/brand/diagrams/architecture-overview.svg)
 
-### Long-running autonomous work
+| Concern | Owner |
+|---|---|
+| Session save / resume | Grok Build |
+| `/goal` autonomous state | Grok Build |
+| Subagent lifecycle | Grok Build |
+| Worktrees | Grok Build |
+| Workflow runtime | Grok Build |
+| Plan quality gate | OGB |
+| Ownership / wave rules | OGB |
+| Independent verification order | OGB |
 
-This project does not build a separate Autopilot state machine. First lock in a plan with OGB, run it for a long duration with Grok Build's native `/goal`, then run OGB verification separately.
+Deep dive: [Architecture](docs/architecture.md).
 
-```text
-/ogb-plan Fix the duplicate-processing bug in the payment webhook
-/goal Implement the currently saved plan. Preserve unrelated changes, isolate parallel writes in worktrees, and do not commit, push, or deploy.
-/ogb-verify Do a final re-verification of the currently saved plan's acceptance criteria
-```
+---
 
-Because `disable-model-invocation` is enabled, `/goal` will not silently invoke OGB skills. For operations, security, auth, data-migration, payments, and PII work, keep planning and verification explicitly separate, as shown above.
+## Native vs OGB
 
-## Design principles
+| Capability | Grok Build native | OGB |
+|---|---|---|
+| Session continuity | `grok -c` / `grok -r` | Records continuity only when native resume occurred |
+| Worktree management | Create / apply / clean | Directs isolation policy in skills |
+| Subagent execution | `spawn_subagent` | Spawns qualified plugin agents with contracts |
+| Workflow runtime | Rhai workflows, budgets, pause | Authors via `/ogb-workflow` + guards |
+| Goal mode | `/goal` | Does not reimplement; pair with plan + verify |
+| Planning discipline | Plan mode + saved plan | Planner → Architect → Critic consensus |
+| Ownership boundaries | — | Non-overlapping file ownership per wave |
+| Independent verification | Bundled `check-work` available | `/ogb-verify` + `verifier` gate |
+| Evidence-based completion | — | Fresh logs required for PASS claims |
 
-1. **Native-first**: Don't reimplement session, goal, worktree, subagent, or workflow state that Grok Build already manages.
-2. **Explicit cost**: Prohibit unbounded parallelism and keep default budgets small.
-3. **Separate planning from execution**: `/ogb-plan` never executes.
-4. **Evidence-based completion**: Report only test logs, type-checks, builds, and reproduction results that were actually run.
-5. **No silent failure**: Never silently fall back to a different model, tool, or MCP path.
-6. **Protect the user's Git**: Never commit, push, open a PR, or force-reset without an explicit request.
+---
 
-## Intentionally excluded
+## Safety and design principles
 
-- A dependency on the Claude Agent SDK or the Anthropic API
-- A separate Node.js execution daemon and SQLite state store
-- tmux-based external model workers
-- New MCP servers and auto-installed binaries
-- Forced state transitions via global hooks
-- Reimplementing Grok Build's native `/goal`, `/workflow`, or worktree features
+1. **Native-first** — do not reimplement session, goal, worktree, subagent, or workflow state
+2. **Bounded parallelism** — max-safe `C*`, residual budgets, workflow `agent_budget`
+3. **Separate planning and execution** — `/ogb-plan` never implements
+4. **Independent verification** — implementer does not self-certify the final gate
+5. **Evidence over confidence** — report only checks that actually ran
+6. **No silent fallback** — no quiet model/tool/MCP swaps
+7. **Git protection** — no commit, push, PR, or force-reset without an explicit request
 
-## Development and validation
+All seven skills set `disable-model-invocation: true`.
 
-There are no runtime dependencies. Repository validation only requires Node.js 20 or later.
+---
+
+## Project status
+
+Plugin version **0.1.0**. Independent third-party marketplace plugin (not an official xAI listing unless/until the separate marketplace process completes — see [publishing](docs/publishing.md)).
+
+| Scope | Status |
+|---|---|
+| Static repo gate (`npm test`) | PASS on current tree (run locally / CI) |
+| Historical live skills on Grok `0.2.112` | PASS (six original skills + later `/ogb-interview` + chain/scheduling evidence) |
+| Compatibility receipt on Grok `0.2.118` | Static + `grok plugin validate` PASS; **current command live UX `NOT RUN`** |
+| Saved workflow `script_path` folder trust | Historical **LIMITATION** |
+| Worktree conflict path | Still unverified (no overlapping ownership in successful runs) |
+
+Do not treat historical `0.2.112` live runs as automatic proof for every later CLI build. Full receipts: [Validation](docs/validation.md).
+
+---
+
+## FAQ
+
+| Question | Short answer |
+|---|---|
+| Fork of Grok Build? | No — third-party plugin |
+| Separate engine like a Claude daemon? | No — content-only |
+| Claude / Anthropic API required? | No |
+| External agent pack required? | No |
+| Replaces `/goal`? | No |
+| Unlimited parallel agents? | No — bounded |
+| Protects Git state? | Yes, by skill instruction (you still control permissions) |
+| Validated Grok versions? | Live `0.2.112`; static receipt `0.2.118` |
+| Plans in a brand-new session? | Not automatically — use `grok -c` / `grok -r` |
+| Production auto-approved? | No |
+
+Full FAQ: [docs/faq.md](docs/faq.md).
+
+---
+
+## Documentation navigation
+
+| Goal | Doc |
+|---|---|
+| Getting started | [docs/getting-started.md](docs/getting-started.md) |
+| Concepts | [docs/concepts.md](docs/concepts.md) |
+| Architecture | [docs/architecture.md](docs/architecture.md) |
+| Command reference | [docs/command-reference.md](docs/command-reference.md) |
+| Examples | [docs/examples.md](docs/examples.md) |
+| Troubleshooting | [docs/troubleshooting.md](docs/troubleshooting.md) |
+| Validation evidence | [docs/validation.md](docs/validation.md) |
+| Compatibility | [docs/compatibility.md](docs/compatibility.md) |
+| Design decisions | [docs/design-decisions.md](docs/design-decisions.md) |
+| Roadmap | [docs/roadmap.md](docs/roadmap.md) |
+| Publishing | [docs/publishing.md](docs/publishing.md) |
+| GitHub owner metadata | [docs/github-metadata.md](docs/github-metadata.md) |
+| Upstream evaluation | [docs/upstream-evaluation.md](docs/upstream-evaluation.md) |
+| Contributing | [CONTRIBUTING.md](CONTRIBUTING.md) |
+| Security | [SECURITY.md](SECURITY.md) |
+| Changelog | [CHANGELOG.md](CHANGELOG.md) |
+| Brand assets | [assets/brand/README.md](assets/brand/README.md) |
+| Legal / attribution | [NOTICE.md](NOTICE.md) · [LICENSE](LICENSE) |
+
+---
+
+## Development and validation (this repository)
+
+No runtime package dependencies. Node.js `>=20` for static checks only.
 
 ```bash
 npm test
 npm run validate:grok
 ```
 
-`npm test` checks the manifest, the marketplace index, skill/agent frontmatter, and component consistency. `npm run validate:grok` also runs the official plugin-validation command when the `grok` CLI is available locally.
-
-## Status
-
-The current version is `0.1.0`. Its six original skills were run against a real Grok Build `0.2.112` session, confirming installation, invocation, subagent spawning, worktree integration, and independent verification. That is historical release evidence, not a claim about the current working candidate.
-
-`/ogb-interview` shipped after that release and was validated on its own, in two headless runs against a throwaway Express repository.
-
-The chain from `/ogb-interview` through `/ogb-verify` has also been run continuously inside one session, which covers the handoffs between skills rather than each skill alone.
-
-The current uncommitted candidate passes `215` repository checks and direct plugin validation on Grok `0.2.118`. Its edited command UX, workflow path, and saved project-workflow loading through `script_path` have not been rerun, so they are `NOT RUN`; the historical `0.2.112` `script_path` attempt remains a trust-boundary `LIMITATION`. A plan does not carry into a fresh session, so return with `grok -c` or `grok -r` before `/ogb-start`. Full historical and current receipts are in `docs/validation.md`.
+---
 
 ## Attribution and trademarks
 
-Independent clean-room implementation. Upstream inspiration and full legal notice: [`NOTICE.md`](NOTICE.md). Design rationale: [`docs/upstream-evaluation.md`](docs/upstream-evaluation.md).
+Independent clean-room implementation. Upstream inspiration and legal notice: [NOTICE.md](NOTICE.md).
 
 Not affiliated with or endorsed by xAI or any upstream project named in the notice. Grok and Grok Build may be trademarks of their respective owners.
 
 ## License
 
-MIT
+[MIT](LICENSE)

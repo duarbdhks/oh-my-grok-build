@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-label="Interview to plan to execute to verify workflow diagram">
+  <title>OGB workflow diagram</title>
+  <rect width="960" height="420" rx="16" fill="#0B1220"/>
+  <text x="32" y="40" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="18" font-weight="700" fill="#E8EEF5">OGB pipeline on native Grok Build</text>
+
+  <!-- User -->
+  <rect x="32" y="80" width="120" height="56" rx="12" fill="#1A2333" stroke="#6B7C93" stroke-width="1.5"/>
+  <text x="64" y="114" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="16" fill="#E8EEF5">User</text>
+
+  <!-- Skills lane -->
+  <rect x="190" y="70" width="540" height="280" rx="16" fill="#101826" stroke="#2A3648" stroke-width="1.5"/>
+  <text x="210" y="98" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#8B9BB4">OGB skills (content only)</text>
+
+  <rect x="210" y="120" width="110" height="70" rx="10" fill="#151D2B" stroke="#6B7C93" stroke-width="1.5"/>
+  <text x="228" y="150" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#C9D4E5">Interview</text>
+  <text x="222" y="172" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11" fill="#7F8FA6">/ogb-interview</text>
+
+  <rect x="340" y="120" width="110" height="70" rx="10" fill="#151D2B" stroke="#5B8DEF" stroke-width="1.5"/>
+  <text x="372" y="150" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#C9D4E5">Plan</text>
+  <text x="356" y="172" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11" fill="#7F8FA6">/ogb-plan</text>
+
+  <rect x="470" y="120" width="110" height="70" rx="10" fill="#151D2B" stroke="#3DDC97" stroke-width="1.5"/>
+  <text x="492" y="150" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#C9D4E5">Execute</text>
+  <text x="482" y="172" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11" fill="#7F8FA6">start/ultrawork</text>
+
+  <rect x="600" y="120" width="110" height="70" rx="10" fill="#151D2B" stroke="#F0B429" stroke-width="1.5"/>
+  <text x="628" y="150" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#C9D4E5">Verify</text>
+  <text x="616" y="172" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11" fill="#7F8FA6">/ogb-verify</text>
+
+  <!-- agents -->
+  <text x="210" y="230" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12" fill="#8B9BB4">Agents</text>
+  <rect x="210" y="244" width="500" height="84" rx="10" fill="#0C121C" stroke="#2A3648"/>
+  <text x="226" y="276" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12" fill="#A9B7CC">planner · architect · critic · explorer · executor · verifier</text>
+  <text x="226" y="304" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12" fill="#7F8FA6">Spawn as oh-my-grok-build:&lt;name&gt; only</text>
+
+  <!-- Native layer -->
+  <rect x="760" y="70" width="168" height="280" rx="16" fill="#101826" stroke="#3A4A61" stroke-width="1.5"/>
+  <text x="780" y="98" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#8B9BB4">Grok native</text>
+  <text x="780" y="140" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12" fill="#C9D4E5">session</text>
+  <text x="780" y="168" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12" fill="#C9D4E5">plan /goal</text>
+  <text x="780" y="196" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12" fill="#C9D4E5">subagents</text>
+  <text x="780" y="224" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12" fill="#C9D4E5">worktrees</text>
+  <text x="780" y="252" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12" fill="#C9D4E5">workflows</text>
+  <text x="780" y="280" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12" fill="#C9D4E5">permissions</text>
+  <text x="780" y="320" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11" fill="#5B6B82">OGB does not</text>
+  <text x="780" y="338" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11" fill="#5B6B82">replace these</text>
+
+  <path d="M152 108h30" stroke="#3A4A61" stroke-width="2"/>
+  <path d="M730 155h22" stroke="#3A4A61" stroke-width="2"/>
+
+  <text x="32" y="390" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" fill="#5B6B82">No OGB daemon, state database, or external orchestrator</text>
+</svg>

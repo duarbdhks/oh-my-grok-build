@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-label="oh-my-grok-build hero: interview, plan, execute, verify flow">
+  <title>oh-my-grok-build hero banner</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#070B12"/>
+      <stop offset="100%" stop-color="#141E2E"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="420" rx="24" fill="url(#bg)"/>
+  <text x="56" y="72" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="34" font-weight="700" fill="#F3F6FB">From vague request to verified change</text>
+  <text x="56" y="112" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="18" fill="#9AA8BD">Native Grok Build capabilities + a thin plan → execute → verify discipline layer</text>
+  <!-- pipeline stages -->
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">
+    <rect x="56" y="170" width="240" height="150" rx="16" fill="#121A28" stroke="#6B7C93" stroke-width="1.5"/>
+    <text x="76" y="210" font-size="14" fill="#8B9BB4">0 · clarify</text>
+    <text x="76" y="250" font-size="22" font-weight="700" fill="#E8EEF5">Interview</text>
+    <text x="76" y="286" font-size="15" fill="#7F8FA6">/ogb-interview</text>
+    <text x="76" y="314" font-size="13" fill="#5B6B82">read-only · one question</text>
+
+    <path d="M308 245h28" stroke="#3A4A61" stroke-width="3" stroke-linecap="round"/>
+    <path d="M328 238l10 7-10 7" fill="none" stroke="#3A4A61" stroke-width="3"/>
+
+    <rect x="350" y="170" width="240" height="150" rx="16" fill="#121A28" stroke="#5B8DEF" stroke-width="2"/>
+    <text x="370" y="210" font-size="14" fill="#9EC0FF">1 · plan</text>
+    <text x="370" y="250" font-size="22" font-weight="700" fill="#E8EEF5">Plan</text>
+    <text x="370" y="286" font-size="15" fill="#7F8FA6">/ogb-plan · /view-plan</text>
+    <text x="370" y="314" font-size="13" fill="#5B6B82">no source edits</text>
+
+    <path d="M602 245h28" stroke="#3A4A61" stroke-width="3" stroke-linecap="round"/>
+    <path d="M622 238l10 7-10 7" fill="none" stroke="#3A4A61" stroke-width="3"/>
+
+    <rect x="644" y="170" width="240" height="150" rx="16" fill="#121A28" stroke="#3DDC97" stroke-width="2"/>
+    <text x="664" y="210" font-size="14" fill="#8FF0C4">2 · execute</text>
+    <text x="664" y="250" font-size="22" font-weight="700" fill="#E8EEF5">Execute</text>
+    <text x="664" y="286" font-size="15" fill="#7F8FA6">/ogb-start · ultrawork</text>
+    <text x="664" y="314" font-size="13" fill="#5B6B82">worktree ownership</text>
+
+    <path d="M896 245h28" stroke="#3A4A61" stroke-width="3" stroke-linecap="round"/>
+    <path d="M916 238l10 7-10 7" fill="none" stroke="#3A4A61" stroke-width="3"/>
+
+    <rect x="938" y="170" width="206" height="150" rx="16" fill="#121A28" stroke="#F0B429" stroke-width="2"/>
+    <text x="958" y="210" font-size="14" fill="#F6D27A">3 · verify</text>
+    <text x="958" y="250" font-size="22" font-weight="700" fill="#E8EEF5">Verify</text>
+    <text x="958" y="286" font-size="15" fill="#7F8FA6">/ogb-verify</text>
+    <text x="958" y="314" font-size="13" fill="#5B6B82">fresh evidence</text>
+  </g>
+  <text x="56" y="380" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="15" fill="#5B6B82">No daemon · no state DB · no external orchestrator — Grok Build remains the runtime</text>
+</svg>

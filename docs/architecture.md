@@ -6,6 +6,10 @@
 
 `oh-my-grok-build` is not an execution engine but an **operating discipline layer**. Grok Build owns the session and the tools; this plugin defines the order and evidence bar for using them.
 
+One-line positioning: lightweight orchestration discipline for Grok Build — consensus planning, bounded parallel execution, and independent verification — without replacing native runtime features.
+
+![Architecture overview: User, OGB skills and agents, Grok Build native layer, independent verifier](../assets/brand/diagrams/architecture-overview.svg)
+
 ```text
 User
   └─ OGB skills
@@ -22,6 +26,11 @@ Grok Build native layer
   ├─ Rhai workflows
   ├─ skills / agents / plugins
   └─ MCP inheritance / permissions
+
+Not present in OGB
+  ├─ daemon / long-lived process
+  ├─ state database
+  └─ external orchestrator
 ```
 
 ## Division of responsibility

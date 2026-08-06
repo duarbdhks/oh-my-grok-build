@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="oh-my-grok-build mark">
+  <title>oh-my-grok-build mark</title>
+  <!-- Terminal frame with plan → execute → verify bars. No external fonts. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B1220"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <rect x="18" y="22" width="92" height="84" rx="12" fill="#0A0F18" stroke="#2A3648" stroke-width="2"/>
+  <circle cx="34" cy="38" r="4" fill="#F07178"/>
+  <circle cx="48" cy="38" r="4" fill="#E6C07B"/>
+  <circle cx="62" cy="38" r="4" fill="#7FD99A"/>
+  <!-- Prompt caret -->
+  <path d="M30 58h8l6 8-6 8h-8l6-8z" fill="#8B9BB4"/>
+  <!-- Three stage bars: plan / execute / verify -->
+  <rect x="52" y="54" width="40" height="8" rx="4" fill="#5B8DEF"/>
+  <rect x="52" y="70" width="48" height="8" rx="4" fill="#3DDC97"/>
+  <rect x="52" y="86" width="32" height="8" rx="4" fill="#F0B429"/>
+</svg>

@@ -6,6 +6,9 @@ All notable changes to this project are documented here.
 
 ### Added
 
+- Open-source landing overhaul: product-style `README.md` / `README.ko.md` with value proposition, Quick Start, command matrix, native-vs-OGB boundary, conservative Project Status, FAQ, and purpose-based docs navigation.
+- Purpose docs (EN+KO pairs): `getting-started`, `concepts`, `command-reference`, `examples`, `troubleshooting`, `compatibility`, `faq`, `design-decisions`, `github-metadata`.
+- Expanded brand system under `assets/brand/` (SVG sources, light/dark marks, hero, social preview, workflow/terminal/architecture diagrams) plus `assets/brand/README.md` regeneration notes. Terminal diagram is labeled a static mockup, not a live capture.
 - Hierarchical `AGENTS.md` maps across the repository (root, docs, scripts, plugins, skills, CI, marketplace metadata) for AI-readable directory guidance. Existing repository hard rules remain under the root `MANUAL` section.
 - Brand assets under `assets/brand/`: avatar and social-preview images used by both READMEs.
 - `/ogb-interview`: a questioning-only skill that turns a vague idea or an unproven design into a direction brief for `/ogb-plan`. One question per turn, weakest-dimension targeting, repository evidence gathered through `oh-my-grok-build:explorer` before the user is asked anything the code can answer, contrarian/simplifier/essence challenge passes, and coarse `CLEAR`/`PARTIAL`/`UNKNOWN` readiness ratings instead of a computed score.
