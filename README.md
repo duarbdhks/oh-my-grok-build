@@ -47,7 +47,7 @@ For why a full upstream fork was rejected, see [Design Evaluation](docs/upstream
 | `/ogb-interview` | One question at a time until a vague idea becomes a direction brief | No source edits; questioning only, never plans or implements |
 | `/ogb-plan` | Planner → Architect → Critic consensus plan | No source edits; up to 3 review loops |
 | `/ogb-start` | Execute an approved plan | Separates task ownership; writes are isolated in worktrees |
-| `/ogb-ultrawork` | Cut the elapsed time of independent tasks by running them in parallel | 4 concurrent tasks by default, at most 8 with proven ownership and resource isolation; workflow agent budget of 8 |
+| `/ogb-ultrawork` | Cut the elapsed time of independent tasks by running them in parallel | Max-safe `C*` concurrency (default iso 4, up to 8 when isolation proven, 2 on shared resources) plus ROLE_LENS on each child; workflow agent budget of 8 |
 | `/ogb-verify` | Test / type-check / build / independent verification | No completion verdict without fresh execution evidence |
 | `/ogb-workflow` | Author reusable Grok workflows | Requires `create-workflow` first, and `validate_only` |
 | `/ogb-doctor` | Diagnose plugin, agent, and native-capability status | Read-only by default |
@@ -145,7 +145,7 @@ Review the plan with `/view-plan`, then execute it.
 /ogb-ultrawork Fix the TypeScript errors in these three independent modules and verify each one
 ```
 
-`/ogb-ultrawork` schedules with Grok Build's own subagents, background execution, and `workflow` tool only — it never calls an external orchestrator. Speed comes from removing serial waits, not from relaxing worktree isolation, ownership, budgets, or verification.
+`/ogb-ultrawork` schedules with Grok Build's own subagents, background execution, and `workflow` tool only — it never calls an external orchestrator. It scores a max-safe concurrent count `C*` from ownership and isolation, launches up to that ceiling with a closed ROLE_LENS on each child, and prefers native workflow for large schema-shaped fan-out. Speed comes from removing serial waits, not from relaxing worktree isolation, ownership, budgets, or verification.
 
 ### Re-running verification only
 

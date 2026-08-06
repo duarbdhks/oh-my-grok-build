@@ -127,17 +127,27 @@ It also stays inside one session, which is the supported path. A plan does not s
 
 ## Scheduling Scenario Mapping for `/ogb-ultrawork`
 
-Each row is checked against the rule that governs it in the `ogb-ultrawork` `SKILL.md`, the same way the naming rules above cite their exact mechanism. Scenarios A, C, D, E, and F also have live headless evidence in the next section. B and B2 remain design mapping only.
+Each row is checked against the rule that governs it in the `ogb-ultrawork` `SKILL.md`, the same way the naming rules above cite their exact mechanism. Scenarios A, C, D, E, and F also have historical live headless evidence in the next section. B and B2 remain design mapping only. Expected `C*` / mechanism annotations below are static design targets for the max-safe formula and ROLE_LENS protocol; they do not invent new live PASS claims.
 
 | Scenario | Expected behavior | Governing rule | Live |
 |---|---|---|---|
-| A — fixes in 3 independent packages | Same wave, launched as one batch | Protocol step 5 (launch together) | PASS (below) |
-| B — tasks that both write the same schema/config file | Not in the same wave (same-file ownership ban) | Protocol step 4 (never same file) | static only |
-| B2 — tasks that share a schema/resource but write disjoint files | Same wave allowed only with lowered concurrency (down to 2) | Protocol step 3 | static only |
-| C — independent file searches and configuration reads | One parallel read-only batch | Protocol step 1 (batched investigation) | PASS (below) |
-| D — integration tests sharing one database and port | Never unconditionally parallel; serialized, with the order stated | Protocol step 4 (overlap ban list) | PASS (below) |
-| E — 6 subsystem tasks with proven independence | Up to 6 concurrent implementation agents | Protocol step 3 (raise toward 8 only on proven isolation) | PASS (below) |
-| F — 8+ repetitive, same-shaped tasks | Native `workflow` tool considered first | Protocol steps 2 and 3 | PASS (below) |
+| A — fixes in 3 independent packages | Same wave; score `C*=3` (iso_cap 4 default or 8 if proven); batch spawn of 3 | Protocol steps 2, 4, 6 | PASS (below; historical) |
+| B — tasks that both write the same schema/config file | Not in the same wave (same-file ownership ban) | Protocol step 5 (never same file) | static only |
+| B2 — tasks that share a schema/resource but write disjoint files | Same wave only with `iso_cap=2`, `C*≤2` | Protocol steps 4–5 | static only |
+| C — independent file searches and configuration reads | One parallel read-only batch; explorers with ROLE_LENS | Protocol step 1 | PASS (below; historical) |
+| D — integration tests sharing one database and port | Never unconditionally parallel; serialize contended commands (independent of agent `C*`) | Protocol step 5 (overlap ban list) | PASS (below; historical) |
+| E — 6 subsystem tasks with proven independence | `iso_cap=8`, `C*=6`, spawn 6 concurrent implementers | Protocol steps 2, 4, 6 | PASS (below; historical) |
+| F — 8+ repetitive, same-shaped tasks | Prefer native `workflow` first; do not launch 8 direct executors even if isolation would allow high `C*` (step 2 HARD RULE) | Protocol step 2 (mechanism non-inversion) | PASS (below; historical) |
+
+### Max-safe formula worked examples (static)
+
+| Scenario | N_ready | iso_cap | remaining | C* | chosen C | mechanism |
+|---|---:|---:|---:|---:|---:|---|
+| A | 3 | 4 (or 8 if proven) | 16 | 3 | 3 | spawn_subagent |
+| B2 | 2+ | 2 | 16 | 2 | ≤2 | spawn_subagent |
+| D | n/a (command serialize) | n/a | — | no parallel wave for contended commands | serialize | spawn/serial |
+| E | 6 | 8 | 16 | 6 | 6 | spawn_subagent |
+| F | — | — | — | n/a for 8 direct spawns | workflow | workflow `agent_budget=8` |
 
 ## Live Scheduling Smokes
 
@@ -257,7 +267,7 @@ The success journal recorded one `spawn_agent` result with `success: true`, `con
 - Loading a saved project workflow through `script_path` in the throwaway repository. The tool required explicit folder trust even though the same authored body validated and ran through `script`; the run deliberately did not mutate user-global trust state.
 - Workflow budget exhaustion and parallel-slot failure. Live success and missing-argument handling are now exercised, but those two failure branches remain unverified.
 - Live scheduling scenarios B and B2. A, C, D, E, and F are exercised above; only the same-file ban and shared-resource lowered-concurrency mappings remain static design evidence.
-- A non-blocking shell-command primitive in Grok Build. The long-command overlap guidance in `ogb-ultrawork` step 4 is written capability-neutral — a backgrounded child can own the command — because this repository has only confirmed `background: true` as a subagent spawn field, not a command-level background mechanism.
+- A non-blocking shell-command primitive in Grok Build. The long-command overlap guidance in `ogb-ultrawork` step 5 is written capability-neutral — a backgrounded child can own the command — because this repository has only confirmed `background: true` as a subagent spawn field, not a command-level background mechanism.
 
 ## Run Commands
 

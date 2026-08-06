@@ -127,17 +127,27 @@ Grok은 플러그인 에이전트를 `oh-my-grok-build:<agent>`로 등록하지�
 
 ## `/ogb-ultrawork` 스케줄링 시나리오 매핑
 
-각 행을 `ogb-ultrawork` `SKILL.md`에서 그것을 지배하는 규칙과 대조합니다. 위의 이름 규칙이 정확한 메커니즘을 인용하는 것과 같은 방식입니다. 시나리오 A, C, D, E, F는 다음 절에 라이브 headless 증거가 있습니다. B와 B2만 설계 매핑으로 남습니다.
+각 행을 `ogb-ultrawork` `SKILL.md`에서 그것을 지배하는 규칙과 대조합니다. 위의 이름 규칙이 정확한 메커니즘을 인용하는 것과 같은 방식입니다. 시나리오 A, C, D, E, F는 다음 절에 과거 라이브 headless 증거가 있습니다. B와 B2만 설계 매핑으로 남습니다. 아래 기대 `C*` / mechanism 주석은 max-safe 공식과 ROLE_LENS 프로토콜의 정적 설계 목표이며, 새 라이브 PASS를 주장하지 않습니다.
 
 | 시나리오 | 기대 동작 | 지배 규칙 | 라이브 |
 |---|---|---|---|
-| A — 독립 3개 패키지 수정 | 같은 Wave, 한 배치로 일괄 시작 | Protocol step 5 (launch together) | PASS (아래) |
-| B — 동일 schema/config 파일을 둘 다 쓰는 작업 | 같은 Wave에 두지 않음 (동일 파일 소유 금지) | Protocol step 4 (never same file) | 정적만 |
-| B2 — schema/자원을 공유하되 쓰는 파일은 서로 다른 작업 | 동시성을 2까지 낮춘 경우에만 같은 Wave 허용 | Protocol step 3 | 정적만 |
-| C — 독립적인 파일 검색과 설정 읽기 | 하나의 병렬 read-only 배치 | Protocol step 1 (조사 일괄 실행) | PASS (아래) |
-| D — 동일 database와 port를 공유하는 integration test | 무조건 병렬 실행하지 않음; 순서를 명시해 직렬화 | Protocol step 4 (겹침 금지 목록) | PASS (아래) |
-| E — 독립성이 증명된 6개 subsystem 작업 | 최대 6개 동시 구현 에이전트 | Protocol step 3 (격리 증명 시에만 8까지 상향) | PASS (아래) |
-| F — 8개 이상의 반복적·동형 작업 | 네이티브 `workflow` 도구를 우선 검토 | Protocol step 2와 3 | PASS (아래) |
+| A — 독립 3개 패키지 수정 | 같은 Wave; `C*=3` (iso_cap 기본 4 또는 증명 시 8); spawn 3 | Protocol step 2, 4, 6 | PASS (아래; 과거 증거) |
+| B — 동일 schema/config 파일을 둘 다 쓰는 작업 | 같은 Wave에 두지 않음 (동일 파일 소유 금지) | Protocol step 5 (never same file) | 정적만 |
+| B2 — schema/자원을 공유하되 쓰는 파일은 서로 다른 작업 | `iso_cap=2`, `C*≤2` 인 경우에만 같은 Wave 허용 | Protocol step 4–5 | 정적만 |
+| C — 독립적인 파일 검색과 설정 읽기 | 하나의 병렬 read-only 배치; explorer + ROLE_LENS | Protocol step 1 | PASS (아래; 과거 증거) |
+| D — 동일 database와 port를 공유하는 integration test | 무조건 병렬 실행하지 않음; 경합 명령은 직렬화 (에이전트 `C*` 와 별개) | Protocol step 5 (겹침 금지 목록) | PASS (아래; 과거 증거) |
+| E — 독립성이 증명된 6개 subsystem 작업 | `iso_cap=8`, `C*=6`, 동시 구현 에이전트 6 | Protocol step 2, 4, 6 | PASS (아래; 과거 증거) |
+| F — 8개 이상의 반복적·동형 작업 | 네이티브 `workflow` 우선; 격리가 높아도 직접 executor 8 금지 (step 2 HARD RULE) | Protocol step 2 (mechanism non-inversion) | PASS (아래; 과거 증거) |
+
+### Max-safe 공식 worked examples (정적)
+
+| 시나리오 | N_ready | iso_cap | remaining | C* | chosen C | mechanism |
+|---|---:|---:|---:|---:|---:|---|
+| A | 3 | 4 (또는 증명 시 8) | 16 | 3 | 3 | spawn_subagent |
+| B2 | 2+ | 2 | 16 | 2 | ≤2 | spawn_subagent |
+| D | n/a (명령 직렬) | n/a | — | 경합 명령 병렬 wave 없음 | serialize | spawn/serial |
+| E | 6 | 8 | 16 | 6 | 6 | spawn_subagent |
+| F | — | — | — | 직접 spawn 8 해당 없음 | workflow | workflow `agent_budget=8` |
 
 ## 라이브 스케줄링 스모크
 
@@ -257,7 +267,7 @@ Smoke check passed for workflow 'inspect-fixture' (1 declared phases; canned-hos
 - 임시 저장소에서 저장된 프로젝트 워크플로를 `script_path`로 로드하는 경로. 같은 작성 본문은 `script`로 검증·실행됐지만 도구가 명시적 folder trust를 요구했고, 이번 실행은 사용자 전역 trust 상태를 의도적으로 바꾸지 않았습니다.
 - 워크플로 예산 소진과 병렬 슬롯 실패. 라이브 성공과 인자 누락 처리는 실행했지만 이 두 실패 분기는 여전히 미검증입니다.
 - 라이브 스케줄링 시나리오 B와 B2. A, C, D, E, F는 위에서 실행했으며 동일 파일 금지와 공유 자원 동시성 하향 매핑만 정적 설계 증거로 남습니다.
-- Grok Build의 non-blocking 셸 명령 프리미티브. `ogb-ultrawork` step 4의 장시간 명령 겹침 지침은 capability-neutral로 작성되어 있습니다 — 백그라운드 child가 명령을 소유할 수 있습니다 — 이 저장소가 확인한 것은 subagent spawn 필드로서의 `background: true`뿐이고, 명령 수준의 백그라운드 메커니즘은 확인하지 못했기 때문입니다.
+- Grok Build의 non-blocking 셸 명령 프리미티브. `ogb-ultrawork` step 5의 장시간 명령 겹침 지침은 capability-neutral로 작성되어 있습니다 — 백그라운드 child가 명령을 소유할 수 있습니다 — 이 저장소가 확인한 것은 subagent spawn 필드로서의 `background: true`뿐이고, 명령 수준의 백그라운드 메커니즘은 확인하지 못했기 때문입니다.
 
 ## 실행 명령
 

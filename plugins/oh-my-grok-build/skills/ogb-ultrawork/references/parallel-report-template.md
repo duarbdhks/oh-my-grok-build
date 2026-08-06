@@ -7,9 +7,15 @@ verdict: PASS | PARTIAL | BLOCKED
 | Wave | Tasks | Depends on |
 |---|---|---|
 
-## Concurrency
+## Concurrency formula
 
-- chosen concurrent subagents:
+- N_ready:
+- iso_cap: `<value>` (`<which rule row>`)
+- remaining_child_calls: `<before batch>`
+- C* = min(N_ready, iso_cap, remaining_child_calls, 8) = `<int>`
+- chosen C:
+- under_launch_reason: none | `<text>`
+- mechanism: spawn_subagent | workflow
 - rationale (ownership, shared resources, integration surface, cost, verification method):
 
 ## Parallel read-only investigation
@@ -23,12 +29,13 @@ verdict: PASS | PARTIAL | BLOCKED
 
 ## Agents
 
-| Agent | subagent_type | Isolation | Worktree | Task | Ownership | Result |
-|---|---|---|---|---|---|---|
+| Agent | subagent_type | ROLE_LENS | Isolation | Worktree | Task | Ownership | Result |
+|---|---|---|---|---|---|---|---|
 
 - child-agent calls used, against the approved budget:
 - isolation: `worktree` | `none` (per agent row above)
 - worktree path: absolute path when isolation is `worktree`; leave blank when `none`
+- ROLE_LENS: enum value or `n/a` for workflow logical agents without a lens
 
 ## Integration
 

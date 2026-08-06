@@ -64,12 +64,15 @@ This boundary keeps session recovery and concurrent-execution responsibility ins
 
 ## Parallel execution rules
 
-- The default number of concurrent implementation agents is 4, raised to at most 8 only when file or subsystem ownership and execution-resource isolation are both proven, and lowered — as far as 2 — when tasks share a schema, configuration, generated file, dependency lock, build output, cache, port, database, or external environment.
+- Concurrent implementation agents use a max-safe ceiling `C* = min(N_ready, iso_cap, remaining_child_calls, 8)`. `iso_cap` is 4 by default when ownership is separable, raised to 8 only when file or subsystem ownership and execution-resource isolation are both proven for every concurrent member, and lowered to 2 when tasks share a schema, configuration, generated file, dependency lock, build output, cache, port, database, or external environment. Prefer launching `C = C*` when isolation allows; under-launch requires an explicit reason.
+- `/ogb-ultrawork` chooses mechanism before scoring: more than four repeated or schema-shaped tasks prefer native workflow even when isolation would allow high spawn concurrency. Heterogeneous five-to-eight tasks may still use `spawn_subagent` under `C*`.
+- Spawn-path children receive a closed `ROLE_LENS` (`general | backend | frontend | data | sre | security | docs | test`) in the prompt. Default spawn types remain `oh-my-grok-build:executor` and `oh-my-grok-build:explorer` only.
+- Lifetime child-agent residual without approval is `16 − (prior_spawn_children + prior_workflow_logical_agents)`. Workflow `agent_budget` (default 8) is a per-workflow cap, not a second unlimited pool.
 - Repeated fan-out uses native workflow, with a default `agent_budget` of 8.
 - Writes default to worktree isolation.
 - No two agents own the same file at the same time.
-- Default (baseline / `/ogb-start` style): between waves, run diff review and narrow verification.
-- `/ogb-ultrawork` is progressive within a wave: review each child's diff as soon as that child finishes (read-only; do not wait for a wave-wide comparison before reviewing a finished child); backfill freed slots when an unstarted task's ownership is already proven disjoint; integrate worktree results one at a time and rerun narrow checks after each apply.
+- Default (baseline / `/ogb-start` style): between waves, run diff review and narrow verification. `/ogb-start` keeps its simpler bound; formal `C*` and ROLE_LENS are ultrawork protocol.
+- `/ogb-ultrawork` is progressive within a wave: review each child's diff as soon as that child finishes (read-only; do not wait for a wave-wide comparison before reviewing a finished child); backfill freed slots when an unstarted task's ownership is already proven disjoint (recompute `C*` first); integrate worktree results one at a time and rerun narrow checks after each apply.
 
 ## Verification rules
 

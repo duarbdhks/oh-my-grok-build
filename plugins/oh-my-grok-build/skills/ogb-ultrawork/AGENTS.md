@@ -1,16 +1,16 @@
 <!-- Parent: ../AGENTS.md -->
-<!-- Generated: 2026-07-28 | Updated: 2026-07-28 -->
+<!-- Generated: 2026-07-28 | Updated: 2026-08-06 -->
 
 # ogb-ultrawork
 
 ## Purpose
-Bounded parallel execution engine for independent tasks. Parallelism is a scheduling tool only; ownership, isolation, budgets, and verification never relax for speed. Parent owns all fan-out.
+Max-safe parallel execution for independent tasks. Score `C*` from ownership and isolation, launch up to that ceiling, inject ROLE_LENS on each child, and never relax ownership, isolation, budgets, or verification for speed. Parent owns all fan-out.
 
 ## Key Files
 
 | File | Description |
 |------|-------------|
-| `SKILL.md` | Admission gate, hard boundaries, wave protocol, concurrency limits, spawn shapes |
+| `SKILL.md` | Admission gate, hard boundaries, mechanism-first protocol, C* formula, ROLE_LENS, spawn shapes |
 
 ## Subdirectories
 
@@ -25,18 +25,24 @@ Bounded parallel execution engine for independent tasks. Parallelism is a schedu
 - Admission: only when ≥2 tasks are independent; otherwise single executor or `/ogb-start`.
 - Never nest orchestrators (no external orchestrator, no recursive ultrawork, no nested workflows).
 - Children must not spawn agents, invoke orchestration skills, or launch workflows.
-- Concurrency default 4; hard max 8 when fully isolated; shared resources → lower to 2 or serialize.
-- Default workflow `agent_budget` 8; >16 child calls needs user approval and a finite list.
+- Protocol order: map → mechanism first → ROLE_LENS → score `C*` → isolate → launch → collect/backfill → verify.
+- `C* = min(N_ready, iso_cap, remaining_child_calls, 8)` is a ceiling; prefer `C = C*` when isolation allows; under-launch needs `under_launch_reason`.
+- `iso_cap`: shared resource → 2; default separable → 4; full isolation proven → 8; same-file or N_ready < 2 → no parallel wave.
+- `remaining_child_calls = 16 − (prior_spawn_children + prior_workflow_logical_agents)` without approval to exceed.
+- Workflow `agent_budget` default 8 is not a second unlimited pool; hybrid runs share the residual.
+- >4 repeated/schema-shaped tasks: prefer native `workflow` even if isolation would allow high spawn concurrency.
+- ROLE_LENS closed enum on spawn-path children; default path is executor/explorer only; no agency unless user-named.
 - Reject unbounded “check everything” until scoped.
 - Finish code changes with bare `ogb-verify`.
 - Always use qualified agent names (`oh-my-grok-build:…`); bare short names are a silent wrong-target risk.
+- Report via `references/parallel-report-template.md` with formula fields and ROLE_LENS column.
 
 ### Testing Requirements
 - Static skill validation via `npm test`.
 - Live scheduling behavior documented in `docs/validation.md`.
 
 ### Common Patterns
-- 2–4 tasks: parallel `spawn_subagent`
+- 2–4 distinct or 5–8 heterogeneous tasks: parallel `spawn_subagent` up to `C*`
 - >4 schema-shaped tasks: native `workflow` tool (after loading `create-workflow`)
 - Report via `references/parallel-report-template.md`
 

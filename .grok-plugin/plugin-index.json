@@ -20,7 +20,7 @@
           },
           {
             "name": "ogb-ultrawork",
-            "description": "Run bounded parallel work for independent tasks"
+            "description": "Run independent tasks with max-safe concurrency scoring and role lenses"
           },
           {
             "name": "ogb-verify",
