@@ -89,14 +89,15 @@ Count of tasks in the current wave that:
 1. have acceptance criteria,
 2. have no unintegrated prerequisite,
 3. are not started,
-4. are pairwise file-ownership disjoint with every other task already selected for this launch batch.
+4. are pairwise file-ownership disjoint with every other task already selected for this launch batch,
+5. do not read a file another selected task writes. A `writes` ∩ `reads` overlap between two task cards is a dependency, not a parallel pair — shared type modules, barrel exports, and generated interfaces are the usual carriers, and file-ownership disjointness alone does not catch them.
 
 #### iso_cap (first matching wins on the candidate ready set)
 
 | Condition | Result |
 |---|---|
 | `N_ready < 2`, or same-file ownership conflict cannot be split | No parallel wave: use a single executor or `/ogb-start`. Report serialized; do not report a parallel `C*`. |
-| Any shared mutable resource among ready-set members (schema, config, generated file, dependency lock, build output, cache, port, database, external env, migration target) even if files are disjoint | `iso_cap = 2` |
+| Any shared mutable resource among ready-set members (schema, config, generated file, dependency lock, build output, cache, container, port, database, external env, migration target) even if files are disjoint | `iso_cap = 2` |
 | Ownership separable and no shared-resource hit, but full execution-resource isolation is not proven for every concurrent member | `iso_cap = 4` (default tier) |
 | File/subsystem ownership separable and execution resources isolated for every concurrent member of the ready set | `iso_cap = 8` |
 

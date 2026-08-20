@@ -73,7 +73,7 @@ v0.1은 별도 데이터베이스나 JSON 상태 파일을 만들지 않습니�
 
 ## 병렬 실행 규칙
 
-- 동시 구현 에이전트는 max-safe 상한 `C* = min(N_ready, iso_cap, remaining_child_calls, 8)` 를 사용합니다. `iso_cap` 은 소유권이 분리되면 기본 4, 모든 동시 멤버에 대해 파일·subsystem 소유권과 실행 자원 격리가 증명되면 8, schema·설정·generated file·dependency lock·build output·cache·port·database·외부 환경을 공유하면 2입니다. 격리가 허용되면 `C = C*` 로 채우는 것이 기본이며, 그보다 적게 띄우면 명시적 이유가 필요합니다.
+- 동시 구현 에이전트는 max-safe 상한 `C* = min(N_ready, iso_cap, remaining_child_calls, 8)` 를 사용합니다. `iso_cap` 은 소유권이 분리되면 기본 4, 모든 동시 멤버에 대해 파일·subsystem 소유권과 실행 자원 격리가 증명되면 8, schema·설정·generated file·dependency lock·build output·cache·container·port·database·외부 환경을 공유하면 2입니다. 다른 선택 작업이 쓰는 파일을 읽는 작업은 파일 소유권이 분리돼 있어도 병렬 동료가 아니라 의존 작업입니다. 격리가 허용되면 `C = C*` 로 채우는 것이 기본이며, 그보다 적게 띄우면 명시적 이유가 필요합니다.
 - `/ogb-ultrawork` 는 점수보다 메커니즘을 먼저 고릅니다. 4개 초과의 반복·스키마형 작업은 격리가 높아도 네이티브 workflow를 우선합니다. 이질적인 5–8개 작업은 `C*` 아래에서 `spawn_subagent` 를 쓸 수 있습니다.
 - spawn 경로 child 프롬프트에는 닫힌 `ROLE_LENS` (`general | backend | frontend | data | sre | security | docs | test`) 가 들어갑니다. 기본 spawn 타입은 `oh-my-grok-build:executor` 와 `oh-my-grok-build:explorer` 만입니다.
 - 승인 없이 사용 가능한 수명 child-agent 잔여는 `16 − (prior_spawn_children + prior_workflow_logical_agents)` 입니다. workflow `agent_budget`(기본 8)은 workflow당 캡이며 두 번째 무제한 풀이 아닙니다.
