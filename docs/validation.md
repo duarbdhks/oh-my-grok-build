@@ -268,6 +268,7 @@ The success journal recorded one `spawn_agent` result with `success: true`, `con
 - Workflow budget exhaustion and parallel-slot failure. Live success and missing-argument handling are now exercised, but those two failure branches remain unverified.
 - Live scheduling scenarios B and B2. A, C, D, E, and F are exercised above; only the same-file ban and shared-resource lowered-concurrency mappings remain static design evidence.
 - A non-blocking shell-command primitive in Grok Build. The long-command overlap guidance in `ogb-ultrawork` step 5 is written capability-neutral — a backgrounded child can own the command — because this repository has only confirmed `background: true` as a subagent spawn field, not a command-level background mechanism.
+- Live `/ogb-graph` DAG scenarios. The skill, inventory, and docs are in source; none of the following have been run in a Grok session: 60-item layered fan-in, shared-file hidden edge, expected 40 / received 38 named gap, mixed chain-plus-parallel graph, failed-node targeted redo, human deploy gate, or a four-step linear skip of the formal graph.
 
 ## Run Commands
 

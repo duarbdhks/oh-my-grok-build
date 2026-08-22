@@ -16,7 +16,7 @@ No. OGB does not call Anthropic or Claude APIs. You use Grok Build as usual.
 
 ## Is an external agent pack required?
 
-No. The seven skills only need the six shipped agents. Optional third-party agent rosters are suggestions for work outside that scope, not dependencies.
+No. The eight skills only need the six shipped agents. Optional third-party agent rosters are suggestions for work outside that scope, not dependencies.
 
 ## Does OGB replace `/goal`?
 

@@ -268,6 +268,7 @@ Smoke check passed for workflow 'inspect-fixture' (1 declared phases; canned-hos
 - 워크플로 예산 소진과 병렬 슬롯 실패. 라이브 성공과 인자 누락 처리는 실행했지만 이 두 실패 분기는 여전히 미검증입니다.
 - 라이브 스케줄링 시나리오 B와 B2. A, C, D, E, F는 위에서 실행했으며 동일 파일 금지와 공유 자원 동시성 하향 매핑만 정적 설계 증거로 남습니다.
 - Grok Build의 non-blocking 셸 명령 프리미티브. `ogb-ultrawork` step 5의 장시간 명령 겹침 지침은 capability-neutral로 작성되어 있습니다 — 백그라운드 child가 명령을 소유할 수 있습니다 — 이 저장소가 확인한 것은 subagent spawn 필드로서의 `background: true`뿐이고, 명령 수준의 백그라운드 메커니즘은 확인하지 못했기 때문입니다.
+- 라이브 `/ogb-graph` DAG 시나리오. 스킬·인벤토리·문서는 소스에 있으나 다음을 Grok 세션에서 실행하지 않았습니다. 60개 계층 fan-in, 공유 파일 hidden edge, expected 40 / received 38 누락 보고, 체인과 병렬이 섞인 그래프, 실패 노드 redo, deploy 인간 게이트, 4단계 순차에서 형식 그래프 생략.
 
 ## 실행 명령
 

@@ -24,7 +24,7 @@ Zero-dependency validation harness for the marketplace. `validate.mjs` is the pr
 ### Working In This Directory
 - Keep Node stdlib-only (`fs`, `path`, `process`, `url`); never add npm packages.
 - Keep expected inventories in lockstep with the filesystem:
-  - Skills: `ogb-interview`, `ogb-plan`, `ogb-start`, `ogb-ultrawork`, `ogb-verify`, `ogb-workflow`, `ogb-doctor`
+  - Skills: `ogb-interview`, `ogb-plan`, `ogb-start`, `ogb-ultrawork`, `ogb-graph`, `ogb-verify`, `ogb-workflow`, `ogb-doctor`
   - Agents: `planner`, `architect`, `critic`, `explorer`, `executor`, `verifier`
 - Permission modes: plan agents → `plan`; `executor` → `auto`; never `bypassPermissions` or unsupported fields.
 - Agent-name rules over skill markdown (`SKILL.md` + `references/`):

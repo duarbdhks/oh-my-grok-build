@@ -20,6 +20,7 @@ User-invocable heavy skill packages for the plugin. Each skill is an `ogb-*` dir
 | `ogb-plan/` | Consensus plan: explorer → planner → architect → critic (see `ogb-plan/AGENTS.md`) |
 | `ogb-start/` | Approved-plan execution with worktrees and integration (see `ogb-start/AGENTS.md`) |
 | `ogb-ultrawork/` | Bounded parallel execution of independent tasks (see `ogb-ultrawork/AGENTS.md`) |
+| `ogb-graph/` | DAG compile-and-execute for mixed-dependency work (see `ogb-graph/AGENTS.md`) |
 | `ogb-verify/` | Fresh independent verification, no repair (see `ogb-verify/AGENTS.md`) |
 | `ogb-workflow/` | Author/validate native Rhai workflows (see `ogb-workflow/AGENTS.md`) |
 | `ogb-doctor/` | Install and discovery diagnosis (see `ogb-doctor/AGENTS.md`) |
@@ -27,7 +28,7 @@ User-invocable heavy skill packages for the plugin. Each skill is an `ogb-*` dir
 ## For AI Agents
 
 ### Working In This Directory
-- Keep the seven-skill inventory stable unless index + validator expectations update in the same change.
+- Keep the eight-skill inventory stable unless index + validator expectations update in the same change.
 - Always use qualified agent names in skill text; skills themselves are referenced by bare names.
 - No nested orchestration: skills may spawn agents, not other orchestrator skills as children of fan-out.
 - Preserve MIT license and author metadata conventions in frontmatter.
@@ -37,7 +38,7 @@ User-invocable heavy skill packages for the plugin. Each skill is an `ogb-*` dir
 - Public skill surface changes also require CHANGELOG, both READMEs, and `plugin-index.json`.
 
 ### Common Patterns
-- Pipeline skills: interview → plan → start/ultrawork → verify
+- Pipeline skills: interview → plan → start/ultrawork/graph → verify
 - Side tools: doctor (install), workflow (Rhai)
 - Optional `references/*.md` templates next to `SKILL.md`
 

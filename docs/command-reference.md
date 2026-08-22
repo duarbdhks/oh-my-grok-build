@@ -2,7 +2,7 @@
 
 [한국어](command-reference.ko.md)
 
-All seven shipped skills use `disable-model-invocation: true`. Grok Build will not silently auto-invoke them during ordinary chat or `/goal` unless the user (or an explicit instruction the user approved) calls them.
+All eight shipped skills use `disable-model-invocation: true`. Grok Build will not silently auto-invoke them during ordinary chat or `/goal` unless the user (or an explicit instruction the user approved) calls them.
 
 Spawn agents only as `oh-my-grok-build:<name>`.
 
@@ -100,6 +100,29 @@ Spawn agents only as `oh-my-grok-build:<name>`.
 
 ---
 
+## `/ogb-graph`
+
+| Field | Value |
+|---|---|
+| Purpose | Compile mixed-dependency work into a DAG and execute it in the same invocation |
+| Input | A large or mixed-dependency task; architecture must already be decided |
+| Source edits | Yes, within node ownership |
+| Parallelism | Phased fan-out (batch 10–25 items per child, max 8 concurrent, 16 lifetime children) and layered fan-in of 20–30 |
+| Agents | `oh-my-grok-build:explorer`, `oh-my-grok-build:executor`, `oh-my-grok-build:verifier` |
+| Artifact | Short phase plan, then a graph report with completeness and gate lines |
+| Failure behavior | Failed items are data; targeted redo of affected nodes; stop and re-plan if the same failure class repeats |
+| Safety | Real dependency edges only; missing IDs named at fan-in; irreversible actions wait for a human |
+
+**Native boundary:** Parent owns all `spawn_subagent` calls. Does not nest `/ogb-ultrawork`, `/ogb-start`, or `/ogb-workflow`. Prints a phase plan, then starts Phase 1 immediately — this is an execution skill, not `/ogb-plan`.
+
+**Example:**
+
+```text
+/ogb-graph Audit all API endpoint handlers for missing auth, patch independent cases, and verify the highest-severity findings from source
+```
+
+---
+
 ## `/ogb-verify`
 
 | Field | Value |
@@ -175,6 +198,7 @@ Spawn agents only as `oh-my-grok-build:<name>`.
 | Need a safe plan | `/ogb-plan` |
 | Approved plan, sequential | `/ogb-start` |
 | Independent parallel tasks | `/ogb-ultrawork` |
+| Mixed-dependency large work | `/ogb-graph` |
 | Re-check evidence | `/ogb-verify` |
 | Reusable multi-agent process | `/ogb-workflow` |
 | Install looks wrong | `/ogb-doctor` |

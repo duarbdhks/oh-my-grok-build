@@ -4,7 +4,7 @@
 # oh-my-grok-build
 
 ## Purpose
-Installable Grok Build plugin package. Provides seven user-invocable heavy skills and six specialized agents for interview → plan → execute → verify workflows. Content-only: no hooks, MCP servers, LSP, or binaries.
+Installable Grok Build plugin package. Provides eight user-invocable heavy skills and six specialized agents for interview → plan → execute → verify workflows. Content-only: no hooks, MCP servers, LSP, or binaries.
 
 ## Key Files
 
@@ -17,7 +17,7 @@ Installable Grok Build plugin package. Provides seven user-invocable heavy skill
 | Directory | Purpose |
 |-----------|---------|
 | `agents/` | Six agent definitions registered as `oh-my-grok-build:<name>` (see `agents/AGENTS.md`) |
-| `skills/` | Seven `ogb-*` skill packages (see `skills/AGENTS.md`) |
+| `skills/` | Eight `ogb-*` skill packages (see `skills/AGENTS.md`) |
 
 ## For AI Agents
 
@@ -34,7 +34,7 @@ Installable Grok Build plugin package. Provides seven user-invocable heavy skill
 - `/ogb-doctor` for live install and discovery checks.
 
 ### Common Patterns
-- Lifecycle: `ogb-interview` → `ogb-plan` → `ogb-start` or `ogb-ultrawork` → `ogb-verify`
+- Lifecycle: `ogb-interview` → `ogb-plan` → `ogb-start` or `ogb-ultrawork` or `ogb-graph` → `ogb-verify`
 - Side tools: `ogb-doctor` (install), `ogb-workflow` (Rhai authoring)
 
 ## Dependencies

@@ -22,8 +22,9 @@ Before a stable release, the following real-session scenarios must pass.
 6. ✅ Does not misjudge a failed test as a success
 7. ✅ `oh-my-grok-build:verifier` and `check-work` run independently
 8. ✅ `/ogb-workflow` script body passed `validate_only`, completed one live run, and blocked missing arguments before spawning an agent
+9. ⬜ `/ogb-graph` live DAG scenarios (layered fan-in completeness, hidden shared-file edge, targeted redo, human deploy gate, linear skip) — static skill and inventory only so far
 
-Evidence is in `docs/validation.md`. Among the numbered scenarios, only item 5 is unverified, and it can only be reproduced by deliberately creating a conflicting work split. Saved project-workflow loading through `script_path` still has a separate folder-trust limitation documented there.
+Evidence is in `docs/validation.md`. Among the numbered scenarios, item 5 (conflicting ownership) and item 9 (`/ogb-graph` live DAG runs) are unverified. Item 5 can only be reproduced by deliberately creating a conflicting work split. Saved project-workflow loading through `script_path` still has a separate folder-trust limitation documented there.
 
 ## v0.2 — Validated Workflow Recipes
 

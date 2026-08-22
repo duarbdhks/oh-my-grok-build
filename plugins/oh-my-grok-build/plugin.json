@@ -1,7 +1,7 @@
 {
   "name": "oh-my-grok-build",
   "version": "0.1.0",
-  "description": "Grok Build-native consensus planning, bounded parallel execution, and evidence-based verification",
+  "description": "Grok Build-native consensus planning, bounded parallel execution, DAG orchestration, and evidence-based verification",
   "author": {
     "name": "duarbdhks",
     "email": "14940560+duarbdhks@users.noreply.github.com",

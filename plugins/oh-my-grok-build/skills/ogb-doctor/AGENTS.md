@@ -23,7 +23,7 @@ Diagnose plugin install health, skill/agent discovery, Grok native capabilities,
 ### Working In This Directory
 - Keep `disable-model-invocation: true`.
 - Do not turn doctor into an auto-fixer that trusts plugins or runs destructive commands.
-- Inventory expectations: 7 skills + 6 qualified agents.
+- Inventory expectations: 8 skills + 6 qualified agents.
 - Unqualified same-name agents are WARN (silent wrong-target risk).
 
 ### Testing Requirements

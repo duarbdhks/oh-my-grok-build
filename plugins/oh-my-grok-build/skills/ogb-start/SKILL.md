@@ -22,8 +22,9 @@ Implement an approved plan without broadening scope, damaging unrelated work, or
 4. Never infer continuity from similar text or a plan path. Report `grok-continue` or `grok-resume` only when the corresponding native Grok session operation actually occurred.
 5. Treat this skill invocation as execution authorization only for the stated scope.
 6. If the request is vague, has no acceptance criteria, or introduces a high-risk decision not covered by the plan, stop and route to `/ogb-plan`.
-7. Inspect `git status`, the current branch, and existing diffs before delegation. Never absorb, reset, overwrite, stage, or commit unrelated user changes.
-8. Record a baseline command or test result when one is available so regressions can be distinguished from pre-existing failures.
+7. If the plan is a large mixed-dependency DAG that this skill would have to re-implement as nested fan-out, stop and tell the user to run `/ogb-graph` on the same task. Do not invoke `/ogb-graph` as a child of this skill.
+8. Inspect `git status`, the current branch, and existing diffs before delegation. Never absorb, reset, overwrite, stage, or commit unrelated user changes.
+9. Record a baseline command or test result when one is available so regressions can be distinguished from pre-existing failures.
 
 ## Execution protocol
 

@@ -28,7 +28,7 @@ Interview (선택) → Plan → Execute → Verify
 | 방향 정리 | `/ogb-interview` | 없음 |
 | 계획 | `/ogb-plan` | 없음 |
 | 계획 검토 | `/view-plan` (네이티브) | 없음 |
-| 실행 | `/ogb-start` 또는 `/ogb-ultrawork` | 소유 범위 안에서 있음 |
+| 실행 | `/ogb-start`, `/ogb-ultrawork`, 또는 `/ogb-graph` | 소유 범위 안에서 있음 |
 | 장시간 실행 | `/goal` (네이티브) | 프롬프트에 따름 |
 | 검증 | `/ogb-verify` | 없음 (읽기 전용 검증) |
 | 재사용 팬아웃 | `/ogb-workflow` | 기본은 워크플로 정의 작성 |
@@ -43,6 +43,7 @@ Interview (선택) → Plan → Execute → Verify
 병렬은 “가능한 한 많은 에이전트”가 아니라 상한이 있습니다.
 
 - `/ogb-ultrawork`는 준비된 작업, 격리, 잔여 child 예산으로 max-safe 동시성 `C*`를 계산합니다.
+- `/ogb-graph`는 의존이 섞인 작업을 DAG로 만들고, 준비된 노드를 fan-out하며 (배치 10–25, 동시 8, 수명 16), 20–30 계층으로 합친 뒤 누락 ID를 확인합니다. 다른 오케스트레이터를 중첩하지 않습니다.
 - 기본 격리 상한 4, 소유권·자원 격리가 증명되면 최대 8, 공유 스키마·설정·포트·DB가 있으면 2.
 - 반복적인 스키마형 대규모 팬아웃은 무제한 direct spawn 대신 명시적 `agent_budget`(기본 8)의 네이티브 워크플로를 선호합니다.
 
