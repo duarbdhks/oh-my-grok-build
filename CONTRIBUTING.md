@@ -9,7 +9,7 @@ Contributions must preserve the Grok-native boundary:
 1. Prefer a native Grok Build capability over a plugin-side reimplementation.
 2. Keep default fan-out bounded and explicit.
 3. Do not add hooks, MCP servers, binaries, network calls, or persistent databases without an architecture decision record and a security review.
-4. Keep planning, execution, and verification responsibilities separate.
+4. Keep planning, execution, and verification responsibilities separate. `/ogb-plan` never implements. `/ogb-graph` is an execution skill that prints a short phase plan and then runs it; it is not a second planner.
 5. Never claim completion without fresh evidence.
 6. Do not invent validation metrics, community size, or live-run results in docs.
 

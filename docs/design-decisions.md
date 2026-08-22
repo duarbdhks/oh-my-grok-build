@@ -18,7 +18,7 @@ Short decision log for product boundaries. Broader redesign rationale versus a f
 
 ## DD-003 — Separate plan from execute
 
-**Decision:** `/ogb-plan` never implements. Execution requires a later explicit `/ogb-start`, `/ogb-ultrawork`, or native `/goal`.
+**Decision:** `/ogb-plan` never implements. Execution requires a later explicit `/ogb-start`, `/ogb-ultrawork`, `/ogb-graph`, or native `/goal`.
 
 **Why:** Stops vague chat from becoming unreviewed source edits.
 
@@ -54,6 +54,12 @@ Short decision log for product boundaries. Broader redesign rationale versus a f
 
 ## DD-009 — disable-model-invocation on heavy skills
 
-**Decision:** All seven skills set `disable-model-invocation: true`.
+**Decision:** All eight skills set `disable-model-invocation: true`.
 
 **Why:** Prevent accidental orchestration inside ordinary generation or `/goal` without user intent.
+
+## DD-010 — Graph is a third execution mode
+
+**Decision:** `/ogb-graph` prints a short phase plan and executes that graph in the same invocation. It is not a planning-only compiler and it does not nest `/ogb-ultrawork`, `/ogb-start`, or `/ogb-workflow`.
+
+**Why:** Mixed-dependency work needs real edges, layered fan-in, and targeted retry. Flattening it through `/ogb-ultrawork` or stopping after a DAG plan would duplicate `/ogb-plan` and leave execution to a second skill that cannot see those edges.

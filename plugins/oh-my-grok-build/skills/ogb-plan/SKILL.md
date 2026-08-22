@@ -20,7 +20,7 @@ Create a decision-ready implementation plan through a sequential Planner → Arc
 2. Do not edit application source, configuration, tests, migrations, generated files, or dependency locks.
 3. Do not run mutation-oriented commands, install packages, commit, push, open a pull request, deploy, or invoke an execution skill.
 4. The only durable artifact allowed before approval is the current native saved plan.
-5. End by presenting the plan as `pending approval`. Never continue into implementation in the same invocation.
+5. End by presenting the plan as `pending approval`. Never continue into implementation in the same invocation. If the approved work is a large mixed-dependency DAG rather than sequential implementation, the next command is `/ogb-graph`, not `/ogb-start`. Do not invoke `/ogb-graph` from this skill.
 
 ## Workflow
 
@@ -83,4 +83,4 @@ Report:
 - plan verdict: `APPROVED FOR USER REVIEW`, `PARTIAL`, or `BLOCKED`,
 - current saved-plan availability,
 - the top decision and top risk,
-- the exact next command: `/ogb-start current approved plan` only after user approval.
+- the exact next command after user approval: `/ogb-start current approved plan` for sequential or small implementation, or `/ogb-graph` when the plan is a large mixed-dependency DAG.

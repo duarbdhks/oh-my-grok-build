@@ -22,8 +22,9 @@
 6. ✅ 실패한 테스트를 성공으로 오판하지 않음
 7. ✅ `oh-my-grok-build:verifier`와 `check-work`가 독립적으로 실행
 8. ✅ `/ogb-workflow` 스크립트 본문이 `validate_only`를 통과하고 라이브 실행 1회를 완료했으며, 인자 누락을 에이전트 시작 전에 차단
+9. ⬜ `/ogb-graph` 라이브 DAG 시나리오 (계층 fan-in 완전성, 공유 파일 hidden edge, 실패 노드 redo, deploy 인간 게이트, 순차 skip) — 지금은 정적 스킬·인벤토리만 있음
 
-증거는 `docs/validation.ko.md`에 있습니다. 번호가 붙은 시나리오 중 5번만 미확인이며, 이는 충돌하는 작업 분할을 의도적으로 만들어야 재현됩니다. `script_path`를 통한 저장 프로젝트 워크플로 로드에는 별도의 folder trust 한계가 남아 있고 같은 문서에 기록했습니다.
+증거는 `docs/validation.ko.md`에 있습니다. 번호가 붙은 시나리오 중 5번(충돌 소유권)과 9번(`/ogb-graph` 라이브 DAG)이 미확인입니다. 5번은 충돌하는 작업 분할을 의도적으로 만들어야 재현됩니다. `script_path`를 통한 저장 프로젝트 워크플로 로드에는 별도의 folder trust 한계가 남아 있고 같은 문서에 기록했습니다.
 
 ## v0.2 — 검증된 워크플로 레시피
 

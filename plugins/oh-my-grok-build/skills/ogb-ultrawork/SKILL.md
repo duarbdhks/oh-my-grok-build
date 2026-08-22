@@ -16,7 +16,7 @@ Reduce the elapsed time of independent work while keeping its safety: ownership,
 
 ## Admission gate
 
-Use this skill when two or more tasks can proceed without depending on each other's output. If ownership overlaps or the task is primarily sequential, use a single executor or `/ogb-start` instead.
+Use this skill when two or more tasks can proceed without depending on each other's output. If the work is a large mixed-dependency DAG, use `/ogb-graph` instead of flattening it. If ownership overlaps or the task is primarily sequential, use a single `oh-my-grok-build:executor` or `/ogb-start` instead.
 
 ## Hard boundary
 

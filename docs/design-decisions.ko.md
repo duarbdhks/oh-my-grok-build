@@ -18,7 +18,7 @@
 
 ## DD-003 — 계획과 실행 분리
 
-**결정:** `/ogb-plan`은 구현하지 않는다. 실행은 이후 명시적 `/ogb-start`, `/ogb-ultrawork`, 또는 네이티브 `/goal`이 필요하다.
+**결정:** `/ogb-plan`은 구현하지 않는다. 실행은 이후 명시적 `/ogb-start`, `/ogb-ultrawork`, `/ogb-graph`, 또는 네이티브 `/goal`이 필요하다.
 
 **이유:** 모호한 채팅이 미검토 소스 수정으로 바로 가는 것을 막는다.
 
@@ -54,6 +54,12 @@
 
 ## DD-009 — heavy 스킬에 disable-model-invocation
 
-**결정:** 스킬 7개 모두 `disable-model-invocation: true`.
+**결정:** 스킬 8개 모두 `disable-model-invocation: true`.
 
 **이유:** 일반 생성이나 `/goal` 안에서 사용자 의도 없이 오케스트레이션이 돌지 않게 한다.
+
+## DD-010 — Graph는 세 번째 실행 모드
+
+**결정:** `/ogb-graph`는 짧은 phase plan을 출력한 뒤 같은 호출에서 그 그래프를 실행한다. planning-only 컴파일러가 아니며 `/ogb-ultrawork`, `/ogb-start`, `/ogb-workflow`를 중첩하지 않는다.
+
+**이유:** 의존이 섞인 작업은 실제 edge, 계층 fan-in, 실패 노드 재실행이 필요하다. `/ogb-ultrawork`로 납작하게 만들거나 DAG 계획에서 멈추면 `/ogb-plan`과 겹치고, 그 edge를 모르는 두 번째 스킬에 실행을 넘기게 된다.

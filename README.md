@@ -86,7 +86,7 @@ flowchart LR
   U[User] --> I["/ogb-interview"]
   I --> P["/ogb-plan"]
   P --> V["/view-plan native"]
-  V --> E["/ogb-start or /ogb-ultrawork"]
+  V --> E["/ogb-start /ogb-ultrawork /ogb-graph"]
   E --> R["/ogb-verify"]
   E -. long run .-> G["/goal native"]
   G --> R
@@ -99,6 +99,7 @@ flowchart LR
 | Inspect | `/view-plan` (native) | — | No | Human/agent review | Confirmed plan |
 | Execute | `/ogb-start` | explorer, executor | Yes (owned) | Worktree isolation | Implementation |
 | Parallel | `/ogb-ultrawork` | executor / explorer | Yes (owned) | Max-safe `C*` | Parallel report |
+| Graph | `/ogb-graph` | explorer, executor, verifier | Yes (owned) | Real edges + completeness | DAG report |
 | Verify | `/ogb-verify` | verifier | No | Fresh evidence | PASS / FAIL / INCONCLUSIVE |
 
 Static terminal illustration of the same loop (not a live capture):
@@ -145,6 +146,7 @@ Then `/ogb-doctor` → first `/ogb-plan` → `/view-plan` → `/ogb-start` → `
 | `/ogb-plan` | Need agreement before code | Saved plan | No | Exploration only | No execution in same call |
 | `/ogb-start` | Approved plan / concrete task | Implementation | Yes | Waves + worktrees | Ownership + no silent git ops |
 | `/ogb-ultrawork` | Independent tasks ready | Parallel report | Yes | Yes, bounded `C*` | Same-file ban, budgets |
+| `/ogb-graph` | Mixed-dependency large work | DAG execute + report | Yes | Phased fan-out + layered fan-in | Real edges, completeness, human gate |
 | `/ogb-verify` | Need fresh evidence | Verdict report | No | Read-only checks | Independent of implementer |
 | `/ogb-workflow` | Reusable multi-step process | Workflow definition | Definition only* | Inside workflow budget | `validate_only` first |
 | `/ogb-doctor` | Install looks wrong | Diagnosis | No (default) | No | Complements native `/doctor` |
@@ -182,6 +184,9 @@ Always spawn the **qualified** name. A bare `executor` can hit a same-named user
 
 # Parallel independent modules
 /ogb-ultrawork Fix TypeScript errors in three independent packages with worktree isolation
+
+# Mixed-dependency graph
+/ogb-graph Audit API handlers for missing auth, patch independent cases, verify top findings from source
 
 # Re-verify existing work
 /ogb-verify Re-verify origin/main...HEAD against the plan acceptance criteria; do not edit source
@@ -246,7 +251,7 @@ Deep dive: [Architecture](docs/architecture.md).
 6. **No silent fallback** — no quiet model/tool/MCP swaps
 7. **Git protection** — no commit, push, PR, or force-reset without an explicit request
 
-All seven skills set `disable-model-invocation: true`.
+All eight skills set `disable-model-invocation: true`.
 
 ---
 

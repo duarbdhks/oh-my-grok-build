@@ -2,7 +2,7 @@
 
 [English](command-reference.md)
 
-제공되는 스킬 7개는 모두 `disable-model-invocation: true`입니다. 사용자가 호출하지 않는 한 일반 채팅이나 `/goal`에서 조용히 자동 실행되지 않습니다.
+제공되는 스킬 8개는 모두 `disable-model-invocation: true`입니다. 사용자가 호출하지 않는 한 일반 채팅이나 `/goal`에서 조용히 자동 실행되지 않습니다.
 
 에이전트는 반드시 `oh-my-grok-build:<name>`으로 spawn 합니다.
 
@@ -74,6 +74,29 @@
 
 ---
 
+## `/ogb-graph`
+
+| 항목 | 내용 |
+|---|---|
+| 목적 | 의존이 섞인 큰 작업을 DAG로 만든 뒤 같은 호출에서 실행 |
+| 입력 | 대규모 또는 혼합 의존 작업. 아키텍처 결정은 이미 나 있어야 함 |
+| 소스 수정 | 노드 소유 범위 안에서 있음 |
+| 병렬 | phase fan-out (child당 10–25개, 동시 최대 8, 수명 16)와 20–30 계층 fan-in |
+| 에이전트 | `oh-my-grok-build:explorer`, `oh-my-grok-build:executor`, `oh-my-grok-build:verifier` |
+| 산출물 | 짧은 phase plan, 이어서 completeness와 게이트가 있는 graph 리포트 |
+| 실패 시 | 실패 항목은 데이터, 해당 노드만 재실행, 같은 유형 반복 시 그래프를 다시 짬 |
+| 안전장치 | 실제 의존 edge만, fan-in에서 누락 ID 명시, 비가역 동작은 인간 승인 |
+
+**네이티브 경계:** parent가 모든 `spawn_subagent`를 소유한다. `/ogb-ultrawork`, `/ogb-start`, `/ogb-workflow`를 중첩하지 않는다. phase plan을 출력한 뒤 바로 Phase 1을 시작한다. `/ogb-plan`이 아니다.
+
+**예시:**
+
+```text
+/ogb-graph API 핸들러 전체의 인증 누락을 감사하고, 독립 건은 수정한 뒤 심각도 상위 항목을 소스에서 재검증해
+```
+
+---
+
 ## `/ogb-verify`
 
 | 항목 | 내용 |
@@ -126,6 +149,7 @@
 | 안전한 계획 필요 | `/ogb-plan` |
 | 승인된 계획, 순차 실행 | `/ogb-start` |
 | 독립 병렬 작업 | `/ogb-ultrawork` |
+| 의존이 섞인 큰 작업 | `/ogb-graph` |
 | 증거 재확인 | `/ogb-verify` |
 | 재사용 멀티 에이전트 프로세스 | `/ogb-workflow` |
 | 설치 이상 | `/ogb-doctor` |

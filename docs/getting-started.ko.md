@@ -42,7 +42,7 @@ Grok Build 세션에서 `/plugins`로 다시 로드하거나 새 세션을 연 �
 /ogb-doctor
 ```
 
-스킬 7개와 플러그인 한정 에이전트 6개(`oh-my-grok-build:planner` 등)가 보여야 합니다. `~/.claude/agents/` 또는 `~/.grok/agents/`에 같은 짧은 이름이 있으면 경고로 나올 수 있습니다. 한정 이름 등록을 덮어쓰지 않으며 정상 동작입니다.
+스킬 8개와 플러그인 한정 에이전트 6개(`oh-my-grok-build:planner` 등)가 보여야 합니다. `~/.claude/agents/` 또는 `~/.grok/agents/`에 같은 짧은 이름이 있으면 경고로 나올 수 있습니다. 한정 이름 등록을 덮어쓰지 않으며 정상 동작입니다.
 
 ## 첫 생산 루프
 

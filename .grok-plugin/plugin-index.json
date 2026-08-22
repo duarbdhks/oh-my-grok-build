@@ -3,7 +3,7 @@
   "plugins": {
     "oh-my-grok-build": {
       "version": "0.1.0",
-      "description": "Grok Build-native planning, execution, workflow, and verification skills",
+      "description": "Grok Build-native planning, execution, DAG orchestration, workflow, and verification skills",
       "components": {
         "skills": [
           {
@@ -21,6 +21,10 @@
           {
             "name": "ogb-ultrawork",
             "description": "Run independent tasks with max-safe concurrency scoring and role lenses"
+          },
+          {
+            "name": "ogb-graph",
+            "description": "Compile a mixed-dependency task into a DAG and execute it through fan-out, layered fan-in, and verification"
           },
           {
             "name": "ogb-verify",

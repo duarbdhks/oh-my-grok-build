@@ -28,7 +28,7 @@ Interview (optional) → Plan → Execute → Verify
 | Clarify | `/ogb-interview` | No |
 | Plan | `/ogb-plan` | No |
 | Inspect plan | `/view-plan` (native) | No |
-| Execute | `/ogb-start` or `/ogb-ultrawork` | Yes, within owned scope |
+| Execute | `/ogb-start`, `/ogb-ultrawork`, or `/ogb-graph` | Yes, within owned scope |
 | Long run | `/goal` (native) | Depends on prompt |
 | Verify | `/ogb-verify` | No (read-only verification) |
 | Reusable fan-out | `/ogb-workflow` | Authors workflow definitions only by default |
@@ -43,6 +43,7 @@ Execution skills require non-overlapping file or subsystem ownership. Two implem
 Parallelism is bounded, not “as many agents as possible.”
 
 - `/ogb-ultrawork` scores a max-safe concurrency `C*` from ready tasks, isolation, and residual child budget.
+- `/ogb-graph` compiles mixed-dependency work into a DAG, fans out ready nodes (batch 10–25, concurrent cap 8, lifetime cap 16), and consolidates in layers of 20–30 with an explicit completeness check. It does not nest other orchestrators.
 - Default isolation cap is 4; up to 8 only when ownership and resource isolation are proven; 2 when shared schema/config/ports/databases are involved.
 - Large repetitive schema-shaped fan-out prefers native workflows with an explicit `agent_budget` (default 8) rather than unbounded direct spawns.
 

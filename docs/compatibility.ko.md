@@ -8,7 +8,7 @@
 |---|---|
 | 플러그인 이름 | `oh-my-grok-build` |
 | 플러그인 버전 (매니페스트) | `0.1.0` |
-| 스킬 | 7 (`ogb-interview`, `ogb-plan`, `ogb-start`, `ogb-ultrawork`, `ogb-verify`, `ogb-workflow`, `ogb-doctor`) |
+| 스킬 | 8 (`ogb-interview`, `ogb-plan`, `ogb-start`, `ogb-ultrawork`, `ogb-graph`, `ogb-verify`, `ogb-workflow`, `ogb-doctor`) |
 | 에이전트 | 6 (`planner`, `architect`, `critic`, `explorer`, `executor`, `verifier`) → `oh-my-grok-build:<name>` |
 | 런타임 의존성 | 없음 (콘텐츠 전용) |
 | 저장소 검증 Node | `>=20` |

@@ -86,7 +86,7 @@ flowchart LR
   U[User] --> I["/ogb-interview"]
   I --> P["/ogb-plan"]
   P --> V["/view-plan native"]
-  V --> E["/ogb-start or /ogb-ultrawork"]
+  V --> E["/ogb-start /ogb-ultrawork /ogb-graph"]
   E --> R["/ogb-verify"]
   E -. long run .-> G["/goal native"]
   G --> R
@@ -99,6 +99,7 @@ flowchart LR
 | 검토 | `/view-plan` (네이티브) | — | 없음 | 사람/에이전트 검토 | 확인된 계획 |
 | 실행 | `/ogb-start` | explorer, executor | 있음 (소유) | 워크트리 격리 | 구현 |
 | 병렬 | `/ogb-ultrawork` | executor / explorer | 있음 (소유) | max-safe `C*` | 병렬 리포트 |
+| 그래프 | `/ogb-graph` | explorer, executor, verifier | 있음 (소유) | 실제 edge + 누락 검사 | DAG 리포트 |
 | 검증 | `/ogb-verify` | verifier | 없음 | 최신 증거 | PASS / FAIL / INCONCLUSIVE |
 
 같은 루프의 정적 터미널 일러스트 (라이브 캡처 아님):
@@ -145,6 +146,7 @@ grok inspect
 | `/ogb-plan` | 코드 전 합의 필요 | 저장 계획 | 없음 | 탐색만 | 같은 호출에서 실행 금지 |
 | `/ogb-start` | 승인된 계획/구체 작업 | 구현 | 있음 | 웨이브 + 워크트리 | 소유권, 조용한 git 작업 금지 |
 | `/ogb-ultrawork` | 독립 작업 준비됨 | 병렬 리포트 | 있음 | 예, 제한 `C*` | 같은 파일 금지, 예산 |
+| `/ogb-graph` | 의존이 섞인 큰 작업 | DAG 실행 + 리포트 | 있음 | phase fan-out + 계층 fan-in | 실제 edge, 누락 검사, 인간 게이트 |
 | `/ogb-verify` | 최신 증거 필요 | 판정 리포트 | 없음 | 읽기 전용 점검 | 구현자와 독립 |
 | `/ogb-workflow` | 재사용 다단계 프로세스 | 워크플로 정의 | 정의만* | 워크플로 예산 안 | `validate_only` 선행 |
 | `/ogb-doctor` | 설치 이상 | 진단 | 기본 없음 | 없음 | 네이티브 `/doctor` 보완 |
@@ -182,6 +184,9 @@ grok inspect
 
 # 독립 모듈 병렬
 /ogb-ultrawork Fix TypeScript errors in three independent packages with worktree isolation
+
+# 의존이 섞인 그래프
+/ogb-graph Audit API handlers for missing auth, patch independent cases, verify top findings from source
 
 # 기존 작업 재검증
 /ogb-verify Re-verify origin/main...HEAD against the plan acceptance criteria; do not edit source
@@ -246,7 +251,7 @@ OGB는 실행 엔진이 아니라 운영 규율 계층입니다.
 6. **No silent fallback** — 조용한 모델/도구/MCP 교체 금지
 7. **Git 보호** — 명시 요청 없이 commit, push, PR, force-reset 금지
 
-스킬 7개 모두 `disable-model-invocation: true`.
+스킬 8개 모두 `disable-model-invocation: true`.
 
 ---
 

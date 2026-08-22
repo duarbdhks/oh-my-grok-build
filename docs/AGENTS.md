@@ -12,7 +12,7 @@ Authoritative design and evidence documentation for the plugin marketplace. Cove
 |------|-------------|
 | `getting-started.md` / `.ko.md` | Install, doctor, first plan→execute→verify loop |
 | `concepts.md` / `.ko.md` | Positioning, ownership, parallelism, verification, naming |
-| `command-reference.md` / `.ko.md` | Full contracts for all seven skills |
+| `command-reference.md` / `.ko.md` | Full contracts for all eight skills |
 | `examples.md` / `.ko.md` | Copy-paste usage scenarios |
 | `troubleshooting.md` / `.ko.md` | Install and runtime common issues |
 | `compatibility.md` / `.ko.md` | Versions, native capabilities, limitations summary |

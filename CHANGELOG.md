@@ -6,6 +6,7 @@ All notable changes to this project are documented here.
 
 ### Added
 
+- `/ogb-graph`: a one-shot DAG orchestrator that audits real dependencies, prints a short phase plan, executes ready nodes with Grok subagents, consolidates in layers of 20–30 with an explicit completeness check, retries failed nodes, and hard-stops irreversible actions for a human. It does not nest `/ogb-ultrawork`, `/ogb-start`, or `/ogb-workflow`. Skill inventory is now eight. Live DAG scenarios remain unverified.
 - Open-source landing overhaul: product-style `README.md` / `README.ko.md` with value proposition, Quick Start, command matrix, native-vs-OGB boundary, conservative Project Status, FAQ, and purpose-based docs navigation.
 - Purpose docs (EN+KO pairs): `getting-started`, `concepts`, `command-reference`, `examples`, `troubleshooting`, `compatibility`, `faq`, `design-decisions`, `github-metadata`.
 - Expanded brand system under `assets/brand/` (SVG sources, light/dark marks, hero, social preview, workflow/terminal/architecture diagrams) plus `assets/brand/README.md` regeneration notes. Terminal diagram is labeled a static mockup, not a live capture.

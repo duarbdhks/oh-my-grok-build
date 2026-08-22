@@ -17,6 +17,7 @@
       ├─ 계획: planner → architect → critic
       ├─ 실행: explorer / executor + native worktree
       ├─ 병렬: native subagents 또는 native workflow
+      ├─ 그래프: DAG audit → phased fan-out → layered fan-in → verify
       └─ 검증: direct checks → verifier → check-work
 
 Grok Build 네이티브 계층
@@ -82,6 +83,7 @@ v0.1은 별도 데이터베이스나 JSON 상태 파일을 만들지 않습니�
 - 같은 파일을 두 에이전트가 동시에 소유하지 않습니다.
 - 기본(베이스라인 / `/ogb-start` 스타일): 파동 사이에 diff 검토와 좁은 검증을 실행합니다. `/ogb-start` 는 더 단순한 상한을 유지하며, 형식화된 `C*` 와 ROLE_LENS 는 ultrawork 프로토콜입니다.
 - `/ogb-ultrawork`는 파동 안에서 점진적으로 진행합니다. 각 child가 끝나는 즉시 그 diff를 검토하고(읽기 전용; 끝난 child 검토를 위해 파동 전체 비교를 기다리지 않음), 소유권이 이미 서로 겹치지 않음이 증명된 미시작 작업으로 빈 슬롯을 채우며(채우기 전 `C*` 재계산), worktree 결과를 한 번에 하나씩 통합한 뒤 적용마다 좁은 검증을 다시 실행합니다.
+- `/ogb-graph`는 의존이 섞인 작업을 위한 세 번째 실행 모드입니다. 짧은 phase plan을 출력한 뒤 같은 호출에서 Phase 1을 시작합니다. 준비된 노드는 10–25개 배치로 fan-out하고 동시 8, 수명 child 16을 상한으로 둡니다. fan-in은 20–30 계층이며 누락 ID를 명시합니다. `/ogb-ultrawork`, `/ogb-start`, `/ogb-workflow`를 중첩하지 않고 ultrawork의 `C*`와 `ROLE_LENS`를 쓰지 않습니다. 쓰기 노드는 여전히 worktree입니다. 비가역 동작은 인간 게이트 뒤에서 inline으로만 실행합니다.
 
 ## 검증 규칙
 

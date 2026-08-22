@@ -42,7 +42,7 @@ In a Grok Build session, reload from `/plugins` or start a new session, then run
 /ogb-doctor
 ```
 
-You should see seven skills and six plugin-qualified agents (`oh-my-grok-build:planner`, and so on). Same-named agents from `~/.claude/agents/` or `~/.grok/agents/` may appear as warnings; that is expected and does not displace the qualified plugin agents.
+You should see eight skills and six plugin-qualified agents (`oh-my-grok-build:planner`, and so on). Same-named agents from `~/.claude/agents/` or `~/.grok/agents/` may appear as warnings; that is expected and does not displace the qualified plugin agents.
 
 ## First productive loop
 

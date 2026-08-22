@@ -10,6 +10,7 @@ const expectedSkills = [
   'ogb-plan',
   'ogb-start',
   'ogb-ultrawork',
+  'ogb-graph',
   'ogb-verify',
   'ogb-workflow',
   'ogb-doctor',

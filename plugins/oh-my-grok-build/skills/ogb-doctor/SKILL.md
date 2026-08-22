@@ -23,7 +23,7 @@ Diagnose the plugin without changing the user's environment by default. This com
    - Confirm the plugin is installed, enabled, and trusted as expected.
 
 2. **Component inventory**
-   - Confirm seven skills: `ogb-interview`, `ogb-plan`, `ogb-start`, `ogb-ultrawork`, `ogb-verify`, `ogb-workflow`, `ogb-doctor`.
+   - Confirm eight skills: `ogb-interview`, `ogb-plan`, `ogb-start`, `ogb-ultrawork`, `ogb-graph`, `ogb-verify`, `ogb-workflow`, `ogb-doctor`.
    - Confirm six agents. Grok registers plugin agents under a plugin-qualified name, so look for `oh-my-grok-build:planner`, `oh-my-grok-build:architect`, `oh-my-grok-build:critic`, `oh-my-grok-build:explorer`, `oh-my-grok-build:executor`, and `oh-my-grok-build:verifier`. Only the qualified form belongs to this plugin.
    - Report any unqualified agent of the same short name — from `~/.grok/agents/`, `~/.claude/agents/`, or another plugin — as a `WARN`, naming the file it came from. It does not displace the qualified entry, but it is what an instruction that drops the prefix will silently reach instead.
 

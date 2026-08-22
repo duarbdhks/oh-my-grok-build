@@ -17,6 +17,7 @@ User
       ├─ Plan: planner → architect → critic
       ├─ Execute: explorer / executor + native worktree
       ├─ Parallel: native subagents or native workflow
+      ├─ Graph: DAG audit → phased fan-out → layered fan-in → verify
       └─ Verify: direct checks → verifier → check-work
 
 Grok Build native layer
@@ -82,6 +83,7 @@ This boundary keeps session recovery and concurrent-execution responsibility ins
 - No two agents own the same file at the same time.
 - Default (baseline / `/ogb-start` style): between waves, run diff review and narrow verification. `/ogb-start` keeps its simpler bound; formal `C*` and ROLE_LENS are ultrawork protocol.
 - `/ogb-ultrawork` is progressive within a wave: review each child's diff as soon as that child finishes (read-only; do not wait for a wave-wide comparison before reviewing a finished child); backfill freed slots when an unstarted task's ownership is already proven disjoint (recompute `C*` first); integrate worktree results one at a time and rerun narrow checks after each apply.
+- `/ogb-graph` is a third execution mode for mixed-dependency work. It prints a short phase plan and starts Phase 1 in the same invocation. Ready nodes fan out in batches of 10–25 with a concurrent cap of 8 and a lifetime cap of 16 child calls; fan-in layers of 20–30 must name missing IDs. It does not nest `/ogb-ultrawork`, `/ogb-start`, or `/ogb-workflow`, and it does not use ultrawork `C*` or `ROLE_LENS`. Write nodes still use worktree isolation. Irreversible actions stay inline behind a human gate.
 
 ## Verification rules
 

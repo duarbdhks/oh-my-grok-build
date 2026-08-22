@@ -8,7 +8,7 @@
 |---|---|
 | Plugin name | `oh-my-grok-build` |
 | Plugin version (manifest) | `0.1.0` |
-| Skills | 7 (`ogb-interview`, `ogb-plan`, `ogb-start`, `ogb-ultrawork`, `ogb-verify`, `ogb-workflow`, `ogb-doctor`) |
+| Skills | 8 (`ogb-interview`, `ogb-plan`, `ogb-start`, `ogb-ultrawork`, `ogb-graph`, `ogb-verify`, `ogb-workflow`, `ogb-doctor`) |
 | Agents | 6 (`planner`, `architect`, `critic`, `explorer`, `executor`, `verifier`) registered as `oh-my-grok-build:<name>` |
 | Runtime dependencies | None (content-only) |
 | Repository validation Node | `>=20` |
